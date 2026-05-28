@@ -35,6 +35,25 @@ Build a **portfolio-grade agentic AI platform** that demonstrates **secure multi
 - Audit trails
 - Observability and tracing
 
+## Development
+
+This project uses Python 3.13 and `uv` for dependency and environment management.
+
+Install dependencies:
+
+```bash
+uv sync
+```
+
+Run local quality checks:
+
+```bash
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy .
+```
+
 ## License
 
 MIT

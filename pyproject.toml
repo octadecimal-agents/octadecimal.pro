@@ -1,0 +1,40 @@
+[project]
+name = "secure-agentic-ai-platform"
+version = "0.1.0"
+description = "Secure governance and observability platform for agentic AI workflows with RAG, HITL approvals, LLM evals and audit trails."
+readme = "README.md"
+authors = [
+    { name = "piotradamczyk78", email = "piotr.k.adamczyk@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+secure-agentic-ai = "secure_agentic_ai:main"
+
+[build-system]
+requires = ["uv_build>=0.11.16,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "secure_agentic_ai"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.1.0",
+    "pytest>=9.0.3",
+    "ruff>=0.15.15",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
