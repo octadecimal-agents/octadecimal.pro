@@ -7,7 +7,10 @@ authors = [
     { name = "piotradamczyk78", email = "piotr.k.adamczyk@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "fastapi>=0.136.3",
+    "uvicorn>=0.48.0",
+]
 
 [project.scripts]
 secure-agentic-ai = "secure_agentic_ai:main"
@@ -21,6 +24,7 @@ module-name = "secure_agentic_ai"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "mypy>=2.1.0",
     "pytest>=9.0.3",
     "ruff>=0.15.15",

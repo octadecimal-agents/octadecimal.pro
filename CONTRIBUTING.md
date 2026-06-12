@@ -1,3 +1,5 @@
+<link rel="stylesheet" href=".dev/styles/main.css">
+
 # Contributing
 
 This document defines the engineering standards used in Secure Agentic AI Platform.
