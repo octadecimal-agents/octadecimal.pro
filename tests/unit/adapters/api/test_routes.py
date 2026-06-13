@@ -7,22 +7,23 @@ from secure_agentic_ai.adapters.api.app import create_app
 from secure_agentic_ai.adapters.api.dependencies import get_request_action_use_case
 from secure_agentic_ai.application.use_cases import RequestActionUseCase
 from secure_agentic_ai.domain.approvals import ApprovalRequest
+from secure_agentic_ai.domain.audit import AuditEvent
 
 
 class FakeApprovalRequestRepository:
     def __init__(self) -> None:
         self.saved: list[ApprovalRequest] = []
 
-    def save(self, request: ApprovalRequest) -> None:
+    async def save(self, request: ApprovalRequest) -> None:
         self.saved.append(request)
 
 
 class FakeAuditWriter:
     def __init__(self) -> None:
-        self.messages: list[str] = []
+        self.events: list[AuditEvent] = []
 
-    def record(self, message: str) -> None:
-        self.messages.append(message)
+    async def record(self, event: AuditEvent) -> None:
+        self.events.append(event)
 
 
 @pytest.fixture

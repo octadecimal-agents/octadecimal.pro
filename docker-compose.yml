@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: secure-agentic-postgres
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: dev-password-only
+      POSTGRES_DB: secure_agentic_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d secure_agentic_ai"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:

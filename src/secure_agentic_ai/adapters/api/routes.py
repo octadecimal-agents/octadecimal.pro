@@ -24,5 +24,5 @@ async def request_action(
     use_case: Annotated[RequestActionUseCase, Depends(get_request_action_use_case)],
 ) -> RequestActionResponse:
     command = payload.to_command()
-    result = use_case.execute(command)
+    result = await use_case.execute(command)
     return RequestActionResponse.from_result(result)

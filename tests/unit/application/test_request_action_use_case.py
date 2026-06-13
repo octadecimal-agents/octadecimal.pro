@@ -1,3 +1,5 @@
+import pytest
+
 from secure_agentic_ai.application.commands import RequestActionCommand
 from secure_agentic_ai.application.use_cases import (
     RequestActionResult,
@@ -6,6 +8,7 @@ from secure_agentic_ai.application.use_cases import (
 )
 from secure_agentic_ai.domain.actors import Actor, ActorType
 from secure_agentic_ai.domain.approvals import ApprovalRequest
+from secure_agentic_ai.domain.audit import AuditEvent, AuditEventType
 from secure_agentic_ai.domain.policies import Action, ActionType, PolicyDecision, RiskLevel
 
 
@@ -13,19 +16,20 @@ class FakeApprovalRequestRepository:
     def __init__(self) -> None:
         self.saved: list[ApprovalRequest] = []
 
-    def save(self, request: ApprovalRequest) -> None:
+    async def save(self, request: ApprovalRequest) -> None:
         self.saved.append(request)
 
 
 class FakeAuditWriter:
     def __init__(self) -> None:
-        self.messages: list[str] = []
+        self.events: list[AuditEvent] = []
 
-    def record(self, message: str) -> None:
-        self.messages.append(message)
+    async def record(self, event: AuditEvent) -> None:
+        self.events.append(event)
 
 
-def test_human_low_risk_action_is_allowed_without_approval() -> None:
+@pytest.mark.asyncio
+async def test_human_low_risk_action_is_allowed_without_approval() -> None:
     repository = FakeApprovalRequestRepository()
     audit_writer = FakeAuditWriter()
     use_case = RequestActionUseCase(
@@ -46,7 +50,7 @@ def test_human_low_risk_action_is_allowed_without_approval() -> None:
         ),
     )
 
-    result = use_case.execute(command)
+    result = await use_case.execute(command)
 
     assert result == RequestActionResult(
         status=RequestActionStatus.ALLOWED,
@@ -55,12 +59,14 @@ def test_human_low_risk_action_is_allowed_without_approval() -> None:
     assert result.evaluation.decision is PolicyDecision.ALLOW
     assert result.approval_request is None
     assert repository.saved == []
-    assert audit_writer.messages == [
-        "Action content.create allowed for human-001",
-    ]
+    assert len(audit_writer.events) == 1
+    assert audit_writer.events[0].event_type == AuditEventType.ACTION_ALLOWED
+    assert audit_writer.events[0].actor_id == "human-001"
+    assert audit_writer.events[0].action_type == "content.create"
 
 
-def test_agent_high_risk_action_creates_approval_request() -> None:
+@pytest.mark.asyncio
+async def test_agent_high_risk_action_creates_approval_request() -> None:
     repository = FakeApprovalRequestRepository()
     audit_writer = FakeAuditWriter()
     use_case = RequestActionUseCase(
@@ -81,7 +87,7 @@ def test_agent_high_risk_action_creates_approval_request() -> None:
         ),
     )
 
-    result = use_case.execute(command)
+    result = await use_case.execute(command)
 
     assert result.status is RequestActionStatus.APPROVAL_REQUIRED
     assert result.evaluation.decision is PolicyDecision.REQUIRE_APPROVAL
@@ -90,12 +96,15 @@ def test_agent_high_risk_action_creates_approval_request() -> None:
     assert result.approval_request.action == command.action
     assert result.approval_request.requested_by == command.actor
     assert repository.saved == [result.approval_request]
-    assert audit_writer.messages == [
-        "Approval required for action file.write by agent-001",
-    ]
+    assert len(audit_writer.events) == 1
+    assert audit_writer.events[0].event_type == AuditEventType.APPROVAL_REQUESTED
+    assert audit_writer.events[0].actor_id == "agent-001"
+    assert audit_writer.events[0].action_type == "file.write"
+    assert audit_writer.events[0].request_id == "req-002"
 
 
-def test_agent_secret_resolution_is_denied_without_approval_request() -> None:
+@pytest.mark.asyncio
+async def test_agent_secret_resolution_is_denied_without_approval_request() -> None:
     repository = FakeApprovalRequestRepository()
     audit_writer = FakeAuditWriter()
     use_case = RequestActionUseCase(
@@ -116,12 +125,13 @@ def test_agent_secret_resolution_is_denied_without_approval_request() -> None:
         ),
     )
 
-    result = use_case.execute(command)
+    result = await use_case.execute(command)
 
     assert result.status is RequestActionStatus.DENIED
     assert result.evaluation.decision is PolicyDecision.DENY
     assert result.approval_request is None
     assert repository.saved == []
-    assert audit_writer.messages == [
-        "Action secret.resolve denied for agent-001",
-    ]
+    assert len(audit_writer.events) == 1
+    assert audit_writer.events[0].event_type == AuditEventType.ACTION_DENIED
+    assert audit_writer.events[0].actor_id == "agent-001"
+    assert audit_writer.events[0].action_type == "secret.resolve"

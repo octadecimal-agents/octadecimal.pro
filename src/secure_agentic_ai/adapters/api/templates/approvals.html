@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Pending Approvals{% endblock %}
+{% block content %}
+<h1>Pending Approvals</h1>
+
+{% if requests %}
+<table>
+  <thead>
+    <tr>
+      <th>Request ID</th>
+      <th>Actor</th>
+      <th>Action Type</th>
+      <th>Description</th>
+      <th>Risk</th>
+      <th>Requested At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for req in requests %}
+    <tr>
+      <td><code>{{ req.request_id }}</code></td>
+      <td>{{ req.requested_by.display_name }}<br><span class="meta">{{ req.requested_by.actor_type.value }}</span></td>
+      <td><code>{{ req.action.action_type.value }}</code></td>
+      <td>{{ req.action.description }}</td>
+      <td><span class="badge badge-pending">{{ req.action.risk_level.value }}</span></td>
+      <td class="meta">{{ req.requested_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+      <td class="actions">
+        <form action="/operator/approvals/{{ req.request_id }}/approve" method="post" style="display:inline">
+          <button class="btn btn-approve btn-small">Approve</button>
+        </form>
+        <form action="/operator/approvals/{{ req.request_id }}/reject" method="post" style="display:inline">
+          <button class="btn btn-reject btn-small">Reject</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty">No pending approvals. All clear.</div>
+{% endif %}
+{% endblock %}

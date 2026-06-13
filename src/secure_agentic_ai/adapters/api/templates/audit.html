@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Audit Trail{% endblock %}
+{% block content %}
+<h1>Audit Trail</h1>
+<p class="meta">Last {{ events|length }} events</p>
+
+{% if events %}
+<table>
+  <thead>
+    <tr>
+      <th>Timestamp</th>
+      <th>Event</th>
+      <th>Actor</th>
+      <th>Action</th>
+      <th>Request ID</th>
+      <th>Metadata</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for event in events %}
+    <tr>
+      <td class="meta">{{ event.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+      <td><span class="badge badge-{{ 'allowed' if event.event_type.value.endswith('allowed') else 'denied' if event.event_type.value.endswith('denied') else 'pending' if event.event_type.value == 'approval.requested' else 'approved' if event.event_type.value.endswith('approved') else 'rejected' if event.event_type.value.endswith('rejected') else 'executed' }}">{{ event.event_type.value }}</span></td>
+      <td>{{ event.actor_id }}</td>
+      <td><code>{{ event.action_type }}</code></td>
+      <td>{% if event.request_id %}<code>{{ event.request_id }}</code>{% else %}—{% endif %}</td>
+      <td class="meta">{% if event.metadata %}{{ event.metadata }}{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty">No audit events recorded yet.</div>
+{% endif %}
+{% endblock %}

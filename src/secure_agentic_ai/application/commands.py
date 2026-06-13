@@ -9,3 +9,9 @@ class RequestActionCommand:
     request_id: str
     actor: Actor
     action: Action
+
+
+@dataclass(frozen=True)
+class ResolveSecretCommand:
+    secret_name: str
+    actor: Actor
