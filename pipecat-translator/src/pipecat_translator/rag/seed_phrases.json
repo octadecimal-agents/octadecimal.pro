@@ -1,0 +1,157 @@
+[
+  {
+    "topic": "powitanie",
+    "pl": "Dzień dobry, miło mi Państwa poznać.",
+    "en": "Good morning, nice to meet you."
+  },
+  {
+    "topic": "powitanie",
+    "pl": "Witam serdecznie w imieniu naszego zespołu.",
+    "en": "I warmly welcome you on behalf of our team."
+  },
+  {
+    "topic": "przedstawienie",
+    "pl": "Nazywam się Jan Kowalski i jestem kierownikiem projektu.",
+    "en": "My name is John Kowalski and I am the project manager."
+  },
+  {
+    "topic": "przedstawienie",
+    "pl": "Po stronie polskiej odpowiadam za koordynację prac.",
+    "en": "On the Polish side, I am responsible for coordinating the work."
+  },
+  {
+    "topic": "zgoda",
+    "pl": "W pełni zgadzam się z Pana/Pani stanowiskiem.",
+    "en": "I fully agree with your position."
+  },
+  {
+    "topic": "zgoda",
+    "pl": "To brzmi rozsądnie. Przechodzimy do realizacji.",
+    "en": "That sounds reasonable. Let's proceed with implementation."
+  },
+  {
+    "topic": "sprzeciw",
+    "pl": "Rozumiem Pana/Pani punkt widzenia, ale mam pewne obawy.",
+    "en": "I understand your point of view, but I have some concerns."
+  },
+  {
+    "topic": "sprzeciw",
+    "pl": "Proponuję rozważyć alternatywne rozwiązanie.",
+    "en": "I suggest we consider an alternative solution."
+  },
+  {
+    "topic": "negocjacje",
+    "pl": "Czy byliby Państwo skłonni pójść na kompromis w tej kwestii?",
+    "en": "Would you be willing to compromise on this matter?"
+  },
+  {
+    "topic": "negocjacje",
+    "pl": "Potrzebujemy więcej czasu na analizę tej propozycji.",
+    "en": "We need more time to analyze this proposal."
+  },
+  {
+    "topic": "terminy",
+    "pl": "Czy możemy ustalić wstępny termin na przyszły tydzień?",
+    "en": "Can we set a preliminary deadline for next week?"
+  },
+  {
+    "topic": "terminy",
+    "pl": "Niestety, nie jesteśmy w stanie dotrzymać tego terminu.",
+    "en": "Unfortunately, we are unable to meet this deadline."
+  },
+  {
+    "topic": "terminy",
+    "pl": "Proponuję przesunięcie terminu o dwa tygodnie.",
+    "en": "I propose postponing the deadline by two weeks."
+  },
+  {
+    "topic": "budżet",
+    "pl": "Nasz budżet na ten projekt wynosi około stu tysięcy euro.",
+    "en": "Our budget for this project is approximately one hundred thousand euros."
+  },
+  {
+    "topic": "budżet",
+    "pl": "Czy istnieje możliwość negocjacji ceny?",
+    "en": "Is there room for price negotiation?"
+  },
+  {
+    "topic": "budżet",
+    "pl": "Musimy zoptymalizować koszty, aby zmieścić się w budżecie.",
+    "en": "We need to optimize costs to stay within the budget."
+  },
+  {
+    "topic": "technologia",
+    "pl": "Korzystamy z najnowszych rozwiązań chmurowych od Amazon Web Services.",
+    "en": "We use the latest cloud solutions from Amazon Web Services."
+  },
+  {
+    "topic": "technologia",
+    "pl": "Nasza platforma opiera się na architekturze mikroserwisów.",
+    "en": "Our platform is based on a microservices architecture."
+  },
+  {
+    "topic": "technologia",
+    "pl": "Wdrożenie odbędzie się w środowisku kontenerowym Docker.",
+    "en": "The deployment will take place in a Docker container environment."
+  },
+  {
+    "topic": "współpraca",
+    "pl": "Liczymy na owocną współpracę i wzajemne zrozumienie.",
+    "en": "We look forward to fruitful cooperation and mutual understanding."
+  },
+  {
+    "topic": "współpraca",
+    "pl": "Proszę o przesłanie dokumentacji do piątku.",
+    "en": "Please send the documentation by Friday."
+  },
+  {
+    "topic": "współpraca",
+    "pl": "Czy moglibyśmy umówić się na kolejne spotkanie za tydzień?",
+    "en": "Could we schedule another meeting for next week?"
+  },
+  {
+    "topic": "problemy",
+    "pl": "Niestety, napotkaliśmy nieprzewidziane trudności techniczne.",
+    "en": "Unfortunately, we have encountered unforeseen technical difficulties."
+  },
+  {
+    "topic": "problemy",
+    "pl": "Pracujemy nad rozwiązaniem tego problemu i damy znać, gdy tylko będzie aktualizacja.",
+    "en": "We are working on resolving this issue and will let you know as soon as there is an update."
+  },
+  {
+    "topic": "problemy",
+    "pl": "Przepraszamy za opóźnienie. Czy możemy przedłużyć termin o dwa dni?",
+    "en": "We apologize for the delay. Can we extend the deadline by two days?"
+  },
+  {
+    "topic": "podsumowanie",
+    "pl": "Podsumowując, ustaliliśmy trzy główne punkty działania.",
+    "en": "In summary, we have established three main action items."
+  },
+  {
+    "topic": "podsumowanie",
+    "pl": "Czy mogę prosić o krótkie podsumowanie dzisiejszego spotkania?",
+    "en": "Could I ask for a brief summary of today's meeting?"
+  },
+  {
+    "topic": "podsumowanie",
+    "pl": "Dziękujemy za produktywne spotkanie. Do usłyszenia wkrótce.",
+    "en": "Thank you for the productive meeting. Talk to you soon."
+  },
+  {
+    "topic": "formalne",
+    "pl": "W załączniku przesyłam wymagane dokumenty do podpisu.",
+    "en": "Please find attached the required documents for signature."
+  },
+  {
+    "topic": "formalne",
+    "pl": "Niniejszym potwierdzamy otrzymanie Państwa zamówienia.",
+    "en": "We hereby confirm receipt of your order."
+  },
+  {
+    "topic": "formalne",
+    "pl": "Zgodnie z wcześniejszymi ustaleniami, przesyłam harmonogram prac.",
+    "en": "As previously agreed, I am sending the work schedule."
+  }
+]
