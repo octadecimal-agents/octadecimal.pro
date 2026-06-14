@@ -90,9 +90,17 @@ async function loadPlanning() {
     api("/workspace/planning/items"),
   ]);
   planItemsCache = items.map((i) => ({ title: i.title, source: i.source }));
-  $("calendar-list").innerHTML = calendar
-    .map((e) => `<div class="calendar-item"><time>${e.time}</time><span>${e.title}</span></div>`)
-    .join("");
+  $("calendar-list").innerHTML = calendar.events.length
+    ? `<p class="muted">Źródło kalendarza: <code>${calendar.source}</code></p>` +
+      calendar.events
+        .map(
+          (e) =>
+            `<div class="calendar-item"><time>${e.time}</time><span>${e.title}${
+              e.calendar ? ` <span class="muted">(${e.calendar})</span>` : ""
+            }</span></div>`
+        )
+        .join("")
+    : `<p class="muted">Brak wydarzeń (źródło: ${calendar.source}).</p>`;
   renderPlanList();
 }
 

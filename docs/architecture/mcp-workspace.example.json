@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "octa-workspace": {
+      "command": "/Users/octadecimal/Developer/Repositories/octadecimal-agents/octadecimal.pro/scripts/octa-mcp-workspace.sh",
+      "env": {
+        "KNOWLEDGE_ROOT": "/Users/octadecimal/Developer/Knowledge",
+        "CALENDAR_PROVIDER": "auto",
+        "CALENDAR_INCLUDE": "Dom,Praca,Ogarnianie"
+      }
+    }
+  }
+}

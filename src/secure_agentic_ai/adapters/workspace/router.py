@@ -9,6 +9,7 @@ from secure_agentic_ai.adapters.api.dependencies import get_db_session
 from secure_agentic_ai.adapters.workspace.schemas import (
     ApprovalSummary,
     CalendarEvent,
+    CalendarListResponse,
     ChatRequest,
     ChatResponse,
     HealthWorkspaceResponse,
@@ -22,9 +23,10 @@ from secure_agentic_ai.adapters.workspace.schemas import (
     TaskUpdateRequest,
     WikiSearchResponse,
 )
-from secure_agentic_ai.application.planning_service import DEFAULT_CALENDAR, generate_daily_plan
+from secure_agentic_ai.application.planning_service import generate_daily_plan
 from secure_agentic_ai.application.workspace_agent import WorkspaceAgent
 from secure_agentic_ai.domain.audit import AuditEvent, AuditEventType
+from secure_agentic_ai.infrastructure.macos.calendar_provider import list_today_calendar_events
 from secure_agentic_ai.infrastructure.persistence.approval_repository import (
     SqlAlchemyApprovalRequestRepository,
     SqlAlchemyAuditWriter,
@@ -175,7 +177,8 @@ async def replace_plan_items(body: PlanReplaceRequest) -> list[PlanItemResponse]
 async def generate_plan(plan_date: str | None = None) -> list[PlanItemResponse]:
     await ensure_workspace_ready()
     day = plan_date or date.today().isoformat()
-    items = generate_daily_plan(get_ledger(), plan_date=day)
+    calendar_events, _source = await list_today_calendar_events(get_config())
+    items = generate_daily_plan(get_ledger(), plan_date=day, calendar_events=calendar_events)
     return [
         PlanItemResponse(
             id=item.id,
@@ -188,9 +191,17 @@ async def generate_plan(plan_date: str | None = None) -> list[PlanItemResponse]:
     ]
 
 
-@router.get("/planning/calendar", response_model=list[CalendarEvent])
-async def planning_calendar_stub() -> list[CalendarEvent]:
-    return [CalendarEvent(time=time, title=title) for time, title in DEFAULT_CALENDAR]
+@router.get("/planning/calendar", response_model=CalendarListResponse)
+async def planning_calendar() -> CalendarListResponse:
+    await ensure_workspace_ready()
+    events, source = await list_today_calendar_events(get_config())
+    return CalendarListResponse(
+        source=source,
+        events=[
+            CalendarEvent(time=event.time, title=event.title, calendar=event.calendar)
+            for event in events
+        ],
+    )
 
 
 @router.get("/wiki/search", response_model=WikiSearchResponse)

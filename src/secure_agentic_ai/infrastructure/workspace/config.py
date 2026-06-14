@@ -7,6 +7,10 @@ def _expand(path: str) -> Path:
     return Path(path).expanduser().resolve()
 
 
+def _csv_tuple(raw: str) -> tuple[str, ...]:
+    return tuple(part.strip() for part in raw.split(",") if part.strip())
+
+
 @dataclass(frozen=True)
 class WorkspaceConfig:
     enabled: bool
@@ -20,6 +24,11 @@ class WorkspaceConfig:
     minimax_model: str
     minimax_base_url: str
     minimax_bw_label: str
+    calendar_provider: str
+    calendar_fixture_path: Path
+    calendar_include: tuple[str, ...]
+    calendar_exclude: tuple[str, ...]
+    octa_state_dir: Path
     rag_backend: str
     qdrant_url: str
     qdrant_collection: str
@@ -40,6 +49,13 @@ class WorkspaceConfig:
             minimax_model=os.environ.get("MINIMAX_MODEL", "MiniMax-M3"),
             minimax_base_url=os.environ.get("MINIMAX_BASE_URL", "https://api.minimax.io/v1"),
             minimax_bw_label=os.environ.get("MINIMAX_BW_LABEL", ""),
+            calendar_provider=os.environ.get("CALENDAR_PROVIDER", "auto").lower(),
+            calendar_fixture_path=_expand(
+                os.environ.get("OCTA_CALENDAR_FIXTURE", "~/.octa/calendar-fixture.json")
+            ),
+            calendar_include=_csv_tuple(os.environ.get("CALENDAR_INCLUDE", "")),
+            calendar_exclude=_csv_tuple(os.environ.get("CALENDAR_EXCLUDE", "")),
+            octa_state_dir=_expand(os.environ.get("OCTA_STATE_DIR", "~/.octa")),
             rag_backend=os.environ.get("RAG_BACKEND", "memory").lower(),
             qdrant_url=os.environ.get("QDRANT_URL", "http://127.0.0.1:6335"),
             qdrant_collection=os.environ.get("QDRANT_COLLECTION", "knowledge_chunks_dev"),

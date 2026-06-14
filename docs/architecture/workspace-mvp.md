@@ -118,6 +118,27 @@ Knowledge ingest (MVP): scan T1 globs under `KNOWLEDGE_ROOT`, strip HTML callout
 - AO answers „co wymaga uwagi?” / „review” with queue summary + suggests `#Review`
 - `/workspace/health` includes `review_pending_count`
 
+## macOS calendar (MCP stub)
+
+Calendar for `#Planning` uses `CALENDAR_PROVIDER`:
+
+| Value | Behavior |
+|-------|----------|
+| `auto` (default) | macOS EventKit via `calctl` when permitted, else fixture/cache |
+| `macos` | EventKit only; falls back to cache/fixture on error |
+| `fixture` | `DEFAULT_CALENDAR` or `~/.octa/calendar-fixture.json` |
+
+```bash
+# Grant Calendars permission when macOS prompts (System Settings → Privacy → Calendars)
+export CALENDAR_PROVIDER=auto
+export CALENDAR_INCLUDE=Dom,Praca,Ogarnianie   # optional filter
+./scripts/octa-mcp-workspace.sh                 # Cursor MCP (stdio)
+```
+
+MCP tools: `list_today_calendar`, `workspace_health`. Example Cursor config: `docs/architecture/mcp-workspace.example.json`.
+
+Successful macOS reads are cached in `~/.octa/calendar-cache.json` for the current day.
+
 ## Planning
 
 - `POST /workspace/planning/generate` — AO builds daily plan from calendar stub + board tasks
@@ -133,10 +154,8 @@ curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
 ## Intentionally not implemented
 
 - Production Qdrant sync to pc-ubuntu (dev collection only)
-- Gemini / Ollama providers (DeepSeek V4 is the external LLM for MVP)
-- macOS MCP live calendar/mail
+- Live Mail/Contacts MCP (calendar stub only for MVP)
 - Full parity with workspace.octadecimal.pro design system
-- External LLM providers (Gemini/Ollama wiring is a follow-up)
 
 ## Related docs
 

@@ -83,6 +83,12 @@ class RetroTodayResponse(BaseModel):
 class CalendarEvent(BaseModel):
     time: str
     title: str
+    calendar: str | None = None
+
+
+class CalendarListResponse(BaseModel):
+    source: str
+    events: list[CalendarEvent]
 
 
 class HealthWorkspaceResponse(BaseModel):
