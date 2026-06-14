@@ -1,6 +1,7 @@
 import pytest
 
 from secure_agentic_ai.application.use_cases import IngestDocumentUseCase, RetrieveContextUseCase
+from secure_agentic_ai.application.review_queue import PendingReviewItem
 from secure_agentic_ai.application.workspace_agent import WorkspaceAgent
 from secure_agentic_ai.infrastructure.knowledge.fake_embedding_provider import FakeEmbeddingProvider
 from secure_agentic_ai.infrastructure.knowledge.in_memory_vector_store import InMemoryVectorStore
@@ -60,3 +61,49 @@ async def test_chat_generate_plan(agent) -> None:
     reply = await workspace_agent.chat("wygeneruj plan na dziś")
     assert "#Planning" in (reply.suggested_hash or "")
     assert "Sprint planning" in reply.message or "Deep work" in reply.message
+
+
+@pytest.mark.asyncio
+async def test_chat_review_queue(agent) -> None:
+    workspace_agent, _ingest = agent
+    pending = (
+        PendingReviewItem(
+            request_id="demo-1",
+            description="Deploy to staging",
+            actor_display_name="Deploy Agent",
+            risk_level="high",
+            action_type="run_command",
+        ),
+    )
+    agent_with_review = WorkspaceAgent(
+        ledger=workspace_agent._ledger,
+        search=workspace_agent._search_backend,
+        pending_reviews=pending,
+    )
+    reply = await agent_with_review.chat("Co czeka w review?")
+    assert reply.suggested_hash == "#Review"
+    assert "Deploy to staging" in reply.message
+
+
+@pytest.mark.asyncio
+async def test_chat_attention_summary(agent) -> None:
+    workspace_agent, _ingest = agent
+    workspace_agent._ledger.create_task("security", "Fix policy gate", status="blocked")
+    pending = (
+        PendingReviewItem(
+            request_id="demo-1",
+            description="Write generated source file",
+            actor_display_name="Dev Agent",
+            risk_level="high",
+            action_type="write_file",
+        ),
+    )
+    agent_with_review = WorkspaceAgent(
+        ledger=workspace_agent._ledger,
+        search=workspace_agent._search_backend,
+        pending_reviews=pending,
+    )
+    reply = await agent_with_review.chat("Co wymaga uwagi?")
+    assert reply.suggested_hash == "#Review"
+    assert "Write generated source file" in reply.message
+    assert "Fix policy gate" in reply.message

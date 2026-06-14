@@ -36,6 +36,7 @@ def workspace_client(tmp_path: Path) -> Iterator[TestClient]:
     os.environ["OCTA_LEDGER"] = str(tmp_path / "ledger.sqlite")
     os.environ["KNOWLEDGE_ROOT"] = str(tmp_path / "knowledge")
     os.environ["LLM_PROVIDER"] = "dry"
+    os.environ.pop("RAG_BACKEND", None)
 
     knowledge = tmp_path / "knowledge" / "01-Base-Point/pro/servers/pc-ubuntu"
     knowledge.mkdir(parents=True)
@@ -64,6 +65,7 @@ def workspace_client(tmp_path: Path) -> Iterator[TestClient]:
     os.environ.pop("OCTA_LEDGER", None)
     os.environ.pop("KNOWLEDGE_ROOT", None)
     os.environ.pop("LLM_PROVIDER", None)
+    os.environ.pop("RAG_BACKEND", None)
 
 
 def test_workspace_index_served(workspace_client: TestClient) -> None:
@@ -80,6 +82,7 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     assert data["documents_indexed"] >= 1
     assert data["rag_backend"] == "memory"
     assert data["llm_provider"] == "dry"
+    assert data["review_pending_count"] >= 0
 
 
 def test_workspace_chat_dry(workspace_client: TestClient) -> None:

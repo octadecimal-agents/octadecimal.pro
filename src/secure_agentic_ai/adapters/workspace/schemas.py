@@ -92,3 +92,4 @@ class HealthWorkspaceResponse(BaseModel):
     documents_indexed: int
     rag_backend: str
     llm_provider: str
+    review_pending_count: int = 0

@@ -138,7 +138,7 @@ async function loadWiki(query) {
     : "<li class='muted'>Brak wyników.</li>";
 }
 
-async function loadReview() {
+async def loadReview() {
   const pending = await api("/workspace/review/pending");
   $("review-list").innerHTML = pending.length
     ? pending
@@ -157,15 +157,38 @@ async function loadReview() {
   $("review-list").querySelectorAll(".btn-approve").forEach((btn) => {
     btn.addEventListener("click", async () => {
       await api(`/workspace/review/${btn.dataset.id}/approve`, { method: "POST" });
-      loadReview();
+      await loadReview();
+      await refreshReviewBadge();
     });
   });
   $("review-list").querySelectorAll(".btn-reject").forEach((btn) => {
     btn.addEventListener("click", async () => {
       await api(`/workspace/review/${btn.dataset.id}/reject`, { method: "POST" });
-      loadReview();
+      await loadReview();
+      await refreshReviewBadge();
     });
   });
+  await refreshReviewBadge(pending.length);
+}
+
+async function refreshReviewBadge(count) {
+  let pendingCount = count;
+  if (pendingCount === undefined) {
+    try {
+      const pending = await api("/workspace/review/pending");
+      pendingCount = pending.length;
+    } catch {
+      return;
+    }
+  }
+  const badge = $("review-badge");
+  if (!badge) return;
+  if (pendingCount > 0) {
+    badge.textContent = String(pendingCount);
+    badge.hidden = false;
+  } else {
+    badge.hidden = true;
+  }
 }
 
 async function loadRetro() {
@@ -259,6 +282,13 @@ window.addEventListener("hashchange", () => {
   try {
     const health = await api("/workspace/health");
     appendMessage(`Indeks Knowledge: ${health.documents_indexed} dokumentów.`, "agent");
+    if (health.review_pending_count > 0) {
+      appendMessage(
+        `W kolejce #Review czeka ${health.review_pending_count} akcji do zatwierdzenia — zapytaj „co wymaga uwagi?”.`,
+        "agent"
+      );
+    }
+    await refreshReviewBadge(health.review_pending_count);
   } catch {
     appendMessage("Workspace API niedostępne — uruchom scripts/octa-mvp-up.sh", "agent");
   }

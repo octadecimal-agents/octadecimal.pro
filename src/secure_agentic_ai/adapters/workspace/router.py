@@ -29,6 +29,7 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
     SqlAlchemyApprovalRequestRepository,
     SqlAlchemyAuditWriter,
 )
+from secure_agentic_ai.infrastructure.workspace.review_adapter import pending_review_items
 from secure_agentic_ai.infrastructure.workspace.ledger import Task
 from secure_agentic_ai.infrastructure.workspace.state import (
     get_chat_provider,
@@ -61,10 +62,14 @@ def _task_response(task: Task) -> TaskResponse:
 
 
 @router.get("/health", response_model=HealthWorkspaceResponse)
-async def workspace_health() -> HealthWorkspaceResponse:
+async def workspace_health(
+    session: Annotated[AsyncSession, Depends(get_db_session)],
+) -> HealthWorkspaceResponse:
     await ensure_workspace_ready()
     await get_chat_provider()
     config = get_config()
+    repo = SqlAlchemyApprovalRequestRepository(session)
+    review_pending_count = len(await repo.list_pending())
     return HealthWorkspaceResponse(
         status="ok",
         knowledge_root=str(config.knowledge_root),
@@ -72,16 +77,23 @@ async def workspace_health() -> HealthWorkspaceResponse:
         documents_indexed=get_documents_indexed(),
         rag_backend=get_rag_backend_label(),
         llm_provider=get_llm_label(),
+        review_pending_count=review_pending_count,
     )
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def workspace_chat(body: ChatRequest) -> ChatResponse:
+async def workspace_chat(
+    body: ChatRequest,
+    session: Annotated[AsyncSession, Depends(get_db_session)],
+) -> ChatResponse:
     await ensure_workspace_ready()
+    repo = SqlAlchemyApprovalRequestRepository(session)
+    pending = pending_review_items(await repo.list_pending())
     agent = WorkspaceAgent(
         ledger=get_ledger(),
         search=get_hybrid_search(),
         chat=await get_chat_provider(),
+        pending_reviews=pending,
     )
     reply = await agent.chat(body.message, active_hash=body.active_hash)
     return ChatResponse(

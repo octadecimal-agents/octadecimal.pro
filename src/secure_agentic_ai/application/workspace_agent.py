@@ -1,7 +1,14 @@
-from dataclasses import dataclass
 from datetime import date
 
+from secure_agentic_ai.application.chat_reply import ChatReply
 from secure_agentic_ai.application.planning_service import generate_daily_plan
+from secure_agentic_ai.application.review_queue import (
+    PendingReviewItem,
+    format_attention_reply,
+    format_review_reply,
+    matches_attention_query,
+    matches_review_query,
+)
 from secure_agentic_ai.application.ports import ChatCompletionProvider
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.domain.knowledge import RetrievedChunk
@@ -14,28 +21,34 @@ from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowl
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
 
-@dataclass(frozen=True)
-class ChatReply:
-    message: str
-    suggested_hash: str | None = None
-    citations: tuple[str, ...] = ()
-
-
 class WorkspaceAgent:
-    """Personal agent (Maja + Anna persona) for local MVP — dry or DeepSeek-backed."""
+    """Personal agent (Maja + Anna persona) for local MVP — dry or external LLM."""
 
     def __init__(
         self,
         ledger: WorkspaceLedger,
         search: HybridKnowledgeSearch | RetrieveContextUseCase,
         chat: ChatCompletionProvider | None = None,
+        pending_reviews: tuple[PendingReviewItem, ...] = (),
     ) -> None:
         self._ledger = ledger
         self._search_backend = search
         self._chat = chat
+        self._pending_reviews = pending_reviews
 
     async def chat(self, message: str, active_hash: str | None = None) -> ChatReply:
         lowered = message.lower()
+
+        if matches_attention_query(message):
+            blocked = self._ledger.list_tasks(status="blocked")
+            return format_attention_reply(
+                self._pending_reviews,
+                blocked_count=len(blocked),
+                blocked_titles=tuple(t.title for t in blocked),
+            )
+
+        if matches_review_query(message):
+            return format_review_reply(self._pending_reviews)
 
         if any(word in lowered for word in ("zablokow", "blocked", "blokad")):
             blocked = self._ledger.list_tasks(status="blocked")
@@ -70,12 +83,6 @@ class WorkspaceAgent:
                     "„Generuj plan” w `#Planning`."
                 )
             return ChatReply(message=body + "\n\n→ `#Planning`", suggested_hash="#Planning")
-
-        if any(word in lowered for word in ("review", "akcept", "approve", "hitl")):
-            return ChatReply(
-                message="Kolejka akceptacji CEO jest w panelu `#Review`. Tam zatwierdzasz akcje wysokiego ryzyka.",
-                suggested_hash="#Review",
-            )
 
         citations, chunks = await self._search(message)
         llm_reply = await self._try_llm_reply(message, chunks, citations)

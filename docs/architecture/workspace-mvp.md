@@ -101,6 +101,13 @@ Browser → FastAPI :8042
 
 Knowledge ingest (MVP): scan T1 globs under `KNOWLEDGE_ROOT`, strip HTML callouts, chunk + embed. Default backend is in-memory (`FakeEmbeddingProvider`, CI-friendly). Set `RAG_BACKEND=qdrant` to persist chunks in local Qdrant on `:6335`. **Hybrid re-ranking** boosts filename/path token matches (e.g. `Backup.md` for “backup Qdrant”).
 
+## Review queue (HITL)
+
+- `GET /workspace/review/pending` — pending CEO approvals (same DB as `/operator/`)
+- Sidebar badge on `#Review` shows pending count; refreshed after approve/reject
+- AO answers „co wymaga uwagi?” / „review” with queue summary + suggests `#Review`
+- `/workspace/health` includes `review_pending_count`
+
 ## Planning
 
 - `POST /workspace/planning/generate` — AO builds daily plan from calendar stub + board tasks
