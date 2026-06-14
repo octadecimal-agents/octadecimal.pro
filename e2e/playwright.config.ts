@@ -1,9 +1,7 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "@playwright/test";
 
-const e2eRoot = path.dirname(fileURLToPath(import.meta.url));
-process.env.PLAYWRIGHT_BROWSERS_PATH ??= path.join(e2eRoot, ".playwright-browsers");
+process.env.PLAYWRIGHT_BROWSERS_PATH ??= path.join(process.cwd(), ".playwright-browsers");
 
 const baseURL = process.env.E2E_BASE_URL ?? "http://127.0.0.1:18042";
 
