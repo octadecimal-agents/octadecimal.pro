@@ -165,4 +165,6 @@ See `e2e/README.md` for scenarios and `E2E_SKIP_SERVER` when reusing a running d
 ## Related docs
 
 - Knowledge plan: `Knowledge/.../octa-os/mvp-localhost-m5.md`
+- Next tasks roadmap: [workspace-mvp-roadmap.md](../planning/workspace-mvp-roadmap.md)
+- Completed work: [workspace-mvp-done-index.md](../planning/workspace-mvp-done-index.md) (Sprint 0–3)
 - Contributing: `CONTRIBUTING.md`
