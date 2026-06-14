@@ -6,4 +6,6 @@ class FakeEmbeddingProvider:
 
     async def embed(self, text: str) -> list[float]:
         digest = hashlib.sha256(text.encode()).digest()
-        return [b / 255.0 for b in digest[: self.VECTOR_SIZE]]
+        # SHA-256 is 32 bytes; extend deterministically to VECTOR_SIZE for Qdrant collections.
+        extended = digest + hashlib.sha256(b"pad:" + digest).digest()
+        return [byte / 255.0 for byte in extended[: self.VECTOR_SIZE]]

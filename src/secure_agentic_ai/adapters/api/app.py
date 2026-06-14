@@ -11,7 +11,7 @@ from secure_agentic_ai.adapters.api.operator_router import router as operator_ro
 from secure_agentic_ai.adapters.api.routes import router
 from secure_agentic_ai.adapters.workspace.router import router as workspace_router
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
-from secure_agentic_ai.infrastructure.workspace.state import init_workspace_state
+from secure_agentic_ai.infrastructure.workspace.state import init_workspace_state, shutdown_workspace_state
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "workspace" / "static"
 
@@ -23,6 +23,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     if config.enabled:
         await init_workspace_state()
     yield
+    if config.enabled:
+        await shutdown_workspace_state()
     await shutdown_db()
 
 

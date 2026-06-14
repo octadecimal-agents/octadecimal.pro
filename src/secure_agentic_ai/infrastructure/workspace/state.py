@@ -1,12 +1,18 @@
+import os
+
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.infrastructure.knowledge.fake_embedding_provider import FakeEmbeddingProvider
 from secure_agentic_ai.infrastructure.knowledge.in_memory_vector_store import InMemoryVectorStore
+from secure_agentic_ai.infrastructure.knowledge.qdrant_vector_store import QdrantVectorStore
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
+from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.knowledge_loader import ingest_knowledge_paths
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
+VectorStoreBackend = InMemoryVectorStore | QdrantVectorStore
+
 _ledger: WorkspaceLedger | None = None
-_vector_store: InMemoryVectorStore | None = None
+_vector_store: VectorStoreBackend | None = None
 _config: WorkspaceConfig | None = None
 _initialized = False
 _documents_indexed = 0
@@ -26,10 +32,21 @@ def get_ledger() -> WorkspaceLedger:
     return _ledger
 
 
-def get_vector_store() -> InMemoryVectorStore:
+def _should_reindex() -> bool:
+    return os.environ.get("OCTA_REINDEX", "").lower() in {"1", "true", "yes"}
+
+
+def get_vector_store() -> VectorStoreBackend:
     global _vector_store
     if _vector_store is None:
-        _vector_store = InMemoryVectorStore()
+        config = get_config()
+        if config.rag_backend == "qdrant":
+            _vector_store = QdrantVectorStore(
+                url=config.qdrant_url,
+                collection=config.qdrant_collection,
+            )
+        else:
+            _vector_store = InMemoryVectorStore()
     return _vector_store
 
 
@@ -38,7 +55,19 @@ async def init_workspace_state() -> int:
     config = get_config()
     store = get_vector_store()
     get_ledger().seed_demo_tasks()
-    if not _initialized:
+
+    reindex = _should_reindex()
+    if isinstance(store, QdrantVectorStore):
+        await store.ensure_collection()
+        existing = await store.count_points()
+        if existing == 0 or reindex:
+            _documents_indexed = await ingest_knowledge_paths(config, store)
+        else:
+            _documents_indexed = existing
+        _initialized = True
+        return _documents_indexed
+
+    if not _initialized or reindex:
         _documents_indexed = await ingest_knowledge_paths(config, store)
         _initialized = True
     return _documents_indexed
@@ -48,11 +77,29 @@ def get_documents_indexed() -> int:
     return _documents_indexed
 
 
+def get_rag_backend_label() -> str:
+    config = get_config()
+    if config.rag_backend == "qdrant":
+        return f"qdrant:{config.qdrant_collection}@{config.qdrant_url}"
+    return "memory"
+
+
+def get_hybrid_search() -> HybridKnowledgeSearch:
+    return HybridKnowledgeSearch(retrieve=get_retrieve_use_case())
+
+
 def get_retrieve_use_case() -> RetrieveContextUseCase:
     return RetrieveContextUseCase(
         embedding_provider=FakeEmbeddingProvider(),
         vector_store=get_vector_store(),
     )
+
+
+async def shutdown_workspace_state() -> None:
+    global _vector_store
+    if isinstance(_vector_store, QdrantVectorStore):
+        await _vector_store.close()
+        _vector_store = None
 
 
 def reset_for_tests() -> None:

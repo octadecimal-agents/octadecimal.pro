@@ -14,6 +14,9 @@ class WorkspaceConfig:
     ledger_path: Path
     journal_dir: Path
     llm_provider: str
+    rag_backend: str
+    qdrant_url: str
+    qdrant_collection: str
     knowledge_globs: tuple[str, ...]
 
     @classmethod
@@ -25,6 +28,9 @@ class WorkspaceConfig:
             ledger_path=_expand(os.environ.get("OCTA_LEDGER", "~/.octa/ledger.sqlite")),
             journal_dir=knowledge_root / "02-6-Rooms-Model" / "_system" / "journal",
             llm_provider=os.environ.get("LLM_PROVIDER", "dry").lower(),
+            rag_backend=os.environ.get("RAG_BACKEND", "memory").lower(),
+            qdrant_url=os.environ.get("QDRANT_URL", "http://127.0.0.1:6335"),
+            qdrant_collection=os.environ.get("QDRANT_COLLECTION", "knowledge_chunks_dev"),
             knowledge_globs=(
                 "01-Base-Point/pro/servers/pc-ubuntu/**/*.md",
                 "01-Base-Point/pro/projects/octa-os/**/*.md",

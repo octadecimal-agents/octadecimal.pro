@@ -26,8 +26,16 @@
 
       <section class="panel" id="panel-Planning" data-panel="#Planning">
         <h2>Plan dnia</h2>
+        <div class="plan-actions">
+          <button type="button" id="generate-plan-btn">Generuj plan (AO)</button>
+          <button type="button" id="save-plan-btn" class="secondary">Zapisz edycję</button>
+        </div>
         <div class="calendar" id="calendar-list"></div>
         <ul class="plan-list" id="plan-list"></ul>
+        <form class="inline" id="add-plan-form">
+          <input type="text" id="new-plan-item" placeholder="Dodaj pozycję planu…" required>
+          <button type="submit">Dodaj</button>
+        </form>
       </section>
 
       <section class="panel" id="panel-Board" data-panel="#Board">

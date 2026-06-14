@@ -90,3 +90,4 @@ class HealthWorkspaceResponse(BaseModel):
     knowledge_root: str
     ledger_path: str
     documents_indexed: int
+    rag_backend: str

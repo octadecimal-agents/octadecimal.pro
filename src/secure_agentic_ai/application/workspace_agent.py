@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from datetime import date
 
+from secure_agentic_ai.application.planning_service import generate_daily_plan
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.domain.knowledge import RetrievedChunk
+from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
 
@@ -16,9 +18,13 @@ class ChatReply:
 class WorkspaceAgent:
     """Dry-mode personal agent (Maja + Anna persona) for local MVP."""
 
-    def __init__(self, ledger: WorkspaceLedger, retrieve: RetrieveContextUseCase) -> None:
+    def __init__(
+        self,
+        ledger: WorkspaceLedger,
+        search: HybridKnowledgeSearch | RetrieveContextUseCase,
+    ) -> None:
         self._ledger = ledger
-        self._retrieve = retrieve
+        self._search_backend = search
 
     async def chat(self, message: str, active_hash: str | None = None) -> ChatReply:
         lowered = message.lower()
@@ -36,6 +42,14 @@ class WorkspaceAgent:
                 suggested_hash="#Board",
             )
 
+        if "wygeneruj plan" in lowered or "generate plan" in lowered:
+            items = generate_daily_plan(self._ledger)
+            lines = [f"{i + 1}. {item.title}" for i, item in enumerate(items)]
+            return ChatReply(
+                message="Przygotowałam plan dnia:\n\n" + "\n".join(lines) + "\n\n→ `#Planning`",
+                suggested_hash="#Planning",
+            )
+
         if any(word in lowered for word in ("plan", "dzisiaj", "today", "planning")):
             today = date.today().isoformat()
             items = self._ledger.list_plan_items(today)
@@ -43,7 +57,10 @@ class WorkspaceAgent:
                 lines = [f"{i + 1}. {item.title}" for i, item in enumerate(items)]
                 body = "Plan na dziś:\n\n" + "\n".join(lines)
             else:
-                body = "Plan na dziś jest pusty — mogę go przygotować. Otwórz `#Planning`."
+                body = (
+                    "Plan na dziś jest pusty. Napisz „wygeneruj plan” albo kliknij "
+                    "„Generuj plan” w `#Planning`."
+                )
             return ChatReply(message=body + "\n\n→ `#Planning`", suggested_hash="#Planning")
 
         if any(word in lowered for word in ("review", "akcept", "approve", "hitl")):
@@ -79,8 +96,11 @@ class WorkspaceAgent:
         )
 
     async def _search(self, query: str) -> tuple[list[str], list[RetrievedChunk]]:
-        chunks = await self._retrieve.execute(query, k=5)
-        citations = []
+        if isinstance(self._search_backend, HybridKnowledgeSearch):
+            chunks = await self._search_backend.search(query, k=5)
+        else:
+            chunks = await self._search_backend.execute(query, k=5)
+        citations: list[str] = []
         for item in chunks:
             source = item.chunk.metadata.source if item.chunk.metadata else ""
             if source and source not in citations:

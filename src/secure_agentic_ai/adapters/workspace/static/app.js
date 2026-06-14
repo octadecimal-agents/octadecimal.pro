@@ -82,17 +82,47 @@ async function loadBoard() {
   });
 }
 
+let planItemsCache = [];
+
 async function loadPlanning() {
   const [calendar, items] = await Promise.all([
     api("/workspace/planning/calendar"),
     api("/workspace/planning/items"),
   ]);
+  planItemsCache = items.map((i) => ({ title: i.title, source: i.source }));
   $("calendar-list").innerHTML = calendar
     .map((e) => `<div class="calendar-item"><time>${e.time}</time><span>${e.title}</span></div>`)
     .join("");
-  $("plan-list").innerHTML = items.length
-    ? items.map((i) => `<li>${i.title} <span class="muted">(${i.source})</span></li>`).join("")
-    : "<li class='muted'>Brak pozycji — zapytaj AO o plan dnia.</li>";
+  renderPlanList();
+}
+
+function renderPlanList() {
+  $("plan-list").innerHTML = planItemsCache.length
+    ? planItemsCache
+        .map(
+          (item, idx) =>
+            `<li><span class="muted">${item.source}</span><input data-idx="${idx}" value="${item.title.replace(/"/g, "&quot;")}"></li>`
+        )
+        .join("")
+    : "<li class='muted'>Brak pozycji — wygeneruj plan lub zapytaj AO.</li>";
+  $("plan-list").querySelectorAll("input").forEach((input) => {
+    input.addEventListener("change", () => {
+      const idx = Number(input.dataset.idx);
+      planItemsCache[idx].title = input.value;
+    });
+  });
+}
+
+async function savePlanItems() {
+  const today = new Date().toISOString().slice(0, 10);
+  await api("/workspace/planning/items", {
+    method: "PUT",
+    body: JSON.stringify({
+      plan_date: today,
+      items: planItemsCache.map((i) => ({ title: i.title, source: i.source })),
+    }),
+  });
+  await loadPlanning();
 }
 
 async function loadWiki(query) {
@@ -199,6 +229,22 @@ $("add-task-btn").addEventListener("click", async () => {
   });
   $("new-title").value = "";
   loadBoard();
+});
+
+$("generate-plan-btn").addEventListener("click", async () => {
+  await api("/workspace/planning/generate", { method: "POST" });
+  await loadPlanning();
+});
+
+$("save-plan-btn").addEventListener("click", () => savePlanItems());
+
+$("add-plan-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = $("new-plan-item").value.trim();
+  if (!title) return;
+  planItemsCache.push({ title, source: "ceo" });
+  $("new-plan-item").value = "";
+  renderPlanList();
 });
 
 window.addEventListener("hashchange", () => {

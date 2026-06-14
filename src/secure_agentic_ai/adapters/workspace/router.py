@@ -22,6 +22,7 @@ from secure_agentic_ai.adapters.workspace.schemas import (
     TaskUpdateRequest,
     WikiSearchResponse,
 )
+from secure_agentic_ai.application.planning_service import DEFAULT_CALENDAR, generate_daily_plan
 from secure_agentic_ai.application.workspace_agent import WorkspaceAgent
 from secure_agentic_ai.domain.audit import AuditEvent, AuditEventType
 from secure_agentic_ai.infrastructure.persistence.approval_repository import (
@@ -32,8 +33,9 @@ from secure_agentic_ai.infrastructure.workspace.ledger import Task
 from secure_agentic_ai.infrastructure.workspace.state import (
     get_config,
     get_documents_indexed,
+    get_hybrid_search,
     get_ledger,
-    get_retrieve_use_case,
+    get_rag_backend_label,
     init_workspace_state,
 )
 
@@ -65,13 +67,14 @@ async def workspace_health() -> HealthWorkspaceResponse:
         knowledge_root=str(config.knowledge_root),
         ledger_path=str(config.ledger_path),
         documents_indexed=get_documents_indexed(),
+        rag_backend=get_rag_backend_label(),
     )
 
 
 @router.post("/chat", response_model=ChatResponse)
 async def workspace_chat(body: ChatRequest) -> ChatResponse:
     await ensure_workspace_ready()
-    agent = WorkspaceAgent(ledger=get_ledger(), retrieve=get_retrieve_use_case())
+    agent = WorkspaceAgent(ledger=get_ledger(), search=get_hybrid_search())
     reply = await agent.chat(body.message, active_hash=body.active_hash)
     return ChatResponse(
         message=reply.message,
@@ -148,20 +151,32 @@ async def replace_plan_items(body: PlanReplaceRequest) -> list[PlanItemResponse]
     ]
 
 
+@router.post("/planning/generate", response_model=list[PlanItemResponse])
+async def generate_plan(plan_date: str | None = None) -> list[PlanItemResponse]:
+    await ensure_workspace_ready()
+    day = plan_date or date.today().isoformat()
+    items = generate_daily_plan(get_ledger(), plan_date=day)
+    return [
+        PlanItemResponse(
+            id=item.id,
+            plan_date=item.plan_date,
+            sort_order=item.sort_order,
+            title=item.title,
+            source=item.source,
+        )
+        for item in items
+    ]
+
+
 @router.get("/planning/calendar", response_model=list[CalendarEvent])
 async def planning_calendar_stub() -> list[CalendarEvent]:
-    return [
-        CalendarEvent(time="09:00", title="Sprint planning wewnętrzny"),
-        CalendarEvent(time="13:30", title="Review HITL — akceptacje CEO"),
-        CalendarEvent(time="17:00", title="Retro dnia + journal"),
-    ]
+    return [CalendarEvent(time=time, title=title) for time, title in DEFAULT_CALENDAR]
 
 
 @router.get("/wiki/search", response_model=WikiSearchResponse)
 async def wiki_search(q: str, k: int = 5) -> WikiSearchResponse:
     await ensure_workspace_ready()
-    retrieve = get_retrieve_use_case()
-    results = await retrieve.execute(q, k=k)
+    results = await get_hybrid_search().search(q, k=k)
     payload: list[dict[str, str | float]] = [
         {
             "source": r.chunk.metadata.source if r.chunk.metadata else "",

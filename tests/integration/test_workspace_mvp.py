@@ -78,6 +78,7 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     data = response.json()
     assert data["status"] == "ok"
     assert data["documents_indexed"] >= 1
+    assert data["rag_backend"] == "memory"
 
 
 def test_workspace_chat_dry(workspace_client: TestClient) -> None:
@@ -115,7 +116,16 @@ def test_wiki_search(workspace_client: TestClient) -> None:
     assert response.status_code == 200
     results = response.json()["results"]
     assert len(results) >= 1
-    assert "Backup.md" in results[0]["source"]
+    assert any("Backup.md" in r["source"] for r in results)
+
+
+def test_planning_generate(workspace_client: TestClient) -> None:
+    response = workspace_client.post("/workspace/planning/generate")
+    assert response.status_code == 200
+    items = response.json()
+    assert len(items) >= 4
+    listed = workspace_client.get("/workspace/planning/items")
+    assert len(listed.json()) == len(items)
 
 
 def test_retro_save(workspace_client: TestClient) -> None:

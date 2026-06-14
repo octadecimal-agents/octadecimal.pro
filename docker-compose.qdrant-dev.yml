@@ -1,0 +1,11 @@
+services:
+  qdrant-dev:
+    image: qdrant/qdrant:v1.13.6
+    ports:
+      - "6335:6333"
+    volumes:
+      - qdrant_dev_data:/qdrant/storage
+    restart: unless-stopped
+
+volumes:
+  qdrant_dev_data:
