@@ -2,7 +2,7 @@ import uuid
 from typing import Any
 
 from qdrant_client import AsyncQdrantClient
-from qdrant_client.models import Distance, PointStruct, VectorParams
+from qdrant_client.models import Distance, FieldCondition, Filter, MatchValue, PointStruct, VectorParams
 
 from secure_agentic_ai.infrastructure.knowledge.fake_embedding_provider import FakeEmbeddingProvider
 
@@ -53,6 +53,14 @@ class QdrantVectorStore:
                     payload={"chunk_id": chunk_id, **metadata},
                 )
             ],
+        )
+
+    async def delete_by_document_id(self, document_id: str) -> None:
+        await self._client.delete(
+            collection_name=self._collection,
+            points_selector=Filter(
+                must=[FieldCondition(key="document_id", match=MatchValue(value=document_id))]
+            ),
         )
 
     async def similarity_search(

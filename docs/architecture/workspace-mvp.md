@@ -62,6 +62,16 @@ Or start Qdrant manually:
 docker compose -f docker-compose.qdrant-dev.yml up -d
 ```
 
+Incremental sync (only changed T1 files):
+
+```bash
+./scripts/octa-qdrant-dev.sh
+uv run python scripts/embed-knowledge.py sync --dev
+uv run python scripts/embed-knowledge.py sync --dev --dry-run   # preview diff
+```
+
+Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup skips full ingest when the Qdrant collection already has points (`OCTA_REINDEX=1` forces rebuild).
+
 ### MiniMax (recommended external LLM)
 
 ```bash
