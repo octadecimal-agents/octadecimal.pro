@@ -5,7 +5,11 @@ from secure_agentic_ai.application.planning_service import generate_daily_plan
 from secure_agentic_ai.application.ports import ChatCompletionProvider
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.domain.knowledge import RetrievedChunk
-from secure_agentic_ai.infrastructure.llm.deepseek_provider import build_rag_messages, parse_suggested_hash
+from secure_agentic_ai.infrastructure.llm.chat_prompts import (
+    build_rag_messages,
+    parse_suggested_hash,
+    sanitize_llm_reply,
+)
 from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
@@ -118,7 +122,9 @@ class WorkspaceAgent:
             context_blocks.append((source, item.chunk.text[:1200]))
 
         try:
-            reply_text = await self._chat.complete(build_rag_messages(message, context_blocks))
+            reply_text = sanitize_llm_reply(
+                await self._chat.complete(build_rag_messages(message, context_blocks))
+            )
         except Exception:
             return None
 

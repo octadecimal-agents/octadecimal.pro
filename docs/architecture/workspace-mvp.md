@@ -28,12 +28,18 @@ Open http://127.0.0.1:8042/
 | `WORKSPACE_ENABLED` | `0` | Set to `1` to mount Workspace routes and static UI |
 | `KNOWLEDGE_ROOT` | `~/Developer/Knowledge` | Canonical Markdown root |
 | `OCTA_LEDGER` | `~/.octa/ledger.sqlite` | Board + planning ledger |
-| `LLM_PROVIDER` | `dry` | `dry` (heuristics) or `deepseek` |
-| `DEEPSEEK_MODEL` | `deepseek-v4-flash` | DeepSeek V4 model id |
+| `LLM_PROVIDER` | `dry` | `dry` (heuristics), `minimax`, or `deepseek` |
+| `MINIMAX_MODEL` | `MiniMax-M3` | MiniMax model id (OpenAI-compatible API) |
+| `MINIMAX_BASE_URL` | `https://api.minimax.io/v1` | MiniMax API base |
+| `MINIMAX_API_TOKEN` | — | Direct token (dev); prefer Bitwarden in prod |
+| `BWS_MINIMAX_SECRET_KEY` | `MINIMAX_API_TOKEN` | Secret key name inside the BSM project |
+| `MINIMAX_BW_LABEL` | `octadecimal-infra/minimax-api-token` | Fallback: Bitwarden vault label via `Knowledge/tools/bitwarden` |
+| `BW_SECRET_ID_MINIMAX_API_TOKEN` | — | Fallback: BSM secret UUID |
+| `DEEPSEEK_MODEL` | `deepseek-v4-flash` | DeepSeek V4 model id (legacy) |
 | `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` | OpenAI-compatible API base |
 | `DEEPSEEK_API_KEY` | — | Direct key (dev); prefer Bitwarden in prod |
 | `BWS_ACCESS_TOKEN` | — | Machine account token (`m1-runtime`) for Secrets Manager |
-| `BWS_PROJECT_NAME` | `multi-agents-framework-m1` | BSM project with `DEEPSEEK_API_KEY` |
+| `BWS_PROJECT_NAME` | `multi-agents-framework-m1` | BSM project with `MINIMAX_API_TOKEN` (or `DEEPSEEK_API_KEY`) |
 | `BWS_DEEPSEEK_SECRET_KEY` | `DEEPSEEK_API_KEY` | Secret key name inside the project |
 | `DEEPSEEK_BW_LABEL` | `octadecimal-infra/deepseek-api-key` | Fallback: Bitwarden vault label via `Knowledge/tools/bitwarden` |
 | `BW_SECRET_ID_DEEPSEEK_API_KEY` | — | Fallback: BSM secret UUID |
@@ -56,7 +62,22 @@ Or start Qdrant manually:
 docker compose -f docker-compose.qdrant-dev.yml up -d
 ```
 
-### DeepSeek V4 (optional)
+### MiniMax (recommended external LLM)
+
+```bash
+# Machine account m1-runtime (Bitwarden Secrets Manager)
+export BWS_ACCESS_TOKEN="..."   # token — Keychain, nie repo
+export LLM_PROVIDER=minimax
+export RAG_BACKEND=qdrant
+./scripts/octa-mvp-up.sh
+```
+
+Key resolution order: `MINIMAX_API_TOKEN` / `MINIMAX_API_KEY` → `BWS_ACCESS_TOKEN` + project `multi-agents-framework-m1` / key `MINIMAX_API_TOKEN` → `BW_SECRET_ID_*` → Bitwarden vault (`bw`).
+If no token is found, AO falls back to dry mode.
+
+`octa-mvp-up.sh` auto-loads `BWS_ACCESS_TOKEN` from macOS Keychain when present (`pl.octadecimal.m1-runtime.BWS_ACCESS_TOKEN`).
+
+### DeepSeek V4 (legacy)
 
 ```bash
 # Machine account m1-runtime (Bitwarden Secrets Manager)

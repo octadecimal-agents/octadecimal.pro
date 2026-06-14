@@ -98,6 +98,8 @@ def get_llm_label() -> str:
     if _chat_provider is not None:
         return _chat_provider.label
     config = get_config()
+    if config.llm_provider == "minimax":
+        return f"minimax:{config.minimax_model}"
     if config.llm_provider == "deepseek":
         return f"deepseek:{config.deepseek_model}"
     return config.llm_provider

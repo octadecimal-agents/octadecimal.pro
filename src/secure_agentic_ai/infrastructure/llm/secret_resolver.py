@@ -7,7 +7,8 @@ from pathlib import Path
 from secure_agentic_ai.infrastructure.secrets.bitwarden_provider import BitwardenSecretProvider
 
 DEFAULT_BWS_PROJECT = "multi-agents-framework-m1"
-DEFAULT_BWS_SECRET_KEY = "DEEPSEEK_API_KEY"
+DEFAULT_BWS_DEEPSEEK_SECRET_KEY = "DEEPSEEK_API_KEY"
+DEFAULT_BWS_MINIMAX_SECRET_KEY = "MINIMAX_API_TOKEN"
 
 
 async def resolve_deepseek_api_key(
@@ -15,29 +16,82 @@ async def resolve_deepseek_api_key(
     knowledge_root: Path,
     bw_label: str,
     bws_project_name: str = DEFAULT_BWS_PROJECT,
-    bws_secret_key: str = DEFAULT_BWS_SECRET_KEY,
+    bws_secret_key: str = DEFAULT_BWS_DEEPSEEK_SECRET_KEY,
 ) -> str | None:
     """Resolve DeepSeek API key without logging the value."""
-    direct = os.environ.get("DEEPSEEK_API_KEY", "").strip()
-    if direct:
-        return direct
+    return await _resolve_llm_token(
+        env_keys=("DEEPSEEK_API_KEY",),
+        knowledge_root=knowledge_root,
+        bw_label=bw_label,
+        manifest_key="deepseek_api_key",
+        default_bw_label="octadecimal-infra/deepseek-api-key",
+        bws_project_name=bws_project_name,
+        bws_secret_key_env="BWS_DEEPSEEK_SECRET_KEY",
+        bws_secret_key=bws_secret_key,
+        bws_secret_id_env="BWS_DEEPSEEK_SECRET_ID",
+        bw_secret_id_env="BW_SECRET_ID_DEEPSEEK_API_KEY",
+        bitwarden_provider_key="deepseek_api_key",
+    )
+
+
+async def resolve_minimax_api_token(
+    *,
+    knowledge_root: Path,
+    bw_label: str,
+    bws_project_name: str = DEFAULT_BWS_PROJECT,
+    bws_secret_key: str = DEFAULT_BWS_MINIMAX_SECRET_KEY,
+) -> str | None:
+    """Resolve MiniMax API token without logging the value."""
+    return await _resolve_llm_token(
+        env_keys=("MINIMAX_API_TOKEN", "MINIMAX_API_KEY"),
+        knowledge_root=knowledge_root,
+        bw_label=bw_label,
+        manifest_key="minimax_api_token",
+        default_bw_label="octadecimal-infra/minimax-api-token",
+        bws_project_name=bws_project_name,
+        bws_secret_key_env="BWS_MINIMAX_SECRET_KEY",
+        bws_secret_key=bws_secret_key,
+        bws_secret_id_env="BWS_MINIMAX_SECRET_ID",
+        bw_secret_id_env="BW_SECRET_ID_MINIMAX_API_TOKEN",
+        bitwarden_provider_key="minimax_api_token",
+    )
+
+
+async def _resolve_llm_token(
+    *,
+    env_keys: tuple[str, ...],
+    knowledge_root: Path,
+    bw_label: str,
+    manifest_key: str,
+    default_bw_label: str,
+    bws_project_name: str,
+    bws_secret_key_env: str,
+    bws_secret_key: str,
+    bws_secret_id_env: str,
+    bw_secret_id_env: str,
+    bitwarden_provider_key: str,
+) -> str | None:
+    for env_key in env_keys:
+        direct = os.environ.get(env_key, "").strip()
+        if direct:
+            return direct
 
     bws_value = await _resolve_from_bsm(
         project_name=os.environ.get("BWS_PROJECT_NAME", bws_project_name).strip(),
         project_id=os.environ.get("BWS_PROJECT_ID", "").strip(),
-        secret_key=os.environ.get("BWS_DEEPSEEK_SECRET_KEY", bws_secret_key).strip(),
-        secret_id=os.environ.get("BWS_DEEPSEEK_SECRET_ID", "").strip(),
+        secret_key=os.environ.get(bws_secret_key_env, bws_secret_key).strip(),
+        secret_id=os.environ.get(bws_secret_id_env, "").strip(),
     )
     if bws_value:
         return bws_value
 
-    secret_id = os.environ.get("BW_SECRET_ID_DEEPSEEK_API_KEY", "").strip()
+    secret_id = os.environ.get(bw_secret_id_env, "").strip()
     if secret_id:
-        provider = BitwardenSecretProvider({"deepseek_api_key": secret_id})
-        return (await provider.resolve("deepseek_api_key")).resolve()
+        provider = BitwardenSecretProvider({bitwarden_provider_key: secret_id})
+        return (await provider.resolve(bitwarden_provider_key)).resolve()
 
-    manifest_label = _manifest_label_for_key(knowledge_root, "deepseek_api_key")
-    label = bw_label or manifest_label or "octadecimal-infra/deepseek-api-key"
+    manifest_label = _manifest_label_for_key(knowledge_root, manifest_key)
+    label = bw_label or manifest_label or default_bw_label
     return await _resolve_from_bw_vault(knowledge_root, label)
 
 
