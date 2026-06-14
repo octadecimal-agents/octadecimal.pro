@@ -79,6 +79,7 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     assert data["status"] == "ok"
     assert data["documents_indexed"] >= 1
     assert data["rag_backend"] == "memory"
+    assert data["llm_provider"] == "dry"
 
 
 def test_workspace_chat_dry(workspace_client: TestClient) -> None:

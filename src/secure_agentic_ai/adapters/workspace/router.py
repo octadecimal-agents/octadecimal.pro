@@ -31,10 +31,12 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
 )
 from secure_agentic_ai.infrastructure.workspace.ledger import Task
 from secure_agentic_ai.infrastructure.workspace.state import (
+    get_chat_provider,
     get_config,
     get_documents_indexed,
     get_hybrid_search,
     get_ledger,
+    get_llm_label,
     get_rag_backend_label,
     init_workspace_state,
 )
@@ -61,6 +63,7 @@ def _task_response(task: Task) -> TaskResponse:
 @router.get("/health", response_model=HealthWorkspaceResponse)
 async def workspace_health() -> HealthWorkspaceResponse:
     await ensure_workspace_ready()
+    await get_chat_provider()
     config = get_config()
     return HealthWorkspaceResponse(
         status="ok",
@@ -68,13 +71,18 @@ async def workspace_health() -> HealthWorkspaceResponse:
         ledger_path=str(config.ledger_path),
         documents_indexed=get_documents_indexed(),
         rag_backend=get_rag_backend_label(),
+        llm_provider=get_llm_label(),
     )
 
 
 @router.post("/chat", response_model=ChatResponse)
 async def workspace_chat(body: ChatRequest) -> ChatResponse:
     await ensure_workspace_ready()
-    agent = WorkspaceAgent(ledger=get_ledger(), search=get_hybrid_search())
+    agent = WorkspaceAgent(
+        ledger=get_ledger(),
+        search=get_hybrid_search(),
+        chat=await get_chat_provider(),
+    )
     reply = await agent.chat(body.message, active_hash=body.active_hash)
     return ChatResponse(
         message=reply.message,

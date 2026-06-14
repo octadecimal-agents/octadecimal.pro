@@ -28,7 +28,15 @@ Open http://127.0.0.1:8042/
 | `WORKSPACE_ENABLED` | `0` | Set to `1` to mount Workspace routes and static UI |
 | `KNOWLEDGE_ROOT` | `~/Developer/Knowledge` | Canonical Markdown root |
 | `OCTA_LEDGER` | `~/.octa/ledger.sqlite` | Board + planning ledger |
-| `LLM_PROVIDER` | `dry` | AO replies without external LLM |
+| `LLM_PROVIDER` | `dry` | `dry` (heuristics) or `deepseek` |
+| `DEEPSEEK_MODEL` | `deepseek-v4-flash` | DeepSeek V4 model id |
+| `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` | OpenAI-compatible API base |
+| `DEEPSEEK_API_KEY` | — | Direct key (dev); prefer Bitwarden in prod |
+| `BWS_ACCESS_TOKEN` | — | Machine account token (`m1-runtime`) for Secrets Manager |
+| `BWS_PROJECT_NAME` | `multi-agents-framework-m1` | BSM project with `DEEPSEEK_API_KEY` |
+| `BWS_DEEPSEEK_SECRET_KEY` | `DEEPSEEK_API_KEY` | Secret key name inside the project |
+| `DEEPSEEK_BW_LABEL` | `octadecimal-infra/deepseek-api-key` | Fallback: Bitwarden vault label via `Knowledge/tools/bitwarden` |
+| `BW_SECRET_ID_DEEPSEEK_API_KEY` | — | Fallback: BSM secret UUID |
 | `RAG_BACKEND` | `memory` | `memory` (in-process) or `qdrant` |
 | `QDRANT_URL` | `http://127.0.0.1:6335` | Qdrant REST when `RAG_BACKEND=qdrant` |
 | `QDRANT_COLLECTION` | `knowledge_chunks_dev` | Collection name for Knowledge chunks |
@@ -47,6 +55,18 @@ Or start Qdrant manually:
 ```bash
 docker compose -f docker-compose.qdrant-dev.yml up -d
 ```
+
+### DeepSeek V4 (optional)
+
+```bash
+# Machine account m1-runtime (Bitwarden Secrets Manager)
+export BWS_ACCESS_TOKEN="..."   # token — Keychain, nie repo
+export LLM_PROVIDER=deepseek
+./scripts/octa-mvp-up.sh
+```
+
+Key resolution order: `DEEPSEEK_API_KEY` → `BWS_ACCESS_TOKEN` + project `multi-agents-framework-m1` / key `DEEPSEEK_API_KEY` → `BW_SECRET_ID_*` → Bitwarden vault (`bw`).
+If no key is found, AO falls back to dry mode.
 
 ## Architecture
 
@@ -75,6 +95,7 @@ curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
 ## Intentionally not implemented
 
 - Production Qdrant sync to pc-ubuntu (dev collection only)
+- Gemini / Ollama providers (DeepSeek V4 is the external LLM for MVP)
 - macOS MCP live calendar/mail
 - Full parity with workspace.octadecimal.pro design system
 - External LLM providers (Gemini/Ollama wiring is a follow-up)

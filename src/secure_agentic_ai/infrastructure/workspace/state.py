@@ -1,9 +1,11 @@
 import os
 
+from secure_agentic_ai.application.ports import ChatCompletionProvider
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.infrastructure.knowledge.fake_embedding_provider import FakeEmbeddingProvider
 from secure_agentic_ai.infrastructure.knowledge.in_memory_vector_store import InMemoryVectorStore
 from secure_agentic_ai.infrastructure.knowledge.qdrant_vector_store import QdrantVectorStore
+from secure_agentic_ai.infrastructure.llm.factory import build_chat_provider
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
 from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.knowledge_loader import ingest_knowledge_paths
@@ -14,6 +16,7 @@ VectorStoreBackend = InMemoryVectorStore | QdrantVectorStore
 _ledger: WorkspaceLedger | None = None
 _vector_store: VectorStoreBackend | None = None
 _config: WorkspaceConfig | None = None
+_chat_provider: ChatCompletionProvider | None = None
 _initialized = False
 _documents_indexed = 0
 
@@ -84,6 +87,22 @@ def get_rag_backend_label() -> str:
     return "memory"
 
 
+async def get_chat_provider() -> ChatCompletionProvider:
+    global _chat_provider
+    if _chat_provider is None:
+        _chat_provider = await build_chat_provider(get_config())
+    return _chat_provider
+
+
+def get_llm_label() -> str:
+    if _chat_provider is not None:
+        return _chat_provider.label
+    config = get_config()
+    if config.llm_provider == "deepseek":
+        return f"deepseek:{config.deepseek_model}"
+    return config.llm_provider
+
+
 def get_hybrid_search() -> HybridKnowledgeSearch:
     return HybridKnowledgeSearch(retrieve=get_retrieve_use_case())
 
@@ -103,9 +122,10 @@ async def shutdown_workspace_state() -> None:
 
 
 def reset_for_tests() -> None:
-    global _ledger, _vector_store, _config, _initialized, _documents_indexed
+    global _ledger, _vector_store, _config, _chat_provider, _initialized, _documents_indexed
     _ledger = None
     _vector_store = None
     _config = None
+    _chat_provider = None
     _initialized = False
     _documents_indexed = 0

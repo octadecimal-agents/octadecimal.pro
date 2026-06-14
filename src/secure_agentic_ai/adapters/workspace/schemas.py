@@ -91,3 +91,4 @@ class HealthWorkspaceResponse(BaseModel):
     ledger_path: str
     documents_indexed: int
     rag_backend: str
+    llm_provider: str

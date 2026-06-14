@@ -17,6 +17,7 @@ class BitwardenSecretProvider:
         process = await asyncio.create_subprocess_exec(
             "bws",
             "secret",
+            "get",
             secret_id,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,

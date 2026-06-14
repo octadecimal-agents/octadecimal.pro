@@ -2,8 +2,10 @@ from dataclasses import dataclass
 from datetime import date
 
 from secure_agentic_ai.application.planning_service import generate_daily_plan
+from secure_agentic_ai.application.ports import ChatCompletionProvider
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.domain.knowledge import RetrievedChunk
+from secure_agentic_ai.infrastructure.llm.deepseek_provider import build_rag_messages, parse_suggested_hash
 from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
@@ -16,15 +18,17 @@ class ChatReply:
 
 
 class WorkspaceAgent:
-    """Dry-mode personal agent (Maja + Anna persona) for local MVP."""
+    """Personal agent (Maja + Anna persona) for local MVP — dry or DeepSeek-backed."""
 
     def __init__(
         self,
         ledger: WorkspaceLedger,
         search: HybridKnowledgeSearch | RetrieveContextUseCase,
+        chat: ChatCompletionProvider | None = None,
     ) -> None:
         self._ledger = ledger
         self._search_backend = search
+        self._chat = chat
 
     async def chat(self, message: str, active_hash: str | None = None) -> ChatReply:
         lowered = message.lower()
@@ -70,6 +74,10 @@ class WorkspaceAgent:
             )
 
         citations, chunks = await self._search(message)
+        llm_reply = await self._try_llm_reply(message, chunks, citations)
+        if llm_reply is not None:
+            return llm_reply
+
         if chunks:
             top = chunks[0]
             excerpt = top.chunk.text[:280].strip()
@@ -93,6 +101,34 @@ class WorkspaceAgent:
                 "Zapytaj o backup, plan dnia albo status zespołów — albo otwórz panel z sidebaru."
             ),
             suggested_hash="#Planning",
+        )
+
+    async def _try_llm_reply(
+        self,
+        message: str,
+        chunks: list[RetrievedChunk],
+        citations: list[str],
+    ) -> ChatReply | None:
+        if self._chat is None or not self._chat.is_available():
+            return None
+
+        context_blocks: list[tuple[str, str]] = []
+        for item in chunks[:5]:
+            source = item.chunk.metadata.source if item.chunk.metadata else "Knowledge"
+            context_blocks.append((source, item.chunk.text[:1200]))
+
+        try:
+            reply_text = await self._chat.complete(build_rag_messages(message, context_blocks))
+        except Exception:
+            return None
+
+        suggested = parse_suggested_hash(reply_text)
+        if suggested is None and chunks:
+            suggested = "#Wiki"
+        return ChatReply(
+            message=reply_text,
+            suggested_hash=suggested,
+            citations=tuple(citations),
         )
 
     async def _search(self, query: str) -> tuple[list[str], list[RetrievedChunk]]:
