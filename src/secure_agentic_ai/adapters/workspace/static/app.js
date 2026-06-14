@@ -146,7 +146,7 @@ async function loadWiki(query) {
     : "<li class='muted'>Brak wyników.</li>";
 }
 
-async def loadReview() {
+async function loadReview() {
   const pending = await api("/workspace/review/pending");
   $("review-list").innerHTML = pending.length
     ? pending
