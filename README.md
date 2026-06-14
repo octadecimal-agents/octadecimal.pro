@@ -47,6 +47,16 @@ uv run uvicorn src.secure_agentic_ai.adapters.api.app:app
 
 Open http://127.0.0.1:8000/operator/ to review pending approval requests.
 
+## Octa Workspace MVP (localhost)
+
+Local CEO workspace: chat with the Personal Agent, hash panels (`#Planning`, `#Board`, `#Wiki`, `#Review`, `#Retro`), Knowledge RAG, and HITL review — see [docs/architecture/workspace-mvp.md](docs/architecture/workspace-mvp.md).
+
+```bash
+./scripts/octa-mvp-up.sh
+```
+
+Open http://127.0.0.1:8042/
+
 ```
 # Quick checks
 uv run pytest          # 62 tests

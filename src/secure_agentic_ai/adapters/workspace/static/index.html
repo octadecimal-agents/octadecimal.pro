@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octa Workspace — MVP</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Panele hash">
+      <div class="brand">Octa <span>Workspace</span></div>
+      <a href="#Ogolny" class="nav-link" data-hash="#Ogolny"><code>#Ogolny</code> Chat</a>
+      <a href="#Planning" class="nav-link" data-hash="#Planning"><code>#Planning</code> Plan dnia</a>
+      <a href="#Board" class="nav-link" data-hash="#Board"><code>#Board</code> Tablica</a>
+      <a href="#Wiki" class="nav-link" data-hash="#Wiki"><code>#Wiki</code> Knowledge</a>
+      <a href="#Review" class="nav-link" data-hash="#Review"><code>#Review</code> HITL</a>
+      <a href="#Retro" class="nav-link" data-hash="#Retro"><code>#Retro</code> Dziennik</a>
+    </nav>
+
+    <div class="main">
+      <section class="panel active" id="panel-Ogolny" data-panel="#Ogolny">
+        <h2>Agent Osobisty</h2>
+        <p class="muted">Maja + Anna — lokalny MVP na M5. Zapytaj o backup, plan albo zablokowane zadania.</p>
+      </section>
+
+      <section class="panel" id="panel-Planning" data-panel="#Planning">
+        <h2>Plan dnia</h2>
+        <div class="calendar" id="calendar-list"></div>
+        <ul class="plan-list" id="plan-list"></ul>
+      </section>
+
+      <section class="panel" id="panel-Board" data-panel="#Board">
+        <h2>Tablica zespołów dev</h2>
+        <div class="task-grid" id="task-list"></div>
+        <div class="add-task">
+          <select id="new-team">
+            <option value="automation">automation</option>
+            <option value="security">security</option>
+            <option value="frontend">frontend</option>
+            <option value="ux">ux</option>
+          </select>
+          <input id="new-title" type="text" placeholder="Tytuł zadania">
+          <button type="button" id="add-task-btn">Dodaj</button>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-Wiki" data-panel="#Wiki">
+        <h2>Knowledge — wyszukiwanie</h2>
+        <form class="inline" id="wiki-form">
+          <input type="search" id="wiki-query" placeholder="np. backup Qdrant" required>
+          <button type="submit">Szukaj</button>
+        </form>
+        <ul class="wiki-results" id="wiki-results"></ul>
+      </section>
+
+      <section class="panel" id="panel-Review" data-panel="#Review">
+        <h2>Review — akceptacje CEO</h2>
+        <ul class="review-list" id="review-list"></ul>
+      </section>
+
+      <section class="panel" id="panel-Retro" data-panel="#Retro">
+        <h2>Retro</h2>
+        <form class="inline" id="retro-form">
+          <label>Co poszło dobrze<input name="went_well" required></label>
+          <label>Co poprawić<textarea name="improve" rows="2" required></textarea></label>
+          <label>Jutro<textarea name="tomorrow" rows="2" required></textarea></label>
+          <button type="submit">Zapisz journal</button>
+        </form>
+        <pre id="retro-preview" class="muted" style="margin-top:1rem;white-space:pre-wrap;"></pre>
+      </section>
+
+      <section class="chat-section">
+        <div class="chat-header">Chat · <span id="active-hash-label">#Ogolny</span></div>
+        <div class="chat-log" id="chat-log"></div>
+        <form class="chat-form" id="chat-form">
+          <input type="text" id="chat-input" placeholder="Napisz do Agenta Osobistego…" autocomplete="off" required>
+          <button type="submit">Wyślij</button>
+        </form>
+      </section>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

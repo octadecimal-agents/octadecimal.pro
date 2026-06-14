@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <!-- Logo Octadecimal - wersja z białym tłem i ramką z zaokrąglonymi rogami -->
+  
+  <!-- Białe tło z zaokrąglonymi rogami -->
+  <rect x="0" y="0" width="400" height="400" rx="32" ry="32"
+        fill="#ffffff"/>
+  
+  <!-- Ramka zewnętrzna z zaokrąglonymi rogami (otacza logo) -->
+  <!-- Grubość ramki: 6 * 1.5 = 9 -->
+  <rect x="12" y="12" width="376" height="376" rx="28" ry="28"
+        fill="none" stroke="#1f1f1f" stroke-width="9"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  
+  <!-- Logo przesunięte do środka z paddingiem (logo 280x280, padding 60px z każdej strony) -->
+  <!-- Środek zwiększony o 20% (2x 10%): 160 * 1.1 * 1.1 = 193.6, pozycja wyśrodkowana: (280 - 193.6) / 2 = 43.2 -->
+  <g transform="translate(60, 60)">
+    <!-- Ciemna ramka (gruba) -->
+    <g id="frame_dark">
+      <rect x="43.2" y="43.2" width="193.6" height="193.6"
+            fill="none" stroke="#1f1f1f" stroke-width="40"
+            stroke-linejoin="miter" stroke-linecap="square"/>
+    </g>
+
+    <!-- Szara ramka: obrócona o 45° wokół środka (gruba) -->
+    <g id="frame_gray" transform="rotate(45 140 140)">
+      <rect x="43.2" y="43.2" width="193.6" height="193.6"
+            fill="none" stroke="#777777" stroke-width="40"
+            stroke-linejoin="miter" stroke-linecap="square"/>
+    </g>
+  </g>
+</svg>
+

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typowy dzień pracy — Octadecimal</title>
+  <meta name="description" content="Jak wygląda dzień CEO z Agentem Osobistym, Workspace i zespołami dev — Octa OS w praktyce. Chat, kalendarz, poczta, wiedza i SCRUM bez chaosu.">
+  <link rel="alternate" hreflang="pl" href="https://octadecimal.pro/typowy-dzien-pracy/">
+  <link rel="alternate" hreflang="en" href="https://octadecimal.pro/en/typical-workday/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css?v=2026061401">
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/octadecimal.svg">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-content">
+      <a href="/" class="logo">
+        <div class="logo-container">
+          <img src="../assets/logos/octadecimal.svg" alt="Octadecimal" class="logo-icon">
+          <span class="logo-text">octadecimal</span>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="/#jak-to-dziala">Jak to działa</a>
+        <a href="/typowy-dzien-pracy/" class="nav-active">Typowy dzień pracy</a>
+        <a href="/#zespol">Zespół</a>
+        <a href="/#architektura">Architektura</a>
+        <a href="/#cennik">Cennik</a>
+        <a href="/#kontakt">Kontakt</a>
+        <a href="https://workspace.octadecimal.pro" target="_blank">Workspace</a>
+        <div class="lang-switcher">
+          <a href="/typowy-dzien-pracy/" class="lang-btn active" title="Polski">PL</a>
+          <a href="/en/typical-workday/" class="lang-btn" title="English">EN</a>
+        </div>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav').classList.toggle('nav-open')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-badge fade-in-up"><span>Octa OS · scenariusz docelowy</span></div>
+      <h1 class="fade-in-up delay-1">Typowy dzień pracy <span>z Agentem Osobistym</span></h1>
+      <p class="hero-description fade-in-up delay-2">
+        Jeden chat steruje całym systemem — kalendarzem, pocztą, wiedzą firmową i zespołami dev.
+        Bez klientów na start: budujemy Octa OS, infrastrukturę i strony firmowe. Ty decydujesz — AI proponuje i wykonuje.
+      </p>
+      <div class="page-hero-actions fade-in-up delay-3">
+        <a href="https://workspace.octadecimal.pro" class="cta-button cta-primary" target="_blank">Otwórz Workspace</a>
+        <a href="/#kontakt" class="cta-button cta-secondary">Umów konsultację</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section difference-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="scroll-reveal">Agent Osobisty — warstwa L0</h2>
+        <p class="scroll-reveal">Persona Maji (planowanie) i Anny (interfejs). Pełny dostęp do kalendarza, poczty, przypomnień i bazy wiedzy — z kontekstem osobistym CEO.</p>
+      </div>
+      <div class="comparison-table scroll-reveal">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Chatbot</th>
+              <th class="highlight-col">Agent Osobisty Octa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="feature-name">Kalendarz i mail</td>
+              <td>Brak integracji</td>
+              <td class="highlight-col">EventKit + Mail — triage i plan dnia</td>
+            </tr>
+            <tr>
+              <td class="feature-name">Wiedza firmowa</td>
+              <td>Brak pamięci między sesjami</td>
+              <td class="highlight-col">Knowledge + Qdrant — cytaty ze ścieżką</td>
+            </tr>
+            <tr>
+              <td class="feature-name">Zespoły dev</td>
+              <td>Generyczne odpowiedzi</td>
+              <td class="highlight-col">Delegacja do automation, security, frontend, UX</td>
+            </tr>
+            <tr>
+              <td class="feature-name">Decyzje</td>
+              <td>Bez nadzoru</td>
+              <td class="highlight-col">HITL — akceptacja w bloku Review</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section how-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="scroll-reveal">Workspace — rozmowa otwiera widok</h2>
+        <p class="scroll-reveal">Interfejs jak w <a href="https://workspace.octadecimal.pro" target="_blank">Workspace Octadecimal</a>. Hash w sidebarze = panel: plan, tablica, wiki, retro.</p>
+      </div>
+      <div class="hash-grid scroll-reveal">
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Planning" target="_blank"><code>#Planning</code><span>Plan dnia i sprint wewnętrzny</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Board" target="_blank"><code>#Board</code><span>Tablica zadań zespołów dev</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Review" target="_blank"><code>#Review</code><span>HITL — akceptacje CEO</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Wiki" target="_blank"><code>#Wiki</code><span>Cała baza Knowledge + RAG</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Dev" target="_blank"><code>#Dev</code><span>Cursor, buildy, logi</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Retro" target="_blank"><code>#Retro</code><span>Dziennik i lessons learned</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Burndown" target="_blank"><code>#Burndown</code><span>Postęp Octa OS</span></a>
+        <a class="hash-chip" href="https://workspace.octadecimal.pro/#Zasady" target="_blank"><code>#Zasady</code><span>Policy, AI Act, tier embed</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section how-section" style="background: var(--secondary);">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="scroll-reveal">Timeline — poniedziałek CEO</h2>
+        <p class="scroll-reveal">Od porannego briefingu do retro wieczorem. Bez obsługi klientów — fokus na Octa OS i infrastrukturę.</p>
+      </div>
+      <div class="scrum-flow">
+        <div class="scrum-step scroll-reveal">
+          <div class="scrum-step-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="scrum-step-content">
+            <div class="day-time">07:00</div>
+            <h3>Start — Ciało i Sens</h3>
+            <p>AO: „3 spotkania, 12 maili, 2 przypomnienia.” CEO pyta „Co ważne?” → skrót z #Planning. Opcjonalny wpis do dziennika.</p>
+            <div class="scrum-step-agent">
+              <img src="../assets/avatars/maja.png" alt="Maja">
+              <span>Agent Osobisty + Kalendarz</span>
+            </div>
+          </div>
+        </div>
+        <div class="scrum-step scroll-reveal">
+          <div class="scrum-step-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="scrum-step-content">
+            <div class="day-time">08:30</div>
+            <h3>Triage poczty</h3>
+            <p>Mail read-only — rekrutacja, infra, newsletter. AO proponuje 2 maile „odpowiedz dziś”, reszta archiwum. Taski trafiają na #Board.</p>
+          </div>
+        </div>
+        <div class="scrum-step scroll-reveal">
+          <div class="scrum-step-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="scrum-step-content">
+            <div class="day-time">09:00</div>
+            <h3>#Planning — sprint wewnętrzny</h3>
+            <p>Plan tygodnia: embed MVP, audyt TCC macOS, poprawki stron. Rozbicie na 4 zespoły dev. CEO akceptuje w chacie.</p>
+            <div class="scrum-step-agent">
+              <img src="../assets/avatars/maja.png" alt="Maja">
+              <span>Maja Wojciechowska — Chief of Staff</span>
+            </div>
+          </div>
+        </div>
+        <div class="scrum-step scroll-reveal">
+          <div class="scrum-step-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div class="scrum-step-content">
+            <div class="day-time">10:00–12:30</div>
+            <h3>#Dev — głęboka praca</h3>
+            <p>CEO w Cursorze z BMAD (Amelia, Winston). AO w tle: watchdog embed, alert tylko przy problemie. automation-team async na #Board.</p>
+          </div>
+        </div>
+        <div class="scrum-step scroll-reveal">
+          <div class="scrum-step-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="scrum-step-content">
+            <div class="day-time">13:30</div>
+            <h3>#Review — HITL</h3>
+            <p>Lista akceptacji: merge PR, deploy strony, zmiana policy tier. security podpisuje rekomendację przy akcjach infra. Pełny audit trail.</p>
+            <div class="scrum-step-agent">
+              <img src="../assets/avatars/pawel.png" alt="Paweł">
+              <span>Paweł Dąbrowski — Security Agent</span>
+            </div>
+          </div>
+        </div>
+        <div class="scrum-step scroll-reveal">
+          <div class="scrum-step-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          </div>
+          <div class="scrum-step-content">
+            <div class="day-time">17:00</div>
+            <h3>#Retro — zamknięcie dnia</h3>
+            <p>Podsumowanie done / carry-over / jutro. 3 zdania retro CEO → dziennik. Lessons learned awansują do bazy wiedzy.</p>
+            <div class="scrum-step-agent">
+              <img src="../assets/avatars/katarzyna.png" alt="Katarzyna">
+              <span>Katarzyna Mazur — Knowledge Agent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="zespoly" class="section services-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="scroll-reveal">Aktywne zespoły dev (MVP)</h2>
+        <p class="scroll-reveal">Na start cztery zespoły — bez obsługi klientów. Każdy z profilem z <a href="/#zespol">zespołu Octadecimal</a>.</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card scroll-reveal">
+          <img src="../assets/avatars/wilson.png" alt="Wilson White" class="team-avatar">
+          <h3>automation-team</h3>
+          <span class="team-role">Wilson White · Team Lead</span>
+          <p>Octa OS: embed, MCP macOS, CLI octa. Stack: octadecimal.pro + BMAD Amelia.</p>
+        </div>
+        <div class="team-card scroll-reveal">
+          <img src="../assets/avatars/pawel.png" alt="Paweł Dąbrowski" class="team-avatar">
+          <h3>security</h3>
+          <span class="team-role">Paweł Dąbrowski · Security Agent</span>
+          <p>Tailscale, Authelia, policy tier, AI Act. Review przy każdej akcji infra.</p>
+        </div>
+        <div class="team-card scroll-reveal">
+          <img src="../assets/avatars/karolina.png" alt="Karolina Wieczorek" class="team-avatar">
+          <h3>frontend-team</h3>
+          <span class="team-role">Karolina Wieczorek · Scrum Master</span>
+          <p>octadecimal.pro, .studio, .pl — strony publiczne i Workspace.</p>
+        </div>
+        <div class="team-card scroll-reveal">
+          <img src="../assets/avatars/joanna.png" alt="Joanna Wiśniewska" class="team-avatar">
+          <h3>ux-design-team</h3>
+          <span class="team-role">Joanna Wiśniewska · Business Advisor</span>
+          <p>Figma, design system, assety graficzne pod interfejs chat + hash.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section memory-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="scroll-reveal">Trzy warstwy pamięci w praktyce</h2>
+        <p class="scroll-reveal">Ten sam model co na stronie głównej — zmapowany na Octa OS wewnętrznie.</p>
+      </div>
+      <div class="memory-grid">
+        <div class="memory-card scroll-reveal">
+          <div class="memory-level">Warstwa 1</div>
+          <h3>Pamięć zespołu</h3>
+          <p>Kontekst sesji BMAD i agentów dev. Amelia pamięta story Octa OS między taskami.</p>
+        </div>
+        <div class="memory-card scroll-reveal">
+          <div class="memory-level">Warstwa 2</div>
+          <h3>Dane operacyjne</h3>
+          <p>#Board, ledger SQLite, git, kolejka HITL Review — status każdego PR i akceptacji.</p>
+        </div>
+        <div class="memory-card scroll-reveal">
+          <div class="memory-level">Warstwa 3</div>
+          <h3>Wiedza firmowa</h3>
+          <p>Knowledge + Qdrant (#Wiki). Runbooki, research, runbooki Operacji — z cytatem ścieżki.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="scroll-reveal">Metryki dobrego dnia</h2>
+      </div>
+      <div class="metrics-grid scroll-reveal">
+        <div class="metric-card"><strong>&lt; 15 min</strong><span>do planu dnia od pierwszego chatu</span></div>
+        <div class="metric-card"><strong>&lt; 5</strong><span>maili wymagających ręcznej odpowiedzi CEO</span></div>
+        <div class="metric-card"><strong>100%</strong><span>akceptacji HITL w bloku Review</span></div>
+        <div class="metric-card"><strong>≥ 1</strong><span>sensowny commit Kanonu (docs lub kod)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container scroll-reveal">
+      <div class="cta-banner">
+        <h2>Zobacz to na żywo</h2>
+        <p>Workspace to demo operacyjne — chat, zespół agentów i panele SCRUM. Ta strona opisuje scenariusz, który budujemy jako Octa OS.</p>
+        <a href="https://workspace.octadecimal.pro" class="cta-button cta-primary" target="_blank">Wejdź do Workspace</a>
+        <p class="link-alternate" style="margin-top: var(--space-lg);">Dokumentacja wewnętrzna: <a href="https://github.com/octadecimal-agents/octadecimal.pro/tree/main/website">website/ w repo</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-content-grid">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <div class="logo-container">
+            <img src="../assets/logos/octadecimal-white-bordered.svg" alt="Octadecimal" class="logo-icon">
+            <span class="logo-text">octadecimal</span>
+          </div>
+        </a>
+        <p>Dedykowane zespoły AI dla firm, które cenią swój czas.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Nawigacja</h4>
+        <a href="/#jak-to-dziala">Jak to działa</a>
+        <a href="/typowy-dzien-pracy/">Typowy dzień pracy</a>
+        <a href="/#zespol">Zespół</a>
+        <a href="/#architektura">Architektura</a>
+        <a href="/#cennik">Cennik</a>
+        <a href="/#kontakt">Kontakt</a>
+        <a href="https://workspace.octadecimal.pro" target="_blank">Workspace</a>
+      </div>
+      <div class="footer-legal">
+        <h4>Octadecimal</h4>
+        <p>Piotr Adamczyk</p>
+        <p>NIP: 118-142-77-76</p>
+        <a href="/polityka-prywatnosci/">Polityka Prywatności</a>
+        <a href="/regulamin/">Warunki Użytkowania</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2018-2026 Octadecimal. Wszelkie prawa zastrzeżone.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/animations.js"></script>
+</body>
+</html>

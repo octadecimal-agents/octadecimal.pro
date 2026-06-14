@@ -1,3 +1,4 @@
+import os
 from collections.abc import Iterator
 
 import pytest
@@ -28,6 +29,7 @@ class FakeAuditWriter:
 
 @pytest.fixture
 def client() -> Iterator[TestClient]:
+    os.environ.pop("WORKSPACE_ENABLED", None)
     app = create_app()
     repository = FakeApprovalRequestRepository()
     audit_writer = FakeAuditWriter()
