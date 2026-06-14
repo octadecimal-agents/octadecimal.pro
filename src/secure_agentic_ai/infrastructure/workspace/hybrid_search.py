@@ -20,20 +20,35 @@ def keyword_score(query: str, source: str, text: str) -> float:
     for token in tokens:
         if token in haystack:
             score += 1.0
-        if token in filename:
-            score += 3.0
+        if token == filename:
+            score += 10.0
+        elif token in filename:
+            score += 2.0
+    # Prefer canonical runbooks over nested agent stubs when keywords tie.
+    if "/.claude/" in source or ("/agents/" in source and "agent" in filename):
+        score *= 0.85
     return score / len(tokens)
 
 
 class HybridKnowledgeSearch:
     """Vector search with keyword re-ranking for path identifiers (MVP hybrid RRF-lite)."""
 
-    def __init__(self, retrieve: RetrieveContextUseCase, vector_weight: float = 0.35) -> None:
+    def __init__(self, retrieve: RetrieveContextUseCase, vector_weight: float = 0.25) -> None:
         self._retrieve = retrieve
         self._vector_weight = vector_weight
 
     async def search(self, query: str, k: int = 5) -> list[RetrievedChunk]:
-        candidates = await self._retrieve.execute(query, k=max(k * 4, 12))
+        # MVP corpus is small (~250 docs); wider pool helps filename-heavy runbooks surface.
+        candidates = await self._retrieve.execute(query, k=max(k * 8, 100))
+        tokens = _query_tokens(query)
+        if tokens:
+            title_hint = " ".join(token.capitalize() for token in tokens[:2])
+            extra = await self._retrieve.execute(f"{title_hint} {query}", k=20)
+            seen = {c.chunk.chunk_id for c in candidates}
+            for item in extra:
+                if item.chunk.chunk_id not in seen:
+                    candidates.append(item)
+                    seen.add(item.chunk.chunk_id)
         if not candidates:
             return []
 
