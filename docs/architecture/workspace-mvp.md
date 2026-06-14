@@ -149,7 +149,12 @@ Successful macOS reads are cached in `~/.octa/calendar-cache.json` for the curre
 ```bash
 uv run pytest tests/integration/test_workspace_mvp.py tests/unit/infrastructure/test_workspace_ledger.py
 curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
+
+# Browser E2E (isolated server on :18042, dry LLM + memory RAG)
+cd e2e && npm install && npm test
 ```
+
+See `e2e/README.md` for scenarios and `E2E_SKIP_SERVER` when reusing a running dev instance.
 
 ## Intentionally not implemented
 

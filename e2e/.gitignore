@@ -1,0 +1,7 @@
+# Playwright E2E artifacts
+.data/
+.playwright-browsers/
+node_modules/
+playwright-report/
+test-results/
+package-lock.json

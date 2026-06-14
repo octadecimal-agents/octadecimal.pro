@@ -4,6 +4,7 @@ Usage: uv run python scripts/seed_demo.py
 """
 
 import asyncio
+import os
 from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -19,8 +20,12 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
 from secure_agentic_ai.infrastructure.persistence.models import Base
 
 
+_DEFAULT_DB = "sqlite+aiosqlite:///data/dev.db"
+
+
 async def seed() -> None:
-    engine = create_async_engine("sqlite+aiosqlite:///data/dev.db", echo=False)
+    database_url = os.environ.get("DATABASE_URL", _DEFAULT_DB)
+    engine = create_async_engine(database_url, echo=False)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
