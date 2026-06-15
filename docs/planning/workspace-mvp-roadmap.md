@@ -20,7 +20,8 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 | **Next** | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) — M1 server mode (agents 24/7 on Mac) |
 | **Deferred** | [M5.7](workspace-mvp-m5-7-hosting-only.md) — pc-ubuntu hosting only (backup, HTTPS); no agent fleet |
 | **Parallel** | [M6+ platform](workspace-mvp-m6-platform.md) — phases 5–13; **backend-team** |
-| **Parallel UX** | [Dual-track](workspace-mvp-dual-track.md) — **frontend-team** (OpenCode / WDS) |
+| **Parallel UX** | [Triple-track](workspace-mvp-triple-track.md) — **frontend-team** (OpenCode / WDS) |
+| **Parallel Ops** | [M5.8 Security Ops](workspace-mvp-m5-8-security-ops.md) — **security-team** (M1 → pc-ubuntu) |
 
 **Explicitly deferred:** `embed-knowledge sync --prod`, HYDRA fleet integration, `#Dev` / git / CRM panels (UX.6).
 
@@ -58,6 +59,7 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) | macOS live MCP | ✅ done |
 | [M5.5](workspace-mvp-m5-5-m5-complete.md) | Complete M5 dev loop | ✅ done |
 | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) | M1 server mode | 🔄 in progress |
+| [M5.8](workspace-mvp-m5-8-security-ops.md) | Security Ops (security-team) | 🔲 parallel |
 | [M5.7](workspace-mvp-m5-7-hosting-only.md) | Ubuntu hosting only | ⏸ deferred |
 | [M6+](workspace-mvp-m6-platform.md) | Platform core | 🔲 parallel |
 
@@ -67,9 +69,11 @@ M5.2  RAG & Knowledge scale  ✅ 2026-06-15
 M5.3  AO & evals             ✅ 2026-06-15
 M5.4  macOS live MCP         ✅ 2026-06-15
 M5.5  M5 dev loop complete   ✅ 2026-06-15
-M5.6  M1 server mode        ← next
-M5.7  Ubuntu hosting only   ← deferred (no HYDRA agents)
-M6+   Platform core          ← parallel with M5.x
+M5.6  M1 server mode        ← next (backend-team)
+M5.8  Security Ops          ← parallel (security-team)
+M5.7  Ubuntu hosting only   ← deferred (backend-team)
+M6+   Platform core          ← parallel (backend-team)
+UX.*  Design / responsive    ← parallel (frontend-team)
 ```
 
 M5.x phases target **Workspace on localhost**. Platform phases (`docs/planning/phase-*.md`) run in parallel where they strengthen the kernel (persistence, LangGraph, security, observability).
@@ -109,6 +113,21 @@ Prod Qdrant backup, HTTPS subdomain, auth — **hosting layer only**. No HYDRA a
 ### [M6+ — Platform (parallel)](workspace-mvp-m6-platform.md)
 
 Phases 5–13: PostgreSQL, AI security, LangGraph HITL, observability, portfolio polish.
+
+---
+
+## Security backlog (security-team, parallel)
+
+| ID | Task | Notes |
+|----|------|-------|
+| SEC.1 | `security-policy.yaml` | Lynis → tier 0–3 |
+| SEC.2 | Agents Triage/Remediator on M1 | after M5.6 smoke |
+| SEC.3 | HITL tier 2+ via `#Review` | SYNC-HITL |
+| SEC.4 | `octa-security-exec.sh` allowlist | pc-ubuntu |
+| SEC.5 | Lynis weekly + mail section | Hardening Index |
+| SEC.6 | Docker Bench + Trivy | optional weekly |
+
+→ [Security team plan](workspace-team-security-plan.md) · [M5.8](workspace-mvp-m5-8-security-ops.md)
 
 ---
 
@@ -172,6 +191,7 @@ flowchart LR
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) macOS MCP | ✅ done | 2026-06-15 | 2026-06-15 | [plan](workspace-mvp-m5-4-macos-mcp.md) |
 | [M5.5](workspace-mvp-m5-5-m5-complete.md) M5 complete | ✅ done | 2026-06-15 | 2026-06-15 | [sign-off](workspace-mvp-m5-5-signoff.md) |
 | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) M1 server | 🔄 in progress | 2026-06-15 | | [runbook](../runbooks/workspace-m1-server-mode.md) |
+| [M5.8](workspace-mvp-m5-8-security-ops.md) Security Ops | 🔲 parallel | 2026-06-15 | | [security plan](workspace-team-security-plan.md) |
 | [M5.7](workspace-mvp-m5-7-hosting-only.md) Hosting | ⏸ deferred | | | [plan](workspace-mvp-m5-7-hosting-only.md) |
 | [M6+](workspace-mvp-m6-platform.md) Platform | 🔲 parallel | | | [plan](workspace-mvp-m6-platform.md) |
 
@@ -181,7 +201,8 @@ flowchart LR
 
 ## Related documents
 
-- [Dual-track: backend-team + frontend-team](workspace-mvp-dual-track.md)
+- [Triple-track: backend + frontend + security](workspace-mvp-triple-track.md)
+- [Team plans: backend](workspace-team-backend-plan.md) · [frontend](workspace-team-frontend-plan.md) · [security](workspace-team-security-plan.md)
 - [Workspace MVP architecture](../architecture/workspace-mvp.md)
 - [ADR 006 — M5-only dev strategy](../adr/006-m5-only-dev-strategy.md)
 - [E2E README](../../e2e/README.md)

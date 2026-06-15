@@ -115,7 +115,7 @@ When `RAG_BACKEND=qdrant`, keep the index fresh:
 # or install launchd (every 6h): ./scripts/install-embed-knowledge-launchd.sh
 ```
 
-See [knowledge-embed-sync-schedule.md](knowledge-embed-sync-schedule.md).
+See [knowledge-embed-sync-schedule.md](knowledge-embed-sync-schedule.md). **M1 file mirror:** [knowledge-sync-m1.md](knowledge-sync-m1.md).
 
 ---
 

@@ -28,8 +28,12 @@ Ten katalog służy do prowadzenia roadmapy, instrukcji faz, decyzji roboczych i
 - [Octa Workspace MVP — roadmap](workspace-mvp-roadmap.md) — M5.1–M5.7 after local MVP ([ADR 006](../adr/006-m5-only-dev-strategy.md)).
   - **Closed:** [Sprint 0–3 index](workspace-mvp-done-index.md) · [S0](workspace-mvp-sprint-0-boot.md) · [S1](workspace-mvp-sprint-1-chat-wiki.md) · [S2](workspace-mvp-sprint-2-panels-hitl.md) · [S3](workspace-mvp-sprint-3-retro-infra.md) · [extensions](workspace-mvp-done-extensions.md)
   - **Done:** [M5.1](workspace-mvp-m5-1-hardening.md) · [M5.5 sign-off](workspace-mvp-m5-5-signoff.md) · [M5.2–M5.4](workspace-mvp-m5-2-rag-scale.md)
-  - **Next (backend-team):** [M5.6 M1 server](workspace-mvp-m5-6-m1-server-mode.md)
-  - **Parallel (frontend-team):** [Dual-track](workspace-mvp-dual-track.md) — OpenCode / WDS
+  - **Next (backend-team):** [M5.6 M1 server](workspace-mvp-m5-6-m1-server-mode.md) · [CEO checklist 20 min](../runbooks/workspace-m5-6-ceo-checklist.md)
+  - **Triple-track:** [backend · frontend · security](workspace-mvp-triple-track.md)
+  - **CEO dashboard (Knowledge):** `Knowledge/.../octa-os/triple-track-dashboard.md` — postęp, SYNC, oś czasu
+  - **Team plans:** [backend](workspace-team-backend-plan.md) · [frontend](workspace-team-frontend-plan.md) · [security](workspace-team-security-plan.md)
+  - **Parallel (security-team):** [M5.8 Security Ops](workspace-mvp-m5-8-security-ops.md)
+  - **Parallel (frontend-team):** UX backlog w [roadmap](workspace-mvp-roadmap.md#ux-backlog-frontend-team-non-critical)
   - **Deferred:** [M5.7 Hosting only](workspace-mvp-m5-7-hosting-only.md) · [M6+ platform](workspace-mvp-m6-platform.md)
 
 ---

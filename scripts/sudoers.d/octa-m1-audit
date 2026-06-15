@@ -1,0 +1,5 @@
+# Octa M1 — sudo session log for security audit WatchPaths.
+# Installed to /etc/sudoers.d/octa-m1-audit by install-m1-security-audit-launchd.sh
+Defaults logfile="/var/log/octa-sudo.log"
+Defaults log_year
+Defaults ignore_logfile_errors

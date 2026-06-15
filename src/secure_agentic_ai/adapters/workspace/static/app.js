@@ -317,23 +317,21 @@ window.addEventListener("hashchange", () => {
   })();
 
 /* Theme toggle + localStorage persistence */
-(function initTheme() {
+function toggleTheme() {
   const html = document.documentElement;
-  const saved = localStorage.getItem("octa-theme");
-  if (saved === "light" || saved === "dark") {
-    html.setAttribute("data-theme", saved);
-  } else {
-    html.setAttribute("data-theme", "dark");
-  }
+  const current = html.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  try { localStorage.setItem("octa-theme", next); } catch {}
+  const btn = document.getElementById("theme-toggle-btn");
+  if (btn) btn.setAttribute("aria-pressed", String(next === "light"));
+}
 
+(function initTheme() {
   const btn = document.getElementById("theme-toggle-btn");
   if (btn) {
-    btn.addEventListener("click", () => {
-      const current = html.getAttribute("data-theme");
-      const next = current === "dark" ? "light" : "dark";
-      html.setAttribute("data-theme", next);
-      localStorage.setItem("octa-theme", next);
-    });
+    btn.setAttribute("aria-pressed", String(document.documentElement.getAttribute("data-theme") === "light"));
+    btn.addEventListener("click", toggleTheme);
   }
 })();
 

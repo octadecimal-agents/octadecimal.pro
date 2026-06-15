@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>pl.octadecimal.calendar-sync-m1</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>@REPO_ROOT@/scripts/octa-calendar-sync-m1.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>@REPO_ROOT@</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>3600</integer>
+  <key>StandardOutPath</key>
+  <string>@HOME@/.octa/logs/calendar-sync-m1-launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>@HOME@/.octa/logs/calendar-sync-m1-launchd.err.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>KNOWLEDGE_ROOT</key>
+    <string>@HOME@/Developer/Knowledge</string>
+    <key>WORKSPACE_ENABLED</key>
+    <string>1</string>
+  </dict>
+</dict>
+</plist>

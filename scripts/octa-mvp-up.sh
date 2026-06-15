@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Start Octa Workspace MVP on M5 (localhost:8042) — interactive foreground.
 set -euo pipefail
-cd "$(dirname "$0")/.."
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "${SCRIPT_DIR}/.."
 
 # shellcheck source=scripts/octa-workspace-env.sh
-source "$(dirname "$0")/octa-workspace-env.sh"
+source "${SCRIPT_DIR}/octa-workspace-env.sh"
 
 if [[ "${RAG_BACKEND}" == "qdrant" ]]; then
   echo "RAG_BACKEND=qdrant — ensuring Qdrant dev on ${QDRANT_URL}..."

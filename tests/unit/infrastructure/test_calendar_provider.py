@@ -60,7 +60,33 @@ async def test_list_today_calendar_fixture_mode(tmp_path: Path) -> None:
 
 
 @pytest.mark.asyncio
-async def test_calendar_cache_roundtrip(tmp_path: Path) -> None:
+async def test_list_today_calendar_cache_mode(tmp_path: Path) -> None:
+    from datetime import date
+
+    from secure_agentic_ai.application.calendar import CalendarEventItem
+
+    config = _config(tmp_path, calendar_provider="cache")
+    day = date.today().isoformat()
+    save_cached_events(
+        config,
+        day,
+        [CalendarEventItem(time="11:00", title="Sync", calendar="Dom", source="macos")],
+        source="macos",
+    )
+    events, source = await list_today_calendar_events(config)
+    assert source == "cache"
+    assert events[0].title == "Sync"
+
+
+@pytest.mark.asyncio
+async def test_list_today_calendar_cache_mode_empty_falls_back_fixture(tmp_path: Path) -> None:
+    config = _config(tmp_path, calendar_provider="cache")
+    events, source = await list_today_calendar_events(config)
+    assert source == "fixture"
+    assert len(events) >= 1
+
+
+def test_calendar_cache_roundtrip(tmp_path: Path) -> None:
     from secure_agentic_ai.application.calendar import CalendarEventItem
 
     config = _config(tmp_path)

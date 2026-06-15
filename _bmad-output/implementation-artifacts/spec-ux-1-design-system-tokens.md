@@ -3,7 +3,7 @@ title: 'UX.1 — Design system tokens'
 type: 'feature'
 created: '2026-06-15'
 baseline_commit: 'e32c4967324afa8861a5dee16de916732d9d483c'
-status: 'done'
+status: 'in-progress'
 context:
   - '_bmad-output/planning-artifacts/ux-designs/ux-octadecimal.pro-2026-06-15/DESIGN.md'
   - '_bmad-output/planning-artifacts/ux-designs/ux-octadecimal.pro-2026-06-15/EXPERIENCE.md'
@@ -99,3 +99,30 @@ Po zmianach: `panel-Ogolny` zamiast `panel-Ogólny` — zachować spójność. O
 **Theme toggle JS** — initTheme z localStorage persist
 
   [`app.js:317`](../../src/secure_agentic_ai/adapters/workspace/static/app.js#L317)
+
+### Review Findings
+
+**`decision-needed`**
+- [x] [Review][Decision] Toggle position — resolved: **top-right** (mockup, rekomendacja)
+- [x] [Review][Decision] `.nav-link--soon` opacity — resolved: **0.5** (mockup, rekomendacja)
+
+**`patch`**
+- [x] [Review][Patch] CSS specificity: `.nav-link.active` override'uje `.tab-pill.active` — accent color zgubiony [`styles.css`]
+- [x] [Review][Patch] `localStorage.getItem()` i `setItem()` bez try/catch — crash w private browsing [`app.js:320,335`]
+- [x] [Review][Patch] Theme FOUC — hardcoded `data-theme="dark"` przed JS [`index.html:2`]
+- [x] [Review][Patch] Missing `aria-pressed` na theme toggle [`index.html:2570`]
+- [x] [Review][Patch] Redundant `var(--color-border, var(--color-border))` fallback (9×) [`styles.css`]
+- [x] [Review][Patch] `--color-muted` referenced but undefined [`styles.css:221,265`]
+- [x] [Review][Patch] Missing `.input-area` wrapper — chat form traci border-top separator [`index.html:2557`]
+- [x] [Review][Patch] Missing `role="tablist"` / `role="tab"` na tab bar [`index.html`]
+- [x] [Review][Patch] Missing `aria-live="polite"` na `#chat-log` [`index.html`]
+- [x] [Review][Patch] Missing focus ring styles na interaktywnych elementach [`styles.css`]
+- [x] [Review][Patch] Status dot border używa `--color-bg` — niewidoczny w dark mode [`styles.css:2730`]
+- [x] [Review][Patch] Missing `animate-pulse-dot` animation na status dots [`styles.css:2723`]
+- [x] [Review][Patch] Missing `--color-bg-sidebar-active` token (z DESIGN.md) [`styles.css`]
+- [x] [Review][Patch] Missing `toggleTheme()` named function (spec Task) [`app.js`]
+
+**`defer`** (pre-existing, not caused by this change)
+- [x] [Review][Defer] Mobile sidebar — wątpienie bez hamburgera przy ≤800px [`styles.css:3398`] — deferred, pre-existing, nowa funkcjonalność wykracza poza zakres
+- [x] [Review][Defer] Nested scroll containers (`.content-area` + `.chat-log`) [`index.html:2372`] — deferred, pre-existing structural issue
+- [x] [Review][Defer] Unqualified `h2` selector [`styles.css:3108`] — deferred, pre-existing

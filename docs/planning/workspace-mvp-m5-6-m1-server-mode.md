@@ -43,7 +43,7 @@ M5 (dev/build)
 | M5.6.1 | M1 launchd stack | Install plist(s) for Workspace on M1 | health OK after reboot | ✅ [runbook](../runbooks/workspace-m1-server-mode.md) |
 | M5.6.2 | Network binding | Document `127.0.0.1` vs Tailscale LAN; no public exposure | runbook | ✅ §6 runbook |
 | M5.6.3 | Calendar on M1 | `CALENDAR_PROVIDER=auto` on daily driver | `#Planning` live events | ✅ plist; verify on M1 |
-| M5.6.4 | Shortcuts / CLI entry | Optional `octa workspace open` from M1 | one-command CEO start | 🔲 optional |
+| M5.6.4 | Shortcuts / CLI entry | Optional `octa workspace open` from M1 | one-command CEO start | ✅ scripts/octa |
 | M5.6.5 | Failover doc | When M5 dev overwrites API — how M1 degrades | runbook section | ✅ §7 runbook |
 
 ---
@@ -58,8 +58,8 @@ M5 (dev/build)
 
 ## Phase completion criteria
 
-- [ ] Workspace reachable on M1 without manual terminal start — **install on physical M1 + reboot test**
-- [ ] Calendar + chat smoke on M1 for 3 consecutive days
+- [ ] Workspace reachable on M1 without manual terminal start — **LaunchDaemon ✅; reboot test pending CEO**
+- [ ] Calendar + chat smoke on M1 for 3 consecutive days — [smoke log](../runbooks/workspace-m5-6-smoke-log.md) (day 1 PASS w/ calendar warn)
 - [x] Runbook: M1 server mode install + rollback — [workspace-m1-server-mode.md](../runbooks/workspace-m1-server-mode.md)
 
 ---

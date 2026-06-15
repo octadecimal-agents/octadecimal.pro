@@ -1,0 +1,9 @@
+# Octa PC Ubuntu security audit — installed by install-pc-ubuntu-security-audit.sh
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Daily full report (06:00 UTC)
+0 6 * * * root OCTA_PC_AUDIT_TRIGGER=daily /usr/local/bin/octa-pc-ubuntu-security-audit.sh >>/var/log/octa/pc-ubuntu-audit-cron.log 2>&1
+
+# Sudo-triggered audit (checks log growth; throttle inside watch script)
+*/5 * * * * root /usr/local/bin/octa-pc-ubuntu-sudo-audit-watch.sh >>/var/log/octa/pc-ubuntu-sudo-watch-cron.log 2>&1

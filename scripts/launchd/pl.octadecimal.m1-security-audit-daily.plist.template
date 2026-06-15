@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>pl.octadecimal.m1-security-audit-daily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>@REPO_ROOT@/scripts/octa-m1-security-audit.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>@REPO_ROOT@</string>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>6</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/var/log/octa/m1-security-audit-daily.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/var/log/octa/m1-security-audit-daily.err.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>OCTA_M1_AUDIT_TRIGGER</key>
+    <string>daily</string>
+    <key>OCTA_M1_REPO</key>
+    <string>@REPO_ROOT@</string>
+    <key>OCTA_M1_CEO_HOME</key>
+    <string>@CEO_HOME@</string>
+  </dict>
+</dict>
+</plist>

@@ -2,48 +2,81 @@
 
 # Runbook — macOS calendar permissions (Workspace MVP)
 
-[← Workspace MVP](../architecture/workspace-mvp.md) · [M5.1 Hardening](../planning/workspace-mvp-m5-1-hardening.md)
+[← Workspace MVP](../architecture/workspace-mvp.md) · [M1 server mode](workspace-m1-server-mode.md)
 
-**Goal:** `#Planning` shows live EventKit events (`source=macos`) instead of fixture/cache.
-
-**Scope:** M5, `CALENDAR_PROVIDER=auto` (default), `calctl` binary (Darwin dependency in `pyproject.toml`).
+**Goal:** `#Planning` shows live or synced calendar events (`source=macos` or `cache`), not `fixture-denied`.
 
 ---
 
-## 1. Prerequisites
+## 1. Architecture (M1 headless)
 
-- macOS with **Calendars** app (EventKit)
-- Repo `octadecimal.pro` — `uv sync` on Mac (installs `calctl`)
-- Terminal, Cursor, iTerm, or the app **from which you run** `./scripts/octa-mvp-up.sh`
+| Process | launchd | `CALENDAR_PROVIDER` | Role |
+|---------|---------|---------------------|------|
+| Workspace API | LaunchDaemon | `cache` | Reads `~/.octa/calendar-cache.json` only |
+| Calendar sync | LaunchAgent | `macos` | Writes cache from EventKit (hourly + login) |
+
+**Why:** LaunchDaemon cannot reliably use EventKit/TCC. Splitting sync into LaunchAgent + cache avoids manual Privacy clicking after one automated install.
 
 ---
 
-## 2. Grant Calendars access
+## 2. M1 — automated install (recommended)
 
-1. Open **System Settings** → **Privacy & Security** → **Calendars**.
-2. Enable access for the app that starts the server:
-   - **Terminal** (default flow)
-   - **Cursor** (if starting from integrated terminal)
-   - **iTerm** (if using iTerm)
-3. If the app is not listed — run `./scripts/octa-mvp-up.sh` once; macOS should prompt. If denied, add manually in Settings.
-
-Optional calendar filter:
+**One-time on M1 (admin, ~1 min):**
 
 ```bash
-export CALENDAR_INCLUDE=Home,Work,Planning
-export CALENDAR_EXCLUDE=Holidays
+cd ~/Developer/Repositories/octadecimal-agents/octadecimal.pro
+sudo ./scripts/install-m1-calendar-automation.sh
+```
+
+**From M5:**
+
+```bash
+./scripts/install-m1-calendar-automation.sh --remote m1-admin
+```
+
+Installs:
+
+1. **PPPC profile** — pre-grants **Calendars** to the Python binary used by `uv`
+2. **LaunchAgent** `pl.octadecimal.calendar-sync-m1` — hourly sync
+3. First sync attempt
+
+Then restart Workspace:
+
+```bash
+sudo launchctl kickstart -k system/pl.octadecimal.workspace-api-m1-server
+```
+
+Verify from M5:
+
+```bash
+./scripts/octa workspace smoke --remote m1-ceo --strict-calendar
+```
+
+Pass = `calendar_source=cache` (fresh) or `macos`.
+
+Uninstall PPPC: System Settings → Profiles → remove **Octa M1 Calendar**.  
+Uninstall sync agent: `./scripts/install-calendar-sync-m1-launchd.sh --uninstall`
+
+---
+
+## 3. M5 / dev (Terminal) — manual
+
+1. **System Settings** → **Privacy & Security** → **Calendars** (PL: **Kalendarze**).
+2. Enable **Terminal** / **Cursor** / **iTerm** (whichever starts the server).
+3. Not the same as **Full Disk Access** — different pane.
+
+```bash
+./scripts/octa-mvp-up.sh
+open http://127.0.0.1:8042/#Planning
 ```
 
 ---
 
-## 3. Smoke test (CLI)
+## 4. Smoke test (CLI)
 
 ```bash
 cd octadecimal.pro
-export WORKSPACE_ENABLED=1
-export KNOWLEDGE_ROOT="${KNOWLEDGE_ROOT:-$HOME/Developer/Knowledge}"
 export CALENDAR_PROVIDER=auto
-
 uv run python -c "
 import asyncio
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
@@ -53,79 +86,25 @@ async def main():
     config = WorkspaceConfig.from_env()
     events, source = await list_today_calendar_events(config)
     print(f'source={source} events={len(events)}')
-    for e in events[:5]:
-        print(f'  {e.time} {e.title} ({e.calendar or \"-\"})')
 
 asyncio.run(main())
 "
 ```
 
-**Expected:** `source=macos` and at least one event (if calendar is not empty).
-
 ---
 
-## 4. UI verification
+## 5. `calendar_source` values
 
-```bash
-./scripts/octa-mvp-up.sh
-open http://127.0.0.1:8042/#Planning
-```
-
-In **Plan dnia** panel check line `Źródło kalendarza: macos` (UI label remains PL for CEO).
-
-Alternatively:
-
-```bash
-curl -s http://127.0.0.1:8042/workspace/planning/calendar | python3 -m json.tool
-curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
-```
-
-Fields `calendar_provider` and `calendar_source` in `/workspace/health` should show `auto` / `macos`.
-
----
-
-## 5. Cache and fallback
-
-| `calendar_source` | Meaning |
-|-------------------|---------|
+| Value | Meaning |
+|-------|---------|
 | `macos` | Live EventKit read |
-| `cache` | Last successful read from `~/.octa/calendar-cache.json` |
-| `fixture` / `fixture-*` | Static list (no permission or `CALENDAR_PROVIDER=fixture`) |
-
-Cache is written automatically after successful macOS read:
-
-```bash
-cat ~/.octa/calendar-cache.json
-```
+| `cache` | Sync agent wrote cache today (OK for M1 headless) |
+| `fixture` / `fixture-denied` | Fallback — run `install-m1-calendar-automation.sh` on M1 |
 
 ---
 
-## 6. Troubleshooting
+## 6. Related
 
-| Symptom | Cause | Action |
-|---------|-------|--------|
-| `source=fixture-denied` | Missing Calendars permission | Settings → enable Terminal/Cursor |
-| `source=cache` | Previous read OK, today no access | Fix permissions; delete cache for clean test |
-| `source=fixture` | `CALENDAR_PROVIDER=fixture` or missing `calctl` | Expected on Linux/CI; on Mac: `uv sync` |
-| Empty calendar | `CALENDAR_INCLUDE` too narrow | Check calendar names in Calendar app |
-
----
-
-## 7. MCP (Cursor)
-
-Cursor Agent can read the same calendar as `#Planning` via MCP:
-
-```bash
-./scripts/octa-mcp-workspace.sh   # stdio — config in docs/architecture/mcp-workspace.example.json
-```
-
-**Requirement:** Cursor needs **Calendars** permission (like Terminal) for `CALENDAR_PROVIDER=auto` to return `source=macos`.
-
-Read-only tools: `list_today_calendar`, `wiki_search`, `board_list_tasks`, `review_pending_summary`, `workspace_health`.
-
----
-
-## Related
-
-- [Workspace MVP — macOS calendar](../architecture/workspace-mvp.md#macos-calendar-mcp-stub)
-- [M5.4 — macOS MCP](../planning/workspace-mvp-m5-4-macos-mcp.md)
+- [M1 server runbook](workspace-m1-server-mode.md)
+- [CEO checklist M5.6](workspace-m5-6-ceo-checklist.md)
+- Legacy manual bootstrap: `scripts/octa-calendar-permission-bootstrap.sh` (superseded by §2)

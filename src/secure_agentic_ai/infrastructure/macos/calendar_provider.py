@@ -120,6 +120,13 @@ async def list_today_calendar_events(config: WorkspaceConfig) -> tuple[list[Cale
         events = fixture_events(config)
         return events, events[0].source if events else "fixture"
 
+    if provider == "cache":
+        cached = load_cached_events(config, day)
+        if cached:
+            return cached, "cache"
+        events = fixture_events(config)
+        return events, "fixture"
+
     if provider in {"macos", "auto"}:
         try:
             events = await asyncio.to_thread(_fetch_macos_events_sync, config, day)

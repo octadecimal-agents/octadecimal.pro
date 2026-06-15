@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles.css">
+  <script>document.documentElement.setAttribute("data-theme",(function(){try{var s=localStorage.getItem("octa-theme");return s==="light"||s==="dark"?s:"dark"}catch(e){return"dark"}})())</script>
 </head>
 <body>
   <div class="workspace">
@@ -108,20 +109,20 @@
 
     <div class="main-area">
       <!-- Tab bar (hash navigation — preserves .nav-link[data-hash] E2E anchors) -->
-      <nav class="tab-bar" aria-label="Panele hash">
-        <a href="#Ogolny" class="nav-link tab-pill active" data-hash="#Ogolny"><span class="tab-icon">○</span> <code>#Ogolny</code></a>
-        <a href="#Planning" class="nav-link tab-pill" data-hash="#Planning"><span class="tab-icon">◈</span> <code>#Planning</code></a>
-        <a href="#Board" class="nav-link tab-pill" data-hash="#Board"><span class="tab-icon">▦</span> <code>#Board</code></a>
-        <a href="#Wiki" class="nav-link tab-pill" data-hash="#Wiki"><span class="tab-icon">◉</span> <code>#Wiki</code></a>
-        <a href="#Review" class="nav-link tab-pill" data-hash="#Review">
+      <nav class="tab-bar" aria-label="Panele hash" role="tablist">
+        <a href="#Ogolny" class="nav-link tab-pill active" data-hash="#Ogolny" role="tab"><span class="tab-icon">○</span> <code>#Ogolny</code></a>
+        <a href="#Planning" class="nav-link tab-pill" data-hash="#Planning" role="tab"><span class="tab-icon">◈</span> <code>#Planning</code></a>
+        <a href="#Board" class="nav-link tab-pill" data-hash="#Board" role="tab"><span class="tab-icon">▦</span> <code>#Board</code></a>
+        <a href="#Wiki" class="nav-link tab-pill" data-hash="#Wiki" role="tab"><span class="tab-icon">◉</span> <code>#Wiki</code></a>
+        <a href="#Review" class="nav-link tab-pill" data-hash="#Review" role="tab">
           <span class="tab-icon">◎</span> <code>#Review</code>
           <span class="nav-badge" id="review-badge" hidden aria-label="Oczekujące akceptacje"></span>
         </a>
-        <a href="#Retro" class="nav-link tab-pill" data-hash="#Retro"><span class="tab-icon">↺</span> <code>#Retro</code></a>
-        <a href="#Zasady" class="nav-link tab-pill" data-hash="#Zasady"><span class="tab-icon">§</span> <code>#Zasady</code></a>
-        <a href="#Dev" class="nav-link tab-pill nav-link--soon" data-hash="#Dev"><span class="tab-icon">◿</span> <code>#Dev</code> <span class="nav-soon">wkrótce</span></a>
-        <a href="#Burndown" class="nav-link tab-pill nav-link--soon" data-hash="#Burndown"><span class="tab-icon">⟩</span> <code>#Burndown</code> <span class="nav-soon">wkrótce</span></a>
-        <a href="#Ranking" class="nav-link tab-pill nav-link--soon" data-hash="#Ranking"><span class="tab-icon">★</span> <code>#Ranking</code> <span class="nav-soon">wkrótce</span></a>
+        <a href="#Retro" class="nav-link tab-pill" data-hash="#Retro" role="tab"><span class="tab-icon">↺</span> <code>#Retro</code></a>
+        <a href="#Zasady" class="nav-link tab-pill" data-hash="#Zasady" role="tab"><span class="tab-icon">§</span> <code>#Zasady</code></a>
+        <a href="#Dev" class="nav-link tab-pill nav-link--soon" data-hash="#Dev" role="tab"><span class="tab-icon">◿</span> <code>#Dev</code> <span class="nav-soon">wkrótce</span></a>
+        <a href="#Burndown" class="nav-link tab-pill nav-link--soon" data-hash="#Burndown" role="tab"><span class="tab-icon">⟩</span> <code>#Burndown</code> <span class="nav-soon">wkrótce</span></a>
+        <a href="#Ranking" class="nav-link tab-pill nav-link--soon" data-hash="#Ranking" role="tab"><span class="tab-icon">★</span> <code>#Ranking</code> <span class="nav-soon">wkrótce</span></a>
       </nav>
 
       <div class="content-area">
@@ -232,17 +233,17 @@
         <!-- Chat section -->
         <section class="chat-section">
           <div class="chat-header">Chat · <span id="active-hash-label">#Ogolny</span></div>
-          <div class="chat-log" id="chat-log"></div>
-          <form class="chat-form" id="chat-form">
+          <div class="chat-log" id="chat-log" aria-live="polite"></div>
+          <div class="input-area"><form class="chat-form" id="chat-form">
             <input type="text" id="chat-input" placeholder="Napisz do Agenta Osobistego…" autocomplete="off" required>
             <button type="submit">Wyślij</button>
-          </form>
+          </form></div>
         </section>
       </div>
     </div>
   </div>
 
-  <button class="theme-toggle" id="theme-toggle-btn" aria-label="Przełącz motyw">🌓</button>
+  <button class="theme-toggle" id="theme-toggle-btn" aria-label="Przełącz motyw" aria-pressed="false">🌓</button>
   <script src="/static/app.js"></script>
 </body>
 </html>

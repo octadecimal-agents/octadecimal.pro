@@ -1,0 +1,4 @@
+# Octa PC Ubuntu — sudo session log for security audit watch (cron every 5 min).
+Defaults logfile="/var/log/octa-sudo.log"
+Defaults log_year
+Defaults ignore_logfile_errors

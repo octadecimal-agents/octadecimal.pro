@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Thin CEO CLI dispatcher — add repo scripts/ to PATH or symlink to ~/bin/octa.
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+usage() {
+  cat <<EOF
+Octa CLI (M5.6+)
+
+Usage:
+  octa workspace open [--no-kickstart]   Open http://127.0.0.1:8042/ (restart launchd if down)
+  octa workspace smoke [opts]           M1 smoke checks (see octa-m1-smoke-check.sh --help)
+  octa workspace smoke-daily            Daily log append (M5→M1, for cron)
+
+Examples:
+  octa workspace open
+  octa workspace smoke --remote m1-ceo
+EOF
+}
+
+case "${1:-}" in
+  workspace)
+    shift
+    case "${1:-}" in
+      open)
+        shift
+        if [[ "${1:-}" == "--no-kickstart" ]]; then
+          export OCTA_WORKSPACE_OPEN_KICKSTART=0
+          shift
+        fi
+        exec "${SCRIPT_DIR}/octa-workspace-open.sh" "$@"
+        ;;
+      smoke)
+        shift
+        exec "${SCRIPT_DIR}/octa-m1-smoke-check.sh" "$@"
+        ;;
+      smoke-daily)
+        shift
+        exec "${SCRIPT_DIR}/octa-m1-smoke-daily.sh" "$@"
+        ;;
+      *)
+        usage >&2
+        exit 1
+        ;;
+    esac
+    ;;
+  -h | --help | "")
+    usage
+    exit 0
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
