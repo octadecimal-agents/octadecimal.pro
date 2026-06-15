@@ -10,6 +10,7 @@ from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
 from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.knowledge_loader import ingest_knowledge_paths
 from secure_agentic_ai.infrastructure.workspace.knowledge_policy import effective_retrieval_weights
+from secure_agentic_ai.infrastructure.workspace.knowledge_sync import manifest_path, sync_knowledge_to_qdrant
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
 VectorStoreBackend = InMemoryVectorStore | QdrantVectorStore
@@ -20,6 +21,8 @@ _config: WorkspaceConfig | None = None
 _chat_provider: ChatCompletionProvider | None = None
 _initialized = False
 _documents_indexed = 0
+_workspace_status = "ok"
+_workspace_issues: list[str] = []
 
 
 def get_config() -> WorkspaceConfig:
@@ -40,6 +43,15 @@ def _should_reindex() -> bool:
     return os.environ.get("OCTA_REINDEX", "").lower() in {"1", "true", "yes"}
 
 
+def get_workspace_status() -> tuple[str, list[str]]:
+    return _workspace_status, list(_workspace_issues)
+
+
+def knowledge_root_exists(config: WorkspaceConfig | None = None) -> bool:
+    root = (config or get_config()).knowledge_root
+    return root.is_dir()
+
+
 def get_vector_store() -> VectorStoreBackend:
     global _vector_store
     if _vector_store is None:
@@ -55,19 +67,35 @@ def get_vector_store() -> VectorStoreBackend:
 
 
 async def init_workspace_state() -> int:
-    global _initialized, _documents_indexed
+    global _initialized, _documents_indexed, _workspace_status, _workspace_issues
+    _workspace_status = "ok"
+    _workspace_issues = []
+
     config = get_config()
     store = get_vector_store()
     get_ledger().seed_demo_tasks()
 
+    if not knowledge_root_exists(config):
+        _workspace_status = "degraded"
+        _workspace_issues.append(f"KNOWLEDGE_ROOT not found: {config.knowledge_root} — Wiki/RAG unavailable")
+        _documents_indexed = 0
+        _initialized = True
+        return _documents_indexed
+
     reindex = _should_reindex()
     if isinstance(store, QdrantVectorStore):
-        await store.ensure_collection()
-        existing = await store.count_points()
-        if existing == 0 or reindex:
-            _documents_indexed = await ingest_knowledge_paths(config, store)
-        else:
-            _documents_indexed = existing
+        try:
+            await store.ensure_collection()
+            existing = await store.count_points()
+        except Exception as exc:
+            raise RuntimeError(f"RAG_BACKEND=qdrant but Qdrant is unreachable at {config.qdrant_url}: {exc}") from exc
+
+        if reindex and existing > 0:
+            await store.reset_collection()
+            manifest_path(config).unlink(missing_ok=True)
+
+        await sync_knowledge_to_qdrant(config, store=store)
+        _documents_indexed = await store.count_points()
         _initialized = True
         return _documents_indexed
 
@@ -111,7 +139,7 @@ def get_hybrid_search() -> HybridKnowledgeSearch:
     return HybridKnowledgeSearch(
         retrieve=get_retrieve_use_case(),
         weights=effective_retrieval_weights(config),
-        knowledge_root=config.knowledge_root,
+        knowledge_root=config.knowledge_root if knowledge_root_exists(config) else None,
     )
 
 
@@ -131,9 +159,12 @@ async def shutdown_workspace_state() -> None:
 
 def reset_for_tests() -> None:
     global _ledger, _vector_store, _config, _chat_provider, _initialized, _documents_indexed
+    global _workspace_status, _workspace_issues
     _ledger = None
     _vector_store = None
     _config = None
     _chat_provider = None
     _initialized = False
     _documents_indexed = 0
+    _workspace_status = "ok"
+    _workspace_issues = []

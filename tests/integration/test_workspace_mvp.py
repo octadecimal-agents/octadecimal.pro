@@ -97,6 +97,8 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "ok"
+    assert data["knowledge_root_exists"] is True
+    assert data["issues"] == []
     assert data["documents_indexed"] >= 1
     assert data["rag_backend"] == "memory"
     assert data["llm_provider"] == "dry"
@@ -104,6 +106,60 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     assert data["review_pending_count"] >= 0
     assert data["calendar_provider"] == "auto"
     assert isinstance(data["calendar_source"], str)
+
+
+def test_workspace_health_degraded_when_knowledge_root_missing(tmp_path: Path) -> None:
+    reset_for_tests()
+    _prepare_sqlite_database(tmp_path / "approvals.db")
+    os.environ["WORKSPACE_ENABLED"] = "1"
+    os.environ["OCTA_LEDGER"] = str(tmp_path / "ledger.sqlite")
+    os.environ["KNOWLEDGE_ROOT"] = str(tmp_path / "does-not-exist")
+    os.environ["LLM_PROVIDER"] = "dry"
+    os.environ.pop("RAG_BACKEND", None)
+
+    app = create_app()
+    with TestClient(app) as client:
+        response = client.get("/workspace/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "degraded"
+        assert data["knowledge_root_exists"] is False
+        assert data["documents_indexed"] == 0
+        assert any("KNOWLEDGE_ROOT not found" in issue for issue in data["issues"])
+
+    reset_for_tests()
+    os.environ.pop("WORKSPACE_ENABLED", None)
+    os.environ.pop("DATABASE_URL", None)
+    os.environ.pop("OCTA_LEDGER", None)
+    os.environ.pop("KNOWLEDGE_ROOT", None)
+    os.environ.pop("LLM_PROVIDER", None)
+
+
+def test_qdrant_unreachable_prevents_app_startup(tmp_path: Path) -> None:
+    reset_for_tests()
+    _prepare_sqlite_database(tmp_path / "approvals.db")
+    knowledge = tmp_path / "knowledge"
+    knowledge.mkdir()
+    os.environ["WORKSPACE_ENABLED"] = "1"
+    os.environ["OCTA_LEDGER"] = str(tmp_path / "ledger.sqlite")
+    os.environ["KNOWLEDGE_ROOT"] = str(knowledge)
+    os.environ["LLM_PROVIDER"] = "dry"
+    os.environ["RAG_BACKEND"] = "qdrant"
+    os.environ["QDRANT_URL"] = "http://127.0.0.1:1"
+    os.environ["QDRANT_COLLECTION"] = "knowledge_chunks_dev"
+
+    with pytest.raises(RuntimeError, match="Qdrant is unreachable"), TestClient(create_app()):
+        pass
+
+    reset_for_tests()
+    os.environ.pop("WORKSPACE_ENABLED", None)
+    os.environ.pop("DATABASE_URL", None)
+    os.environ.pop("OCTA_LEDGER", None)
+    os.environ.pop("KNOWLEDGE_ROOT", None)
+    os.environ.pop("LLM_PROVIDER", None)
+    os.environ.pop("RAG_BACKEND", None)
+    os.environ.pop("QDRANT_URL", None)
+    os.environ.pop("QDRANT_COLLECTION", None)
 
 
 def test_workspace_chat_dry(workspace_client: TestClient) -> None:

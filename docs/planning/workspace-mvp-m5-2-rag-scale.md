@@ -202,6 +202,8 @@ retrieval:
 
 ### M5.2.6 — Startup edge cases
 
+**Status:** ✅ done (2026-06-15)
+
 **Scenariusze:**
 
 | Scenariusz | Oczekiwane zachowanie |
@@ -209,9 +211,9 @@ retrieval:
 | Pusta kolekcja Qdrant, `OCTA_REINDEX=0` | Jednorazowy ingest przy starcie |
 | Manifest nowszy niż Qdrant | Sync incremental |
 | `KNOWLEDGE_ROOT` missing | Health `degraded` + czytelny błąd UI |
-| Qdrant down, `RAG_BACKEND=qdrant` | Fallback memory **lub** fail loud (decyzja) |
+| Qdrant down, `RAG_BACKEND=qdrant` | Fail loud — `RuntimeError` przy starcie uvicorn |
 
-**Rekomendacja:** fail loud w dev (łatwiejszy debug); E2E zostaje na `memory`.
+**Implementacja:** `init_workspace_state()` — Qdrant: incremental `sync_knowledge_to_qdrant` przy każdym starcie (pusta kolekcja = pełny ingest via sync); brak `KNOWLEDGE_ROOT` → `status=degraded` + `issues[]`; health/UI pokazuje komunikat.
 
 **Done when:** test integration dla pustej kolekcji; dokumentacja env.
 
@@ -252,6 +254,7 @@ flowchart TD
 - [x] 5 golden queries PASS (unit parametrized)
 - [x] Metryki retrieval w logach / debug header
 - [x] launchd/cron opcjonalnie udokumentowany
+- [x] Startup edge cases (pusta Qdrant, brak KNOWLEDGE_ROOT, fail loud Qdrant)
 
 ---
 

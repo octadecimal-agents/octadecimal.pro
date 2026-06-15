@@ -289,7 +289,16 @@ window.addEventListener("hashchange", () => {
   appendMessage("Dzień dobry! Jestem Agentem Osobistym. Zapytaj o plan, backup albo tablicę.", "agent");
   try {
     const health = await api("/workspace/health");
-    appendMessage(`Indeks Knowledge: ${health.documents_indexed} dokumentów.`, "agent");
+    if (health.status === "degraded" && health.issues?.length) {
+      appendMessage(`Workspace: ${health.issues.join(" ")}`, "agent");
+    } else if (!health.knowledge_root_exists) {
+      appendMessage(
+        `Knowledge niedostępne — ustaw KNOWLEDGE_ROOT (obecnie: ${health.knowledge_root}).`,
+        "agent"
+      );
+    } else {
+      appendMessage(`Indeks Knowledge: ${health.documents_indexed} dokumentów.`, "agent");
+    }
     if (health.review_pending_count > 0) {
       appendMessage(
         `W kolejce #Review czeka ${health.review_pending_count} akcji do zatwierdzenia — zapytaj „co wymaga uwagi?”.`,

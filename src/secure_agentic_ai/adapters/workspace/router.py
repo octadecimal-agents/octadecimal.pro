@@ -43,7 +43,9 @@ from secure_agentic_ai.infrastructure.workspace.state import (
     get_ledger,
     get_llm_label,
     get_rag_backend_label,
+    get_workspace_status,
     init_workspace_state,
+    knowledge_root_exists,
 )
 
 router = APIRouter(prefix="/workspace", tags=["workspace"])
@@ -76,9 +78,18 @@ async def workspace_health(
     review_pending_count = len(await repo.list_pending())
     manifest_age, manifest_updated_at = manifest_sync_status(config)
     _, calendar_source = await list_today_calendar_events(config)
+    status, issues = get_workspace_status()
+    root_exists = knowledge_root_exists(config)
+    if not root_exists and status == "ok":
+        status = "degraded"
+        issues = [
+            *issues,
+            f"KNOWLEDGE_ROOT not found: {config.knowledge_root} — Wiki/RAG unavailable",
+        ]
     return HealthWorkspaceResponse(
-        status="ok",
+        status=status,
         knowledge_root=str(config.knowledge_root),
+        knowledge_root_exists=root_exists,
         ledger_path=str(config.ledger_path),
         documents_indexed=get_documents_indexed(),
         rag_backend=get_rag_backend_label(),
@@ -89,6 +100,7 @@ async def workspace_health(
         knowledge_last_sync_at=manifest_updated_at,
         calendar_provider=config.calendar_provider,
         calendar_source=calendar_source,
+        issues=issues,
     )
 
 

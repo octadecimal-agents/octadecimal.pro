@@ -39,6 +39,12 @@ class QdrantVectorStore:
                 vectors_config=VectorParams(size=self._vector_size, distance=Distance.COSINE),
             )
 
+    async def reset_collection(self) -> None:
+        names = {item.name for item in (await self._client.get_collections()).collections}
+        if self._collection in names:
+            await self._client.delete_collection(self._collection)
+        await self.ensure_collection()
+
     async def count_points(self) -> int:
         info = await self._client.get_collection(self._collection)
         return int(info.points_count or 0)

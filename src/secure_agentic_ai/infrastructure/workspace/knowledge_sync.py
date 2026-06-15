@@ -99,6 +99,7 @@ async def sync_knowledge_to_qdrant(
     config: WorkspaceConfig,
     *,
     dry_run: bool = False,
+    store: QdrantVectorStore | None = None,
 ) -> SyncResult:
     scanned = scan_knowledge_files(config)
     path = manifest_path(config)
@@ -117,17 +118,18 @@ async def sync_knowledge_to_qdrant(
             dry_run=True,
         )
 
-    store = QdrantVectorStore(url=config.qdrant_url, collection=config.qdrant_collection)
-    await store.ensure_collection()
-    ingest = IngestDocumentUseCase(embedding_provider=FakeEmbeddingProvider(), vector_store=store)
+    owned_store = store is None
+    active_store = store or QdrantVectorStore(url=config.qdrant_url, collection=config.qdrant_collection)
+    await active_store.ensure_collection()
+    ingest = IngestDocumentUseCase(embedding_provider=FakeEmbeddingProvider(), vector_store=active_store)
 
     try:
         for source in plan.removed:
             document_id = manifest[source].get("document_id") or f"knowledge-{source.replace('/', '-')}"
-            await store.delete_by_document_id(document_id)
+            await active_store.delete_by_document_id(document_id)
 
         for item in (*plan.added, *plan.changed):
-            await store.delete_by_document_id(item.document_id)
+            await active_store.delete_by_document_id(item.document_id)
             await ingest.execute(document_id=item.document_id, text=item.text, source=item.source)
 
         next_manifest = {
@@ -139,7 +141,8 @@ async def sync_knowledge_to_qdrant(
         }
         save_manifest(path, next_manifest)
     finally:
-        await store.close()
+        if owned_store:
+            await active_store.close()
 
     return SyncResult(
         scanned=len(scanned),

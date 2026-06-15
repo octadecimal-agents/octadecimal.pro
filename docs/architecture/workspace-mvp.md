@@ -73,7 +73,7 @@ uv run python scripts/embed-knowledge.py sync --dev --dry-run   # preview diff
 
 With `policy.yaml` in place, a typical local Knowledge tree indexes **~80+** T1 markdown files (expect `documents_indexed` >> 77 in `/workspace/health` after ingest).
 
-Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup skips full ingest when the Qdrant collection already has points (`OCTA_REINDEX=1` forces rebuild).
+Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup with `RAG_BACKEND=qdrant` runs **incremental sync** on every boot (empty collection → full ingest via sync; existing points → manifest diff only). `OCTA_REINDEX=1` clears the collection and manifest before re-sync. Missing `KNOWLEDGE_ROOT` → health `status=degraded` and UI warning; `RAG_BACKEND=qdrant` with unreachable Qdrant → **fail loud** at startup (use `memory` for CI/E2E).
 
 **Scheduled sync (optional, M5.2.5):** `./scripts/octa-knowledge-sync-dev.sh` wraps incremental sync with logging to `~/.octa/logs/embed-sync.log`. Install macOS launchd (every 6h): `./scripts/install-embed-knowledge-launchd.sh`. See [knowledge-embed-sync-schedule runbook](../runbooks/knowledge-embed-sync-schedule.md).
 
@@ -132,6 +132,10 @@ Example:
 ```json
 {
   "status": "ok",
+  "status": "ok",
+  "knowledge_root": "/Users/you/Developer/Knowledge",
+  "knowledge_root_exists": true,
+  "issues": [],
   "documents_indexed": 251,
   "rag_backend": "memory",
   "llm_provider": "dry",

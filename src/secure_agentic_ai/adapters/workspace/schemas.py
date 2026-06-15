@@ -94,6 +94,7 @@ class CalendarListResponse(BaseModel):
 class HealthWorkspaceResponse(BaseModel):
     status: str
     knowledge_root: str
+    knowledge_root_exists: bool = True
     ledger_path: str
     documents_indexed: int
     rag_backend: str
@@ -104,3 +105,4 @@ class HealthWorkspaceResponse(BaseModel):
     knowledge_last_sync_at: str | None = None
     calendar_provider: str
     calendar_source: str
+    issues: list[str] = []
