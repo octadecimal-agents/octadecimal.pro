@@ -3,6 +3,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
+from secure_agentic_ai.infrastructure.workspace.knowledge_policy import (
+    effective_exclude_globs,
+    effective_scan_globs,
+    is_path_excluded,
+)
 from secure_agentic_ai.infrastructure.workspace.markdown_clean import clean_markdown_for_embed
 
 
@@ -30,8 +35,9 @@ def scan_knowledge_files(config: WorkspaceConfig) -> list[KnowledgeFile]:
 
     seen: set[Path] = set()
     files: list[KnowledgeFile] = []
+    exclude_patterns = effective_exclude_globs(config)
 
-    for pattern in config.knowledge_globs:
+    for pattern in effective_scan_globs(config):
         for path in root.glob(pattern):
             if not path.is_file() or path.suffix.lower() != ".md":
                 continue
@@ -40,12 +46,15 @@ def scan_knowledge_files(config: WorkspaceConfig) -> list[KnowledgeFile]:
                 continue
             seen.add(canonical)
 
+            rel = path.relative_to(root).as_posix()
+            if is_path_excluded(rel, exclude_patterns):
+                continue
+
             raw = path.read_text(encoding="utf-8", errors="replace")
             cleaned = clean_markdown_for_embed(raw)
             if len(cleaned) < 40:
                 continue
 
-            rel = path.relative_to(root).as_posix()
             files.append(
                 KnowledgeFile(
                     path=path,

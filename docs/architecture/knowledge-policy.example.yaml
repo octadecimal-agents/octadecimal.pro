@@ -1,0 +1,21 @@
+version: 1
+tiers:
+  T1:
+    include:
+      - "01-Base-Point/pro/servers/pc-ubuntu/**/*.md"
+      - "01-Base-Point/pro/projects/octa-os/**/*.md"
+      - "01-Base-Point/pro/knowledge-embeddings.md"
+      - "02-6-Rooms-Model/Operacje/serwer/**/*.md"
+      - "02-6-Rooms-Model/_system/**/*.md"
+    exclude:
+      - "**/.git/**"
+      - "**/node_modules/**"
+      - "**/*.private.md"
+  T2:
+    include: []
+retrieval:
+  weights:
+    vector: 0.6
+    path: 0.25
+    heading: 0.1
+    recency: 0.05

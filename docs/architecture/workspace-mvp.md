@@ -72,6 +72,8 @@ uv run python scripts/embed-knowledge.py sync --dev --dry-run   # preview diff
 
 Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup skips full ingest when the Qdrant collection already has points (`OCTA_REINDEX=1` forces rebuild).
 
+**Embed policy:** `KNOWLEDGE_ROOT/.knowledge-index/policy.yaml` defines tier T1 include/exclude globs (see [knowledge-policy.example.yaml](knowledge-policy.example.yaml)). When missing, code falls back to built-in `knowledge_globs` in `WorkspaceConfig`.
+
 ### MiniMax (recommended external LLM)
 
 ```bash
