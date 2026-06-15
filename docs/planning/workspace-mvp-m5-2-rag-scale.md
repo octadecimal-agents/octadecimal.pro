@@ -137,6 +137,8 @@ tiers:
 
 ### M5.2.4 — Re-ranking v2
 
+**Status:** ✅ done (2026-06-15)
+
 **Problem v1:** boost path/filename wystarcza dla „backup Qdrant”, słabiej dla semantyki ogólnej.
 
 **Algorytm v2 (propozycja):**
@@ -175,6 +177,8 @@ retrieval:
 
 ### M5.2.5 — Harmonogram sync (launchd / cron)
 
+**Status:** ✅ done (2026-06-15)
+
 **Cel:** manifest aktualny bez ręcznego `embed-knowledge sync`.
 
 **macOS launchd (M5):**
@@ -185,6 +189,10 @@ retrieval:
 ```
 
 **Skrypt wrapper:** `scripts/octa-knowledge-sync-dev.sh` — log do `~/.octa/logs/embed-sync.log`.
+
+**Instalacja launchd:** `scripts/install-embed-knowledge-launchd.sh` (szablon w `scripts/launchd/`).
+
+**Runbook:** [knowledge-embed-sync-schedule.md](../runbooks/knowledge-embed-sync-schedule.md).
 
 **Bezpieczeństwo:** tylko dev collection `:6335`; nigdy auto-push prod w tej fazie.
 
@@ -243,7 +251,7 @@ flowchart TD
 - [x] Pełny sync dev; health pokazuje ≥ 79 dokumentów (lokalny Knowledge)
 - [x] 5 golden queries PASS (unit parametrized)
 - [x] Metryki retrieval w logach / debug header
-- [ ] launchd/cron opcjonalnie udokumentowany
+- [x] launchd/cron opcjonalnie udokumentowany
 
 ---
 

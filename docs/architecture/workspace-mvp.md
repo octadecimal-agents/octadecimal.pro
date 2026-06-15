@@ -75,6 +75,8 @@ With `policy.yaml` in place, a typical local Knowledge tree indexes **~80+** T1 
 
 Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup skips full ingest when the Qdrant collection already has points (`OCTA_REINDEX=1` forces rebuild).
 
+**Scheduled sync (optional, M5.2.5):** `./scripts/octa-knowledge-sync-dev.sh` wraps incremental sync with logging to `~/.octa/logs/embed-sync.log`. Install macOS launchd (every 6h): `./scripts/install-embed-knowledge-launchd.sh`. See [knowledge-embed-sync-schedule runbook](../runbooks/knowledge-embed-sync-schedule.md).
+
 **Embed policy:** `KNOWLEDGE_ROOT/.knowledge-index/policy.yaml` defines tier T1 include/exclude globs (see [knowledge-policy.example.yaml](knowledge-policy.example.yaml)). When missing, code falls back to built-in `knowledge_globs` in `WorkspaceConfig`.
 
 **Retrieval debug (dev):** set `WORKSPACE_DEBUG=1` and pass header `X-Debug-Retrieval: 1` on `/workspace/wiki/search` to include `vector_score`, `keyword_score`, and `keyword_raw` per hit. Structured JSON logs go to logger `secure_agentic_ai.retrieval`.
