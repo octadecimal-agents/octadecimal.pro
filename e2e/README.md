@@ -25,17 +25,20 @@ Playwright starts an isolated API server via `scripts/octa-e2e-server.sh`:
 | `DATABASE_URL` | `data/e2e-playwright.db` (fresh seed each run) |
 | `KNOWLEDGE_ROOT` | `e2e/.data/knowledge` (includes `Backup.md`) |
 
-## Scenarios (9)
+## Scenarios (12)
 
 1. Boot — greeting + Knowledge index health message
 2. `#Wiki` navigation
 3. Wiki search — `backup Qdrant` → `Backup.md`
 4. Chat — backup question → Kanon + `#Wiki` suggestion
 5. `#Board` — create task
-6. `#Planning` — calendar fixture + generate plan
-7. `#Review` — pending HITL queue from `seed_demo.py`
-8. Chat — „Co wymaga uwagi?” → Review summary
-9. `#Retro` — journal save + preview
+6. `#Board` — Octa-native teams (`platform`, `knowledge`, `ops`, `product`) in select + badge
+7. `GET /workspace/health` — status, RAG/LLM/calendar fields, pending review count
+8. `#Planning` — calendar fixture + generate plan
+9. `#Review` — pending HITL queue from `seed_demo.py`
+10. Chat — „Co wymaga uwagi?” → Review summary
+11. `#Retro` — journal save + preview
+12. `#Review` — approve + reject remove items from queue
 
 ## Options
 

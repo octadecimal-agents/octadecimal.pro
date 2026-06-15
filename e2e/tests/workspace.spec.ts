@@ -39,6 +39,33 @@ test.describe("Octa Workspace MVP", () => {
     await expect(page.locator("#task-list")).toContainText("E2E task Playwright");
   });
 
+  test("board team select lists Octa-native teams and badge reflects team", async ({ page }) => {
+    await page.locator('.nav-link[data-hash="#Board"]').click();
+    const teamSelect = page.locator("#new-team");
+    for (const team of ["platform", "knowledge", "ops", "product"]) {
+      await expect(teamSelect.locator(`option[value="${team}"]`)).toHaveText(team);
+    }
+    await expect(page.locator("#task-list")).toContainText("platform");
+    await teamSelect.selectOption("knowledge");
+    await page.locator("#new-title").fill("E2E knowledge team task");
+    await page.locator("#add-task-btn").click();
+    await expect(page.locator("#task-list .badge", { hasText: "knowledge" })).toBeVisible();
+  });
+
+  test("workspace health API returns expected E2E fields", async ({ request }) => {
+    const res = await request.get("/workspace/health");
+    expect(res.ok()).toBeTruthy();
+    const body = await res.json();
+    expect(body.status).toMatch(/ok|degraded/);
+    expect(body.knowledge_root_exists).toBe(true);
+    expect(body.documents_indexed).toBeGreaterThan(0);
+    expect(body.rag_backend).toBe("memory");
+    expect(body.llm_provider).toBe("dry");
+    expect(body.llm_active).toBe("dry");
+    expect(body.calendar_provider).toBe("fixture");
+    expect(body.review_pending_count).toBeGreaterThanOrEqual(3);
+  });
+
   test("planning shows calendar source and generates plan", async ({ page }) => {
     await page.locator('.nav-link[data-hash="#Planning"]').click();
     await expect(page.locator("#calendar-list")).toContainText("Źródło kalendarza");
@@ -67,5 +94,23 @@ test.describe("Octa Workspace MVP", () => {
     await page.locator('textarea[name="tomorrow"]').fill("Ship features");
     await page.locator("#retro-form").evaluate((form: HTMLFormElement) => form.requestSubmit());
     await expect(page.locator("#retro-preview")).toContainText("E2E retro OK");
+  });
+
+  test("review approve and reject remove items from pending queue", async ({ page }) => {
+    await page.locator('.nav-link[data-hash="#Review"]').click();
+    const approveButtons = page.locator("#review-list .btn-approve");
+    await expect(approveButtons.first()).toBeVisible();
+    const countBefore = await approveButtons.count();
+    expect(countBefore).toBeGreaterThanOrEqual(2);
+
+    const firstTitle = await page.locator("#review-list li strong").first().textContent();
+    await approveButtons.first().click();
+    await expect(approveButtons).toHaveCount(countBefore - 1);
+    if (firstTitle) {
+      await expect(page.locator("#review-list")).not.toContainText(firstTitle);
+    }
+
+    await page.locator("#review-list .btn-reject").first().click();
+    await expect(approveButtons).toHaveCount(countBefore - 2);
   });
 });
