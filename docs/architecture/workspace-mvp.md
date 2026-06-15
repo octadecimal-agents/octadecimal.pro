@@ -124,6 +124,10 @@ Browser → FastAPI :8042
 
 Knowledge ingest (MVP): scan T1 globs under `KNOWLEDGE_ROOT`, strip HTML callouts, chunk + embed. Default backend is in-memory (`FakeEmbeddingProvider`, CI-friendly). Set `RAG_BACKEND=qdrant` to persist chunks in local Qdrant on `:6335`. **Hybrid re-ranking** boosts filename/path token matches (e.g. `Backup.md` for “backup Qdrant”).
 
+## Board teams
+
+Octa-native team slugs (not legacy Ubuntu dev-teams): `platform`, `knowledge`, `ops`, `product`. Existing ledgers with `automation` / `security` / `frontend` / `ux` are migrated automatically on open.
+
 ## Review queue (HITL)
 
 - `GET /workspace/review/pending` — pending CEO approvals (same DB as `/operator/`)
@@ -206,7 +210,7 @@ Per [ADR 006](../adr/006-m5-only-dev-strategy.md):
 
 | Phase | Status | Focus |
 |-------|--------|-------|
-| [M5.5](../planning/workspace-mvp-m5-5-m5-complete.md) | next | Daily runbook, launchd API, board team rename |
+| [M5.5](../planning/workspace-mvp-m5-5-m5-complete.md) | in progress | Runbook ✅, launchd ✅, teams ✅ |
 | [M5.6](../planning/workspace-mvp-m5-6-m1-server-mode.md) | planned | Always-on Workspace on M1 |
 | [M5.7](../planning/workspace-mvp-m5-7-hosting-only.md) | deferred | pc-ubuntu hosting only (no HYDRA agents) |
 | [M6+](../planning/workspace-mvp-m6-platform.md) | parallel | Platform phases 5–13 |

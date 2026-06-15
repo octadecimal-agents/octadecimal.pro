@@ -24,7 +24,13 @@ CREATE TABLE IF NOT EXISTS plan_items (
 );
 """
 
-TEAMS = frozenset({"automation", "security", "frontend", "ux"})
+TEAMS = frozenset({"platform", "knowledge", "ops", "product"})
+LEGACY_TEAM_MAP = {
+    "automation": "platform",
+    "security": "ops",
+    "frontend": "product",
+    "ux": "knowledge",
+}
 STATUSES = frozenset({"todo", "doing", "blocked", "done"})
 
 
@@ -62,6 +68,12 @@ class WorkspaceLedger:
     def _init_schema(self) -> None:
         with self._connect() as conn:
             conn.executescript(SCHEMA)
+        self._migrate_legacy_teams()
+
+    def _migrate_legacy_teams(self) -> None:
+        with self._connect() as conn:
+            for old, new in LEGACY_TEAM_MAP.items():
+                conn.execute("UPDATE tasks SET team = ? WHERE team = ?", (new, old))
 
     def list_tasks(self, team: str | None = None, status: str | None = None) -> list[Task]:
         query = "SELECT * FROM tasks WHERE 1=1"
@@ -139,9 +151,10 @@ class WorkspaceLedger:
         if self.list_tasks():
             return
         demos = [
-            ("automation", "embed-knowledge.py phase 0", "Ingest T1 Knowledge paths into local RAG"),
-            ("security", "Review MCP TCC matrix", "macOS Full Disk Access recommendations"),
-            ("frontend", "Align #zespol section with Workspace", "Public demo consistency"),
+            ("platform", "Workspace M5 dev loop", "Runbook, launchd, Octa-native board teams"),
+            ("knowledge", "embed-knowledge.py T1 sync", "Ingest Knowledge paths into local RAG"),
+            ("ops", "Review MCP TCC matrix", "macOS Full Disk Access recommendations"),
+            ("product", "Align public demo with Workspace", "Marketing page consistency"),
         ]
         for team, title, intent in demos:
             self.create_task(team=team, title=title, intent=intent)

@@ -31,7 +31,7 @@ def test_approvals_pending_tool_summary() -> None:
 
 def test_board_list_tool(tmp_path: Path) -> None:
     ledger = WorkspaceLedger(tmp_path / "ledger.sqlite")
-    ledger.create_task("automation", "Blocked item", status="blocked")
+    ledger.create_task("platform", "Blocked item", status="blocked")
     result = board_list(ledger, status="blocked")
     assert result.row_count == 1
     assert "Blocked item" in result.summary

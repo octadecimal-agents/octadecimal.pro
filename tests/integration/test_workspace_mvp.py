@@ -179,7 +179,7 @@ def test_workspace_chat_dry(workspace_client: TestClient) -> None:
 def test_board_task_crud(workspace_client: TestClient) -> None:
     create = workspace_client.post(
         "/workspace/board/tasks",
-        json={"team": "automation", "title": "Test task MVP"},
+        json={"team": "platform", "title": "Test task MVP"},
     )
     assert create.status_code == 200
     task_id = create.json()["id"]

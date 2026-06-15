@@ -31,7 +31,7 @@ async def test_chat_suggests_planning(agent) -> None:
 @pytest.mark.asyncio
 async def test_chat_blocked_tasks(agent) -> None:
     workspace_agent, _ingest = agent
-    workspace_agent._ledger.create_task("automation", "Blocked item", status="blocked")
+    workspace_agent._ledger.create_task("platform", "Blocked item", status="blocked")
     reply = await workspace_agent.chat("Co jest zablokowane?")
     assert "Blocked item" in reply.message
     assert reply.suggested_hash == "#Board"
@@ -88,7 +88,7 @@ async def test_chat_review_queue(agent) -> None:
 @pytest.mark.asyncio
 async def test_chat_attention_summary(agent) -> None:
     workspace_agent, _ingest = agent
-    workspace_agent._ledger.create_task("security", "Fix policy gate", status="blocked")
+    workspace_agent._ledger.create_task("ops", "Fix policy gate", status="blocked")
     pending = (
         PendingReviewItem(
             request_id="demo-1",
