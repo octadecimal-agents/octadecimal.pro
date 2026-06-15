@@ -314,4 +314,26 @@ window.addEventListener("hashchange", () => {
   } catch {
     appendMessage("Workspace API niedostępne — uruchom scripts/octa-mvp-up.sh", "agent");
   }
+  })();
+
+/* Theme toggle + localStorage persistence */
+(function initTheme() {
+  const html = document.documentElement;
+  const saved = localStorage.getItem("octa-theme");
+  if (saved === "light" || saved === "dark") {
+    html.setAttribute("data-theme", saved);
+  } else {
+    html.setAttribute("data-theme", "dark");
+  }
+
+  const btn = document.getElementById("theme-toggle-btn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const current = html.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      localStorage.setItem("octa-theme", next);
+    });
+  }
 })();
+

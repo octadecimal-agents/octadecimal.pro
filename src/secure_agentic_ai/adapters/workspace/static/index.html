@@ -1,143 +1,248 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Octa Workspace — MVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <div class="layout">
-    <nav class="sidebar" aria-label="Panele hash">
-      <div class="brand">Octa <span>Workspace</span></div>
-      <a href="#Ogolny" class="nav-link" data-hash="#Ogolny"><code>#Ogolny</code> Chat</a>
-      <a href="#Planning" class="nav-link" data-hash="#Planning"><code>#Planning</code> Plan dnia</a>
-      <a href="#Board" class="nav-link" data-hash="#Board"><code>#Board</code> Tablica</a>
-      <a href="#Wiki" class="nav-link" data-hash="#Wiki"><code>#Wiki</code> Knowledge</a>
-      <a href="#Review" class="nav-link" data-hash="#Review">
-        <code>#Review</code> HITL
-        <span class="nav-badge" id="review-badge" hidden aria-label="Oczekujące akceptacje"></span>
-      </a>
-      <a href="#Retro" class="nav-link" data-hash="#Retro"><code>#Retro</code> Dziennik</a>
-      <a href="#Zasady" class="nav-link" data-hash="#Zasady"><code>#Zasady</code> Kanon</a>
-      <hr class="nav-divider">
-      <a href="#Dev" class="nav-link nav-link--soon" data-hash="#Dev"><code>#Dev</code> <span class="nav-soon">wkrótce</span></a>
-      <a href="#Burndown" class="nav-link nav-link--soon" data-hash="#Burndown"><code>#Burndown</code> <span class="nav-soon">wkrótce</span></a>
-      <a href="#Ranking" class="nav-link nav-link--soon" data-hash="#Ranking"><code>#Ranking</code> <span class="nav-soon">wkrótce</span></a>
-    </nav>
-
-    <div class="main">
-      <section class="panel active" id="panel-Ogolny" data-panel="#Ogolny">
-        <h2>Agent Osobisty</h2>
-        <p class="muted">Maja + Anna — lokalny MVP na M5. Zapytaj o backup, plan albo zablokowane zadania.</p>
-      </section>
-
-      <section class="panel" id="panel-Planning" data-panel="#Planning">
-        <h2>Plan dnia</h2>
-        <div class="plan-actions">
-          <button type="button" id="generate-plan-btn">Generuj plan (AO)</button>
-          <button type="button" id="save-plan-btn" class="secondary">Zapisz edycję</button>
+  <div class="workspace">
+    <!-- Sidebar agentów -->
+    <aside class="sidebar" aria-label="Zespół agentów">
+      <div class="sidebar-header"><span>Zespół</span></div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#6366f1;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Maja Wojciechowska">M</div>
+          <span class="status-dot working"></span>
         </div>
-        <div class="calendar" id="calendar-list"></div>
-        <ul class="plan-list" id="plan-list"></ul>
-        <form class="inline" id="add-plan-form">
-          <input type="text" id="new-plan-item" placeholder="Dodaj pozycję planu…" required>
-          <button type="submit">Dodaj</button>
-        </form>
-      </section>
-
-      <section class="panel" id="panel-Board" data-panel="#Board">
-        <h2>Tablica zespołów dev</h2>
-        <div class="task-grid" id="task-list"></div>
-        <div class="add-task">
-          <select id="new-team">
-            <option value="platform">platform</option>
-            <option value="knowledge">knowledge</option>
-            <option value="ops">ops</option>
-            <option value="product">product</option>
-          </select>
-          <input id="new-title" type="text" placeholder="Tytuł zadania">
-          <button type="button" id="add-task-btn">Dodaj</button>
+        <div class="agent-info">
+          <div class="agent-name">Maja Wojciechowska</div>
+          <div class="agent-role">Chief of Staff</div>
         </div>
-      </section>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#8b5cf6;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Karolina Wieczorek">K</div>
+          <span class="status-dot working"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Karolina Wieczorek</div>
+          <div class="agent-role">Scrum Master</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#10b981;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Wilson White">W</div>
+          <span class="status-dot working"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Wilson White</div>
+          <div class="agent-role">Team Lead — Automatyzacja</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#ec4899;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Anna Lewandowska">A</div>
+          <span class="status-dot working"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Anna Lewandowska</div>
+          <div class="agent-role">Client Relations</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#f59e0b;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Natalia Krawczyk">N</div>
+          <span class="status-dot working"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Natalia Krawczyk</div>
+          <div class="agent-role">Marketing Agent</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#3b82f6;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Katarzyna Mazur">K</div>
+          <span class="status-dot review"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Katarzyna Mazur</div>
+          <div class="agent-role">Knowledge Agent</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#ef4444;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Paweł Dąbrowski">P</div>
+          <span class="status-dot working"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Paweł Dąbrowski</div>
+          <div class="agent-role">Security Agent</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#a855f7;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Aleksandra Kamińska">A</div>
+          <span class="status-dot planning"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Aleksandra Kamińska</div>
+          <div class="agent-role">Research Agent</div>
+        </div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-avatar">
+          <div class="agent-avatar-inner" style="background:#06b6d4;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;" aria-label="Joanna Wiśniewska">J</div>
+          <span class="status-dot review"></span>
+        </div>
+        <div class="agent-info">
+          <div class="agent-name">Joanna Wiśniewska</div>
+          <div class="agent-role">Business Advisor</div>
+        </div>
+      </div>
+    </aside>
 
-      <section class="panel" id="panel-Wiki" data-panel="#Wiki">
-        <h2>Knowledge — wyszukiwanie</h2>
-        <form class="inline" id="wiki-form">
-          <input type="search" id="wiki-query" placeholder="np. backup Qdrant" required>
-          <button type="submit">Szukaj</button>
-        </form>
-        <ul class="wiki-results" id="wiki-results"></ul>
-      </section>
+    <div class="main-area">
+      <!-- Tab bar (hash navigation — preserves .nav-link[data-hash] E2E anchors) -->
+      <nav class="tab-bar" aria-label="Panele hash">
+        <a href="#Ogolny" class="nav-link tab-pill active" data-hash="#Ogolny"><span class="tab-icon">○</span> <code>#Ogolny</code></a>
+        <a href="#Planning" class="nav-link tab-pill" data-hash="#Planning"><span class="tab-icon">◈</span> <code>#Planning</code></a>
+        <a href="#Board" class="nav-link tab-pill" data-hash="#Board"><span class="tab-icon">▦</span> <code>#Board</code></a>
+        <a href="#Wiki" class="nav-link tab-pill" data-hash="#Wiki"><span class="tab-icon">◉</span> <code>#Wiki</code></a>
+        <a href="#Review" class="nav-link tab-pill" data-hash="#Review">
+          <span class="tab-icon">◎</span> <code>#Review</code>
+          <span class="nav-badge" id="review-badge" hidden aria-label="Oczekujące akceptacje"></span>
+        </a>
+        <a href="#Retro" class="nav-link tab-pill" data-hash="#Retro"><span class="tab-icon">↺</span> <code>#Retro</code></a>
+        <a href="#Zasady" class="nav-link tab-pill" data-hash="#Zasady"><span class="tab-icon">§</span> <code>#Zasady</code></a>
+        <a href="#Dev" class="nav-link tab-pill nav-link--soon" data-hash="#Dev"><span class="tab-icon">◿</span> <code>#Dev</code> <span class="nav-soon">wkrótce</span></a>
+        <a href="#Burndown" class="nav-link tab-pill nav-link--soon" data-hash="#Burndown"><span class="tab-icon">⟩</span> <code>#Burndown</code> <span class="nav-soon">wkrótce</span></a>
+        <a href="#Ranking" class="nav-link tab-pill nav-link--soon" data-hash="#Ranking"><span class="tab-icon">★</span> <code>#Ranking</code> <span class="nav-soon">wkrótce</span></a>
+      </nav>
 
-      <section class="panel" id="panel-Review" data-panel="#Review">
-        <h2>Review — akceptacje CEO</h2>
-        <ul class="review-list" id="review-list"></ul>
-      </section>
+      <div class="content-area">
+        <!-- Panels -->
+        <div style="flex:1;overflow-y:auto;">
+          <section class="panel active" id="panel-Ogolny" data-panel="#Ogolny">
+            <h2>Agent Osobisty</h2>
+            <p class="muted">Maja + Anna — lokalny MVP na M5. Zapytaj o backup, plan albo zablokowane zadania.</p>
+          </section>
 
-      <section class="panel" id="panel-Retro" data-panel="#Retro">
-        <h2>Retro</h2>
-        <form class="inline" id="retro-form">
-          <label>Co poszło dobrze<input name="went_well" required></label>
-          <label>Co poprawić<textarea name="improve" rows="2" required></textarea></label>
-          <label>Jutro<textarea name="tomorrow" rows="2" required></textarea></label>
-          <button type="submit">Zapisz journal</button>
-        </form>
-        <pre id="retro-preview" class="muted" style="margin-top:1rem;white-space:pre-wrap;"></pre>
-      </section>
+          <section class="panel" id="panel-Planning" data-panel="#Planning">
+            <h2>Plan dnia</h2>
+            <div class="plan-actions">
+              <button type="button" id="generate-plan-btn">Generuj plan (AO)</button>
+              <button type="button" id="save-plan-btn" class="secondary">Zapisz edycję</button>
+            </div>
+            <div class="calendar" id="calendar-list"></div>
+            <ul class="plan-list" id="plan-list"></ul>
+            <form class="inline-form" id="add-plan-form">
+              <input type="text" id="new-plan-item" placeholder="Dodaj pozycję planu…" required>
+              <button type="submit">Dodaj</button>
+            </form>
+          </section>
 
-      <section class="panel" id="panel-Zasady" data-panel="#Zasady">
-        <h2>Zasady i Kanon</h2>
-        <p class="muted">Statyczne odnośniki do dokumentacji Octa — bez RAG, tylko curated linki.</p>
-        <ul class="rules-list">
-          <li>
-            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/docs/architecture/workspace-mvp.md" target="_blank" rel="noopener">Workspace MVP — architektura</a>
-            <span class="muted">Kanon lokalnego MVP (hash, API, sprinty)</span>
-          </li>
-          <li>
-            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/docs/planning/workspace-mvp-roadmap.md" target="_blank" rel="noopener">Plan dalszych prac M5.x</a>
-            <span class="muted">Fazy hardening → produkcja</span>
-          </li>
-          <li>
-            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING</a>
-            <span class="muted">Konwencje commitów, PR, jakość kodu</span>
-          </li>
-          <li>
-            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY</a>
-            <span class="muted">Zgłaszanie luk, polityka bezpieczeństwa</span>
-          </li>
-          <li>
-            <span>OCTA-ZALOZENIA.md</span>
-            <span class="muted">Knowledge/ — założenia biznesowe (repo lokalne, poza tym serwerem)</span>
-          </li>
-        </ul>
-      </section>
+          <section class="panel" id="panel-Board" data-panel="#Board">
+            <h2>Tablica zespołów dev</h2>
+            <div class="task-grid" id="task-list"></div>
+            <div class="add-task">
+              <select id="new-team">
+                <option value="platform">platform</option>
+                <option value="knowledge">knowledge</option>
+                <option value="ops">ops</option>
+                <option value="product">product</option>
+              </select>
+              <input id="new-title" type="text" placeholder="Tytuł zadania">
+              <button type="button" id="add-task-btn">Dodaj</button>
+            </div>
+          </section>
 
-      <section class="panel" id="panel-Dev" data-panel="#Dev">
-        <h2>#Dev</h2>
-        <p class="muted">Wkrótce — integracja z git/BMAD i status branchy. Poza zakresem MVP M5.</p>
-      </section>
+          <section class="panel" id="panel-Wiki" data-panel="#Wiki">
+            <h2>Knowledge — wyszukiwanie</h2>
+            <form class="inline-form" id="wiki-form">
+              <input type="search" id="wiki-query" placeholder="np. backup Qdrant" required>
+              <button type="submit">Szukaj</button>
+            </form>
+            <ul class="wiki-results" id="wiki-results"></ul>
+          </section>
 
-      <section class="panel" id="panel-Burndown" data-panel="#Burndown">
-        <h2>#Burndown</h2>
-        <p class="muted">Wkrótce — burndown sprintu i velocity. Poza zakresem MVP M5.</p>
-      </section>
+          <section class="panel" id="panel-Review" data-panel="#Review">
+            <h2>Review — akceptacje CEO</h2>
+            <ul class="review-list" id="review-list"></ul>
+          </section>
 
-      <section class="panel" id="panel-Ranking" data-panel="#Ranking">
-        <h2>#Ranking</h2>
-        <p class="muted">Wkrótce — ranking zespołów / CRM. Poza zakresem MVP M5.</p>
-      </section>
+          <section class="panel" id="panel-Retro" data-panel="#Retro">
+            <h2>Retro</h2>
+            <form class="inline-form" id="retro-form">
+              <label>Co poszło dobrze<input name="went_well" required></label>
+              <label>Co poprawić<textarea name="improve" rows="2" required></textarea></label>
+              <label>Jutro<textarea name="tomorrow" rows="2" required></textarea></label>
+              <button type="submit">Zapisz journal</button>
+            </form>
+            <pre id="retro-preview" class="muted" style="margin-top:1rem;white-space:pre-wrap;"></pre>
+          </section>
 
-      <section class="chat-section">
-        <div class="chat-header">Chat · <span id="active-hash-label">#Ogolny</span></div>
-        <div class="chat-log" id="chat-log"></div>
-        <form class="chat-form" id="chat-form">
-          <input type="text" id="chat-input" placeholder="Napisz do Agenta Osobistego…" autocomplete="off" required>
-          <button type="submit">Wyślij</button>
-        </form>
-      </section>
+          <section class="panel" id="panel-Zasady" data-panel="#Zasady">
+            <h2>Zasady i Kanon</h2>
+            <p class="muted">Statyczne odnośniki do dokumentacji Octa — bez RAG, tylko curated linki.</p>
+            <ul class="rules-list">
+              <li>
+                <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/docs/architecture/workspace-mvp.md" target="_blank" rel="noopener">Workspace MVP — architektura</a>
+                <span class="muted">Kanon lokalnego MVP (hash, API, sprinty)</span>
+              </li>
+              <li>
+                <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/docs/planning/workspace-mvp-roadmap.md" target="_blank" rel="noopener">Plan dalszych prac M5.x</a>
+                <span class="muted">Fazy hardening → produkcja</span>
+              </li>
+              <li>
+                <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING</a>
+                <span class="muted">Konwencje commitów, PR, jakość kodu</span>
+              </li>
+              <li>
+                <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY</a>
+                <span class="muted">Zgłaszanie luk, polityka bezpieczeństwa</span>
+              </li>
+              <li>
+                <span>OCTA-ZALOZENIA.md</span>
+                <span class="muted">Knowledge/ — założenia biznesowe (repo lokalne, poza tym serwerem)</span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="panel" id="panel-Dev" data-panel="#Dev">
+            <h2>#Dev</h2>
+            <p class="muted">Wkrótce — integracja z git/BMAD i status branchy. Poza zakresem MVP M5.</p>
+          </section>
+
+          <section class="panel" id="panel-Burndown" data-panel="#Burndown">
+            <h2>#Burndown</h2>
+            <p class="muted">Wkrótce — burndown sprintu i velocity. Poza zakresem MVP M5.</p>
+          </section>
+
+          <section class="panel" id="panel-Ranking" data-panel="#Ranking">
+            <h2>#Ranking</h2>
+            <p class="muted">Wkrótce — ranking zespołów / CRM. Poza zakresem MVP M5.</p>
+          </section>
+        </div>
+
+        <!-- Chat section -->
+        <section class="chat-section">
+          <div class="chat-header">Chat · <span id="active-hash-label">#Ogolny</span></div>
+          <div class="chat-log" id="chat-log"></div>
+          <form class="chat-form" id="chat-form">
+            <input type="text" id="chat-input" placeholder="Napisz do Agenta Osobistego…" autocomplete="off" required>
+            <button type="submit">Wyślij</button>
+          </form>
+        </section>
+      </div>
     </div>
   </div>
+
+  <button class="theme-toggle" id="theme-toggle-btn" aria-label="Przełącz motyw">🌓</button>
   <script src="/static/app.js"></script>
 </body>
 </html>

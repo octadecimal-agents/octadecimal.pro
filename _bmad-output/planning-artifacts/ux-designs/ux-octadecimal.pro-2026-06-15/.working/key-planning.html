@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octa Workspace – #Planning mockup</title>
+<!--
+  Spine sections:
+  - DESIGN.md: Colors, Typography
+  - EXPERIENCE.md: Component Patterns (Planning), Key Flows (Flow 2)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-accent: #1a73e8;
+  --color-accent-soft: #E8F0FE;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8f9fa;
+  --color-text-primary: #202124;
+  --color-text-secondary: #5f6368;
+  --color-border: #DADCE0;
+  --color-border-light: #E8EAED;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: #e8eaed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+.workspace {
+  width: 900px;
+  height: 620px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.tab-bar {
+  display: flex; align-items: center; gap: 0.25rem;
+  padding: 0.5rem 1rem; border-bottom: 1px solid var(--color-border-light);
+  overflow-x: auto; flex-shrink: 0;
+}
+.tab-pill {
+  display: flex; align-items: center; gap: 0.25rem;
+  padding: 0.375rem 0.75rem; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 500; white-space: nowrap;
+  color: var(--color-text-secondary); cursor: default;
+  border: none; background: none; font-family: inherit;
+}
+.tab-pill.active { background: var(--color-accent-soft); color: var(--color-accent); }
+.tab-icon { font-size: 0.625rem; }
+.panel {
+  flex: 1; padding: 1.25rem 1.5rem; overflow-y: auto;
+}
+.panel h2 { font-size: 1.15rem; font-weight: 600; color: var(--color-text-primary); margin-bottom: 1rem; }
+.plan-actions { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.plan-actions button {
+  padding: 0.5rem 0.85rem; font-size: 0.85rem; font-weight: 600;
+  border: none; border-radius: 8px; cursor: default; font-family: inherit;
+}
+.plan-actions .primary { background: var(--color-accent); color: white; }
+.plan-actions .secondary { background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+.calendar { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+.calendar-item {
+  display: flex; gap: 1rem; padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.calendar-item time { color: var(--color-accent); font-variant-numeric: tabular-nums; min-width: 3.5rem; font-size: 0.875rem; }
+.calendar-item span { font-size: 0.875rem; color: var(--color-text-primary); }
+.calendar-item .cal-name { color: var(--color-text-secondary); font-size: 0.75rem; }
+.plan-list { list-style: none; display: grid; gap: 0.5rem; }
+.plan-list li {
+  background: var(--color-bg-alt); border: 1px solid var(--color-border);
+  border-radius: 8px; padding: 0.65rem 0.85rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.plan-list .source {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--color-text-secondary); background: var(--color-bg-alt2);
+  padding: 0.1rem 0.35rem; border-radius: 4px; flex-shrink: 0;
+}
+.plan-list input {
+  flex: 1; border: none; background: transparent;
+  font-size: 0.875rem; color: var(--color-text-primary); font-family: inherit;
+  outline: none;
+}
+.add-plan-form {
+  display: flex; gap: 0.5rem; margin-top: 1rem;
+}
+.add-plan-form input {
+  flex: 1; padding: 0.5rem; border: 1px solid var(--color-border);
+  border-radius: 8px; font-size: 0.875rem; font-family: inherit; outline: none;
+}
+.add-plan-form input:focus { border-color: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent); }
+.add-plan-form button {
+  padding: 0.5rem 1rem; background: var(--color-accent); color: white;
+  border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: default; font-family: inherit;
+}
+</style>
+</head>
+<body>
+<div class="workspace">
+  <div class="tab-bar">
+    <button class="tab-pill"><span class="tab-icon">○</span> #Ogólny</button>
+    <button class="tab-pill active"><span class="tab-icon">◈</span> #Planning</button>
+    <button class="tab-pill"><span class="tab-icon">▦</span> #Board</button>
+    <button class="tab-pill"><span class="tab-icon">◉</span> #Wiki</button>
+    <button class="tab-pill"><span class="tab-icon">◎</span> #Review</button>
+    <button class="tab-pill"><span class="tab-icon">↺</span> #Retro</button>
+    <button class="tab-pill"><span class="tab-icon">§</span> #Zasady</button>
+  </div>
+  <div class="panel">
+    <h2>Plan dnia</h2>
+    <div class="plan-actions">
+      <button class="primary">Generuj plan (AO)</button>
+      <button class="secondary">Zapisz edycję</button>
+    </div>
+    <div class="calendar">
+      <p style="font-size:0.8rem;color:var(--color-text-secondary);margin-bottom:0.5rem;">Źródło kalendarza: <code style="font-size:0.75rem;">macOS EventKit</code></p>
+      <div class="calendar-item"><time>07:00</time><span>Start — Ciało i Sens <span class="cal-name">(Praca)</span></span></div>
+      <div class="calendar-item"><time>08:30</time><span>Triage poczty <span class="cal-name">(Praca)</span></span></div>
+      <div class="calendar-item"><time>09:00</time><span>#Planning — sprint wewnętrzny <span class="cal-name">(Praca)</span></span></div>
+      <div class="calendar-item"><time>10:00</time><span>Embed audit — briefing <span class="cal-name">(Praca)</span></span></div>
+      <div class="calendar-item"><time>13:30</time><span>#Review — HITL <span class="cal-name">(Praca)</span></span></div>
+      <div class="calendar-item"><time>17:00</time><span>#Retro — zamknięcie dnia <span class="cal-name">(Praca)</span></span></div>
+    </div>
+    <ul class="plan-list">
+      <li><span class="source">AO</span><input value="Embed pipeline — approve + merge" readonly></li>
+      <li><span class="source">AO</span><input value="Audyt TCC macOS — przegląd raportu" readonly></li>
+      <li><span class="source">CEO</span><input value="Poprawki do awatarów — feedback dla Joanny" readonly></li>
+      <li><span class="source">AO</span><input value="Deploy strony klienta B" readonly></li>
+      <li><span class="source">CEO</span><input value="Newsletter klient B — finalna akceptacja" readonly></li>
+    </ul>
+    <form class="add-plan-form">
+      <input type="text" placeholder="Dodaj pozycję planu…" style="color:var(--color-text-secondary);">
+      <button>Dodaj</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

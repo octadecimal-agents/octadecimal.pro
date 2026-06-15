@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octa Workspace – #Retro mockup</title>
+<!--
+  Spine sections:
+  - DESIGN.md: Components (Forms)
+  - EXPERIENCE.md: Component Patterns (Retro), Key Flows (Flow 4)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-accent: #1a73e8;
+  --color-accent-soft: #E8F0FE;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8f9fa;
+  --color-text-primary: #202124;
+  --color-text-secondary: #5f6368;
+  --color-border: #DADCE0;
+  --color-border-light: #E8EAED;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: #e8eaed;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 2rem;
+}
+.workspace {
+  width: 900px; height: 620px; background: var(--color-bg);
+  border: 1px solid var(--color-border); border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.tab-bar {
+  display: flex; align-items: center; gap: 0.25rem;
+  padding: 0.5rem 1rem; border-bottom: 1px solid var(--color-border-light);
+  overflow-x: auto; flex-shrink: 0;
+}
+.tab-pill {
+  display: flex; align-items: center; gap: 0.25rem;
+  padding: 0.375rem 0.75rem; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 500; white-space: nowrap;
+  color: var(--color-text-secondary); cursor: default;
+  border: none; background: none; font-family: inherit;
+}
+.tab-pill.active { background: var(--color-accent-soft); color: var(--color-accent); }
+.tab-icon { font-size: 0.625rem; }
+.panel { flex: 1; padding: 1.25rem 1.5rem; overflow-y: auto; }
+.panel h2 { font-size: 1.15rem; font-weight: 600; color: var(--color-text-primary); margin-bottom: 1rem; }
+.inline-form { display: grid; gap: 0.85rem; max-width: 520px; }
+.inline-form label {
+  display: flex; flex-direction: column; gap: 0.3rem;
+  font-size: 0.85rem; font-weight: 500; color: var(--color-text-primary);
+}
+.inline-form input, .inline-form textarea {
+  background: var(--color-bg-alt); border: 1px solid var(--color-border);
+  border-radius: 8px; padding: 0.6rem; color: var(--color-text-primary);
+  font-family: inherit; font-size: 0.875rem; outline: none;
+}
+.inline-form input:focus, .inline-form textarea:focus {
+  border-color: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent);
+}
+.inline-form button {
+  background: var(--color-accent); color: white; border: none;
+  border-radius: 8px; padding: 0.6rem 1.2rem; cursor: default;
+  font-weight: 600; font-family: inherit; width: fit-content;
+  font-size: 0.875rem;
+}
+.preview-box {
+  margin-top: 1.25rem; padding: 0.85rem 1rem;
+  background: var(--color-bg-alt); border: 1px solid var(--color-border-light);
+  border-radius: 8px; font-size: 0.82rem; color: var(--color-text-secondary);
+  white-space: pre-wrap; line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<div class="workspace">
+  <div class="tab-bar">
+    <button class="tab-pill"><span class="tab-icon">○</span> #Ogólny</button>
+    <button class="tab-pill"><span class="tab-icon">◈</span> #Planning</button>
+    <button class="tab-pill"><span class="tab-icon">▦</span> #Board</button>
+    <button class="tab-pill"><span class="tab-icon">◉</span> #Wiki</button>
+    <button class="tab-pill"><span class="tab-icon">◎</span> #Review</button>
+    <button class="tab-pill active"><span class="tab-icon">↺</span> #Retro</button>
+    <button class="tab-pill"><span class="tab-icon">§</span> #Zasady</button>
+  </div>
+  <div class="panel">
+    <h2>Retro — dziennik</h2>
+    <form class="inline-form">
+      <label>
+        Co poszło dobrze
+        <input name="went_well" value="Embed pipeline testy OK — approve + merge">
+      </label>
+      <label>
+        Co poprawić
+        <textarea name="improve" rows="2">WiFcej czasu na review rano — deploy klienta B czekał do 13:30.</textarea>
+      </label>
+      <label>
+        Jutro
+        <textarea name="tomorrow" rows="2">Zacząć od #Review (1 nowa akcja z automatu). Poprawki awatarów dla Joanny. Newsletter przed 12:00.</textarea>
+      </label>
+      <button type="submit">Zapisz journal</button>
+    </form>
+    <div class="preview-box">
+      2026-06-15<br><br>
+      Co poszło dobrze: Embed pipeline testy OK — approve + merge<br>
+      Co poprawić: Więcej czasu na review rano — deploy klienta B czekał do 13:30.<br>
+      Jutro: Zacząć od #Review (1 nowa akcja z automatu). Poprawki awatarów dla Joanny. Newsletter przed 12:00.
+    </div>
+  </div>
+</div>
+</body>
+</html>
