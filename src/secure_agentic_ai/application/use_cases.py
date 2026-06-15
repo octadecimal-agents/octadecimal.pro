@@ -56,7 +56,8 @@ class RequestActionUseCase:
     async def _record_audit(
         self, event_type: AuditEventType, command: RequestActionCommand, request_id: str | None = None
     ) -> None:
-        trace_id = str(self.tracer.trace_id) if self.tracer else None
+        trace_id = self.tracer.trace_id if self.tracer else None
+        trace_id = str(trace_id) if trace_id is not None else None
         event = AuditEvent(
             event_id=str(uuid4()),
             event_type=event_type,

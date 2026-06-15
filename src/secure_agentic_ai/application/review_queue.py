@@ -53,10 +53,7 @@ def format_review_reply(items: tuple[PendingReviewItem, ...]) -> ChatReply:
             message="Kolejka `#Review` jest pusta — brak akcji do zatwierdzenia.",
             suggested_hash="#Review",
         )
-    lines = [
-        f"- **{item.description}** ({item.risk_level}) — {item.actor_display_name}"
-        for item in items
-    ]
+    lines = [f"- **{item.description}** ({item.risk_level}) — {item.actor_display_name}" for item in items]
     count = len(items)
     noun = "akcja" if count == 1 else "akcje" if 2 <= count <= 4 else "akcji"
     header = f"W kolejce `#Review` czeka **{count}** {noun}:\n\n"
@@ -77,11 +74,7 @@ def format_attention_reply(
     if pending:
         review_lines = [f"- {item.description} ({item.risk_level})" for item in pending[:5]]
         suffix = f"\n- … i {len(pending) - 5} więcej" if len(pending) > 5 else ""
-        sections.append(
-            f"**Review ({len(pending)})** — wymaga zatwierdzenia CEO:\n"
-            + "\n".join(review_lines)
-            + suffix
-        )
+        sections.append(f"**Review ({len(pending)})** — wymaga zatwierdzenia CEO:\n" + "\n".join(review_lines) + suffix)
     else:
         sections.append("**Review** — kolejka pusta.")
 

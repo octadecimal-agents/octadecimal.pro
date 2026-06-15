@@ -19,6 +19,11 @@
         <span class="nav-badge" id="review-badge" hidden aria-label="Oczekujące akceptacje"></span>
       </a>
       <a href="#Retro" class="nav-link" data-hash="#Retro"><code>#Retro</code> Dziennik</a>
+      <a href="#Zasady" class="nav-link" data-hash="#Zasady"><code>#Zasady</code> Kanon</a>
+      <hr class="nav-divider">
+      <a href="#Dev" class="nav-link nav-link--soon" data-hash="#Dev"><code>#Dev</code> <span class="nav-soon">wkrótce</span></a>
+      <a href="#Burndown" class="nav-link nav-link--soon" data-hash="#Burndown"><code>#Burndown</code> <span class="nav-soon">wkrótce</span></a>
+      <a href="#Ranking" class="nav-link nav-link--soon" data-hash="#Ranking"><code>#Ranking</code> <span class="nav-soon">wkrótce</span></a>
     </nav>
 
     <div class="main">
@@ -79,6 +84,48 @@
           <button type="submit">Zapisz journal</button>
         </form>
         <pre id="retro-preview" class="muted" style="margin-top:1rem;white-space:pre-wrap;"></pre>
+      </section>
+
+      <section class="panel" id="panel-Zasady" data-panel="#Zasady">
+        <h2>Zasady i Kanon</h2>
+        <p class="muted">Statyczne odnośniki do dokumentacji Octa — bez RAG, tylko curated linki.</p>
+        <ul class="rules-list">
+          <li>
+            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/docs/architecture/workspace-mvp.md" target="_blank" rel="noopener">Workspace MVP — architektura</a>
+            <span class="muted">Kanon lokalnego MVP (hash, API, sprinty)</span>
+          </li>
+          <li>
+            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/docs/planning/workspace-mvp-roadmap.md" target="_blank" rel="noopener">Plan dalszych prac M5.x</a>
+            <span class="muted">Fazy hardening → produkcja</span>
+          </li>
+          <li>
+            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING</a>
+            <span class="muted">Konwencje commitów, PR, jakość kodu</span>
+          </li>
+          <li>
+            <a href="https://github.com/octadecimal-agents/octadecimal.pro/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY</a>
+            <span class="muted">Zgłaszanie luk, polityka bezpieczeństwa</span>
+          </li>
+          <li>
+            <span>OCTA-ZALOZENIA.md</span>
+            <span class="muted">Knowledge/ — założenia biznesowe (repo lokalne, poza tym serwerem)</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="panel" id="panel-Dev" data-panel="#Dev">
+        <h2>#Dev</h2>
+        <p class="muted">Wkrótce — integracja z git/BMAD i status branchy. Poza zakresem MVP M5.</p>
+      </section>
+
+      <section class="panel" id="panel-Burndown" data-panel="#Burndown">
+        <h2>#Burndown</h2>
+        <p class="muted">Wkrótce — burndown sprintu i velocity. Poza zakresem MVP M5.</p>
+      </section>
+
+      <section class="panel" id="panel-Ranking" data-panel="#Ranking">
+        <h2>#Ranking</h2>
+        <p class="muted">Wkrótce — ranking zespołów / CRM. Poza zakresem MVP M5.</p>
       </section>
 
       <section class="chat-section">

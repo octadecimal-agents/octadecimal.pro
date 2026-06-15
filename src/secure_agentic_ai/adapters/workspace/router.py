@@ -31,8 +31,8 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
     SqlAlchemyApprovalRequestRepository,
     SqlAlchemyAuditWriter,
 )
-from secure_agentic_ai.infrastructure.workspace.review_adapter import pending_review_items
 from secure_agentic_ai.infrastructure.workspace.ledger import Task
+from secure_agentic_ai.infrastructure.workspace.review_adapter import pending_review_items
 from secure_agentic_ai.infrastructure.workspace.state import (
     get_chat_provider,
     get_config,
@@ -197,10 +197,7 @@ async def planning_calendar() -> CalendarListResponse:
     events, source = await list_today_calendar_events(get_config())
     return CalendarListResponse(
         source=source,
-        events=[
-            CalendarEvent(time=event.time, title=event.title, calendar=event.calendar)
-            for event in events
-        ],
+        events=[CalendarEvent(time=event.time, title=event.title, calendar=event.calendar) for event in events],
     )
 
 

@@ -24,10 +24,7 @@ def test_parse_suggested_hash() -> None:
 
 
 def test_sanitize_llm_reply_strips_minimax_thinking() -> None:
-    raw = (
-        "<think>\nThe user asked about backup.\n</think>\n\n"
-        "# Backup Qdrant\n\n→ `#Wiki`"
-    )
+    raw = "<think>\nThe user asked about backup.\n</think>\n\n# Backup Qdrant\n\n→ `#Wiki`"
     cleaned = sanitize_llm_reply(raw)
     assert "redacted_thinking" not in cleaned
     assert cleaned.startswith("# Backup Qdrant")

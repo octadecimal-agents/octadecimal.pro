@@ -120,7 +120,7 @@ async def _resolve_from_bsm(
         projects = await _bws_json(bws, ["project", "list"], env)
         if projects is None:
             return None
-        for project in projects:
+        for project in _iter_bws_records(projects):
             if project.get("name") == project_name:
                 resolved_project_id = str(project.get("id", ""))
                 break
@@ -129,7 +129,7 @@ async def _resolve_from_bsm(
     if secrets is None:
         return None
 
-    for item in secrets:
+    for item in _iter_bws_records(secrets):
         if item.get("key") != secret_key:
             continue
         if resolved_project_id and item.get("projectId") != resolved_project_id:
@@ -161,9 +161,20 @@ async def _bws_json(bws: str, args: list[str], env: dict[str, str]) -> object | 
     if process.returncode != 0:
         return None
     try:
-        return json.loads(stdout.decode())
+        parsed: object = json.loads(stdout.decode())
+        return parsed
     except json.JSONDecodeError:
         return None
+
+
+def _iter_bws_records(data: object) -> list[dict[str, object]]:
+    if not isinstance(data, list):
+        return []
+    records: list[dict[str, object]] = []
+    for item in data:
+        if isinstance(item, dict):
+            records.append(item)
+    return records
 
 
 def _manifest_label_for_key(knowledge_root: Path, key: str) -> str | None:
@@ -187,9 +198,7 @@ async def _resolve_from_bw_vault(knowledge_root: Path, label: str) -> str | None
     if not lib.is_file():
         return None
 
-    script = (
-        f'set -euo pipefail; source "{lib}"; bw_load_session; bw_get_secret "{label}"'
-    )
+    script = f'set -euo pipefail; source "{lib}"; bw_load_session; bw_get_secret "{label}"'
     process = await asyncio.create_subprocess_exec(
         "/bin/bash",
         "-lc",

@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import pytest
-
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
 from secure_agentic_ai.infrastructure.workspace.knowledge_scan import (
     document_id_for_source,

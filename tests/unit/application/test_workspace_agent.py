@@ -1,7 +1,7 @@
 import pytest
 
-from secure_agentic_ai.application.use_cases import IngestDocumentUseCase, RetrieveContextUseCase
 from secure_agentic_ai.application.review_queue import PendingReviewItem
+from secure_agentic_ai.application.use_cases import IngestDocumentUseCase, RetrieveContextUseCase
 from secure_agentic_ai.application.workspace_agent import WorkspaceAgent
 from secure_agentic_ai.infrastructure.knowledge.fake_embedding_provider import FakeEmbeddingProvider
 from secure_agentic_ai.infrastructure.knowledge.in_memory_vector_store import InMemoryVectorStore

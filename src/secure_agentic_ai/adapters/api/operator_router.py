@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.responses import Response
 
 from secure_agentic_ai.adapters.api.dependencies import get_db_session
 from secure_agentic_ai.domain.audit import AuditEvent, AuditEventType
@@ -36,7 +37,7 @@ def _writer(session: AsyncSession) -> SqlAlchemyAuditWriter:
 async def dashboard(
     request: Request,
     session: Annotated[AsyncSession, Depends(get_db_session)],
-):
+) -> Response:
     repo = _repo(session)
     reader = _reader(session)
     pending = await repo.list_pending()
@@ -44,9 +45,9 @@ async def dashboard(
     now = datetime.now(UTC)
     recent_24h = [e for e in recent if (now - e.timestamp).total_seconds() < 86400]
     return templates.TemplateResponse(
+        request,
         "dashboard.html",
         {
-            "request": request,
             "pending_count": len(pending),
             "audit_count": len(recent_24h),
             "pending": pending,
@@ -59,12 +60,13 @@ async def dashboard(
 async def list_approvals(
     request: Request,
     session: Annotated[AsyncSession, Depends(get_db_session)],
-):
+) -> Response:
     repo = _repo(session)
     pending = await repo.list_pending()
     return templates.TemplateResponse(
+        request,
         "approvals.html",
-        {"request": request, "requests": pending},
+        {"requests": pending},
     )
 
 
@@ -72,7 +74,7 @@ async def list_approvals(
 async def approve_request(
     request_id: str,
     session: Annotated[AsyncSession, Depends(get_db_session)],
-):
+) -> Response:
     repo = _repo(session)
     req = await repo.find_by_id(request_id)
     if req is None:
@@ -95,7 +97,7 @@ async def approve_request(
 async def reject_request(
     request_id: str,
     session: Annotated[AsyncSession, Depends(get_db_session)],
-):
+) -> Response:
     repo = _repo(session)
     req = await repo.find_by_id(request_id)
     if req is None:
@@ -118,10 +120,11 @@ async def reject_request(
 async def list_audit(
     request: Request,
     session: Annotated[AsyncSession, Depends(get_db_session)],
-):
+) -> Response:
     reader = _reader(session)
     events = await reader.list_recent(limit=100)
     return templates.TemplateResponse(
+        request,
         "audit.html",
-        {"request": request, "events": events},
+        {"events": events},
     )

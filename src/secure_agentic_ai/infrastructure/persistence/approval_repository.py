@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from secure_agentic_ai.domain.approvals import ApprovalRequest
-from secure_agentic_ai.domain.audit import AuditEvent
+from secure_agentic_ai.domain.audit import AuditEvent, AuditEventType
 from secure_agentic_ai.domain.policies import Action
 from secure_agentic_ai.infrastructure.persistence.models import (
     ApprovalRequestRow,
@@ -116,7 +116,7 @@ class SqlAlchemyAuditReader:
             events.append(
                 AuditEvent(
                     event_id=row.event_id,
-                    event_type=row.event_type,
+                    event_type=AuditEventType(row.event_type),
                     actor_id=row.actor_id,
                     action_type=row.action_type,
                     request_id=row.request_id,

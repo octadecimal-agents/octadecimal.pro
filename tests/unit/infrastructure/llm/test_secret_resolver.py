@@ -32,9 +32,7 @@ async def test_resolve_deepseek_from_bsm(monkeypatch: pytest.MonkeyPatch, tmp_pa
 
 
 @pytest.mark.asyncio
-async def test_resolve_deepseek_returns_none_without_sources(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+async def test_resolve_deepseek_returns_none_without_sources(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     monkeypatch.delenv("BWS_ACCESS_TOKEN", raising=False)
     monkeypatch.delenv("BW_SECRET_ID_DEEPSEEK_API_KEY", raising=False)
@@ -50,9 +48,7 @@ async def test_resolve_minimax_prefers_token_env(monkeypatch: pytest.MonkeyPatch
 
 
 @pytest.mark.asyncio
-async def test_resolve_minimax_falls_back_to_api_key_env(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+async def test_resolve_minimax_falls_back_to_api_key_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.delenv("MINIMAX_API_TOKEN", raising=False)
     monkeypatch.setenv("MINIMAX_API_KEY", "key-alias")
     token = await resolve_minimax_api_token(knowledge_root=tmp_path, bw_label="")

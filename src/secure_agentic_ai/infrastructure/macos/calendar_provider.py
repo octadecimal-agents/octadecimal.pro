@@ -23,10 +23,7 @@ def fixture_events(config: WorkspaceConfig) -> list[CalendarEventItem]:
             if parsed:
                 return parsed
 
-    return [
-        CalendarEventItem(time=time, title=title, source="fixture")
-        for time, title in DEFAULT_CALENDAR
-    ]
+    return [CalendarEventItem(time=time, title=title, source="fixture") for time, title in DEFAULT_CALENDAR]
 
 
 def _event_from_mapping(item: dict[str, object], *, source: str) -> CalendarEventItem:
@@ -58,7 +55,9 @@ def load_cached_events(config: WorkspaceConfig, day: str) -> list[CalendarEventI
     events = data.get("events")
     if not isinstance(events, list):
         return None
-    parsed = [_event_from_mapping(item, source=str(data.get("source", "cache"))) for item in events if isinstance(item, dict)]
+    parsed = [
+        _event_from_mapping(item, source=str(data.get("source", "cache"))) for item in events if isinstance(item, dict)
+    ]
     return parsed or None
 
 

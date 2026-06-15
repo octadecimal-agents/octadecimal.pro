@@ -58,14 +58,10 @@ class QdrantVectorStore:
     async def delete_by_document_id(self, document_id: str) -> None:
         await self._client.delete(
             collection_name=self._collection,
-            points_selector=Filter(
-                must=[FieldCondition(key="document_id", match=MatchValue(value=document_id))]
-            ),
+            points_selector=Filter(must=[FieldCondition(key="document_id", match=MatchValue(value=document_id))]),
         )
 
-    async def similarity_search(
-        self, query_vector: list[float], k: int = 5
-    ) -> list[tuple[str, float, dict[str, str]]]:
+    async def similarity_search(self, query_vector: list[float], k: int = 5) -> list[tuple[str, float, dict[str, str]]]:
         response = await self._client.query_points(
             collection_name=self._collection,
             query=query_vector,

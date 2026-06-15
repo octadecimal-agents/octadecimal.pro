@@ -1,12 +1,17 @@
 """Seed demo data: create sample pending approval requests + audit events.
 
-Usage: uv run python scripts/seed_demo.py
+Usage:
+  uv run python scripts/seed_demo.py
+  uv run python scripts/seed_demo.py --reset
+  uv run python scripts/seed_demo.py --force
 """
 
+import argparse
 import asyncio
 import os
 from uuid import uuid4
 
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from secure_agentic_ai.domain.actors import Actor, ActorType
@@ -17,13 +22,29 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
     SqlAlchemyApprovalRequestRepository,
     SqlAlchemyAuditWriter,
 )
-from secure_agentic_ai.infrastructure.persistence.models import Base
-
+from secure_agentic_ai.infrastructure.persistence.models import ApprovalRequestRow, AuditEventRow, Base
 
 _DEFAULT_DB = "sqlite+aiosqlite:///data/dev.db"
+_DEMO_REQUEST_PREFIX = "demo-"
 
 
-async def seed() -> None:
+async def _count_demo_approvals(session: AsyncSession) -> int:
+    result = await session.execute(
+        select(ApprovalRequestRow).where(ApprovalRequestRow.request_id.like(f"{_DEMO_REQUEST_PREFIX}%"))
+    )
+    return len(result.scalars().all())
+
+
+async def _clear_demo_data(session: AsyncSession) -> None:
+    await session.execute(delete(AuditEventRow).where(AuditEventRow.request_id.like(f"{_DEMO_REQUEST_PREFIX}%")))
+    await session.execute(delete(AuditEventRow).where(AuditEventRow.request_id == "demo-deny-001"))
+    await session.execute(
+        delete(ApprovalRequestRow).where(ApprovalRequestRow.request_id.like(f"{_DEMO_REQUEST_PREFIX}%"))
+    )
+    await session.commit()
+
+
+async def seed(*, reset: bool = False, force: bool = False) -> None:
     database_url = os.environ.get("DATABASE_URL", _DEFAULT_DB)
     engine = create_async_engine(database_url, echo=False)
     async with engine.begin() as conn:
@@ -32,6 +53,17 @@ async def seed() -> None:
     session_factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with session_factory() as session:
+        if reset:
+            await _clear_demo_data(session)
+            print("  Cleared existing demo approvals and related audit rows.")
+
+        if not reset and not force:
+            existing = await _count_demo_approvals(session)
+            if existing > 0:
+                print(f"  Demo data already present ({existing} approvals) — skip. Use --reset or --force.")
+                await engine.dispose()
+                return
+
         repo = SqlAlchemyApprovalRequestRepository(session)
         audit = SqlAlchemyAuditWriter(session)
 
@@ -99,6 +131,22 @@ async def seed() -> None:
     await engine.dispose()
 
 
-if __name__ == "__main__":
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Seed demo HITL approvals for local dev.")
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Remove existing demo-* approvals (and related audit rows) before seeding.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Seed even when demo approvals already exist (may duplicate pending items).",
+    )
+    args = parser.parse_args()
     print("Seeding demo data...")
-    asyncio.run(seed())
+    asyncio.run(seed(reset=args.reset, force=args.force))
+
+
+if __name__ == "__main__":
+    main()

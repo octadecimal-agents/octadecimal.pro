@@ -50,9 +50,7 @@ class WorkspaceConfig:
             minimax_base_url=os.environ.get("MINIMAX_BASE_URL", "https://api.minimax.io/v1"),
             minimax_bw_label=os.environ.get("MINIMAX_BW_LABEL", ""),
             calendar_provider=os.environ.get("CALENDAR_PROVIDER", "auto").lower(),
-            calendar_fixture_path=_expand(
-                os.environ.get("OCTA_CALENDAR_FIXTURE", "~/.octa/calendar-fixture.json")
-            ),
+            calendar_fixture_path=_expand(os.environ.get("OCTA_CALENDAR_FIXTURE", "~/.octa/calendar-fixture.json")),
             calendar_include=_csv_tuple(os.environ.get("CALENDAR_INCLUDE", "")),
             calendar_exclude=_csv_tuple(os.environ.get("CALENDAR_EXCLUDE", "")),
             octa_state_dir=_expand(os.environ.get("OCTA_STATE_DIR", "~/.octa")),

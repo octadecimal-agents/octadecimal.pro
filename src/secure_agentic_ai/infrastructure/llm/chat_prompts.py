@@ -20,9 +20,7 @@ def sanitize_llm_reply(text: str) -> str:
 
 
 def build_rag_messages(user_message: str, context_blocks: list[tuple[str, str]]) -> list[dict[str, str]]:
-    context = "\n\n".join(
-        f"### {source}\n{excerpt}" for source, excerpt in context_blocks if excerpt.strip()
-    )
+    context = "\n\n".join(f"### {source}\n{excerpt}" for source, excerpt in context_blocks if excerpt.strip())
     user_content = user_message
     if context:
         user_content = f"Kontekst Knowledge:\n\n{context}\n\n---\n\nPytanie CEO: {user_message}"

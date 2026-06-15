@@ -1,5 +1,4 @@
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
+from contextlib import AbstractAsyncContextManager
 from typing import Protocol
 
 from secure_agentic_ai.domain.approvals import ApprovalRequest
@@ -37,8 +36,10 @@ class SafetyChecker(Protocol):
 
 
 class Tracer(Protocol):
-    @asynccontextmanager
-    async def span(self, name: str, attributes: dict[str, str] | None = None) -> AsyncGenerator[None]: ...
+    @property
+    def trace_id(self) -> str | None: ...
+
+    def span(self, name: str, attributes: dict[str, str] | None = None) -> AbstractAsyncContextManager[None]: ...
 
 
 class AuditReader(Protocol):

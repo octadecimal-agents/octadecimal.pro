@@ -2,6 +2,7 @@ from datetime import date
 
 from secure_agentic_ai.application.chat_reply import ChatReply
 from secure_agentic_ai.application.planning_service import generate_daily_plan
+from secure_agentic_ai.application.ports import ChatCompletionProvider
 from secure_agentic_ai.application.review_queue import (
     PendingReviewItem,
     format_attention_reply,
@@ -9,7 +10,6 @@ from secure_agentic_ai.application.review_queue import (
     matches_attention_query,
     matches_review_query,
 )
-from secure_agentic_ai.application.ports import ChatCompletionProvider
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.domain.knowledge import RetrievedChunk
 from secure_agentic_ai.infrastructure.llm.chat_prompts import (
@@ -78,10 +78,7 @@ class WorkspaceAgent:
                 lines = [f"{i + 1}. {item.title}" for i, item in enumerate(items)]
                 body = "Plan na dziś:\n\n" + "\n".join(lines)
             else:
-                body = (
-                    "Plan na dziś jest pusty. Napisz „wygeneruj plan” albo kliknij "
-                    "„Generuj plan” w `#Planning`."
-                )
+                body = "Plan na dziś jest pusty. Napisz „wygeneruj plan” albo kliknij „Generuj plan” w `#Planning`."
             return ChatReply(message=body + "\n\n→ `#Planning`", suggested_hash="#Planning")
 
         citations, chunks = await self._search(message)
@@ -129,9 +126,7 @@ class WorkspaceAgent:
             context_blocks.append((source, item.chunk.text[:1200]))
 
         try:
-            reply_text = sanitize_llm_reply(
-                await self._chat.complete(build_rag_messages(message, context_blocks))
-            )
+            reply_text = sanitize_llm_reply(await self._chat.complete(build_rag_messages(message, context_blocks)))
         except Exception:
             return None
 
