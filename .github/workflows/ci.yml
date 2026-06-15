@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --dev
 
+      - name: Prepare local data directory
+        run: mkdir -p data
+
       - name: Run tests
         run: uv run --frozen pytest
 

@@ -1,3 +1,4 @@
+import asyncio
 import os
 from collections.abc import Iterator
 from pathlib import Path
@@ -10,7 +11,22 @@ from secure_agentic_ai.adapters.api.dependencies import get_request_action_use_c
 from secure_agentic_ai.application.use_cases import RequestActionUseCase
 from secure_agentic_ai.domain.approvals import ApprovalRequest
 from secure_agentic_ai.domain.audit import AuditEvent
+from secure_agentic_ai.infrastructure.persistence.models import Base
+from secure_agentic_ai.infrastructure.persistence.session import create_engine
 from secure_agentic_ai.infrastructure.workspace.state import reset_for_tests
+
+
+def _prepare_sqlite_database(db_path: Path) -> None:
+    database_url = f"sqlite+aiosqlite:///{db_path}"
+    os.environ["DATABASE_URL"] = database_url
+
+    async def _create_schema() -> None:
+        engine = create_engine(database_url)
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        await engine.dispose()
+
+    asyncio.run(_create_schema())
 
 
 class FakeApprovalRequestRepository:
@@ -32,6 +48,7 @@ class FakeAuditWriter:
 @pytest.fixture
 def workspace_client(tmp_path: Path) -> Iterator[TestClient]:
     reset_for_tests()
+    _prepare_sqlite_database(tmp_path / "approvals.db")
     os.environ["WORKSPACE_ENABLED"] = "1"
     os.environ["OCTA_LEDGER"] = str(tmp_path / "ledger.sqlite")
     os.environ["KNOWLEDGE_ROOT"] = str(tmp_path / "knowledge")
@@ -62,6 +79,7 @@ def workspace_client(tmp_path: Path) -> Iterator[TestClient]:
 
     reset_for_tests()
     os.environ.pop("WORKSPACE_ENABLED", None)
+    os.environ.pop("DATABASE_URL", None)
     os.environ.pop("OCTA_LEDGER", None)
     os.environ.pop("KNOWLEDGE_ROOT", None)
     os.environ.pop("LLM_PROVIDER", None)
