@@ -233,6 +233,8 @@ async def wiki_search(
             row["vector_score"] = round(result.breakdown.vector_score, 4)
             row["keyword_score"] = round(result.breakdown.keyword_score, 4)
             row["keyword_raw"] = round(result.breakdown.keyword_raw, 4)
+            row["heading_score"] = round(result.breakdown.heading_score, 4)
+            row["recency_score"] = round(result.breakdown.recency_score, 4)
         payload.append(row)
     return WikiSearchResponse(query=q, results=payload)
 

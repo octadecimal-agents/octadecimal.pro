@@ -114,6 +114,29 @@ def test_policy_exclude_private_files(tmp_path: Path) -> None:
     assert "01-Base-Point/pro/demo/notes.private.md" not in sources
 
 
+def test_retrieval_weights_from_policy(tmp_path: Path) -> None:
+    from secure_agentic_ai.infrastructure.workspace.knowledge_policy import (
+        effective_retrieval_weights,
+        retrieval_weights_from_policy,
+    )
+
+    root = tmp_path / "knowledge"
+    root.mkdir()
+    policy_path = root / ".knowledge-index" / "policy.yaml"
+    policy_path.parent.mkdir(parents=True)
+    policy_path.write_text(
+        "version: 1\ntiers:\n  T1:\n    include: ['**/*.md']\n    exclude: []\n"
+        "retrieval:\n  weights:\n    vector: 0.5\n    path: 0.3\n    heading: 0.15\n    recency: 0.05\n",
+        encoding="utf-8",
+    )
+    config = _config(root)
+    weights = effective_retrieval_weights(config)
+    assert weights.vector == 0.5
+    assert weights.path == 0.3
+    assert weights.heading == 0.15
+    assert retrieval_weights_from_policy(load_knowledge_policy(config)).path == 0.3
+
+
 def test_load_knowledge_policy_parses_retrieval_weights(tmp_path: Path) -> None:
     root = tmp_path / "knowledge"
     _write_policy(

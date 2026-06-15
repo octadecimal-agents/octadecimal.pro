@@ -24,6 +24,8 @@ class RetrievalScoreBreakdown:
     keyword_score: float
     keyword_raw: float
     combined_score: float
+    heading_score: float = 0.0
+    recency_score: float = 0.0
 
 
 @dataclass(frozen=True)

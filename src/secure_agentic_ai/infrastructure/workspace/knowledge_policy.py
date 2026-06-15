@@ -99,3 +99,32 @@ def path_matches_pattern(relative_posix_path: str, pattern: str) -> bool:
 
 def is_path_excluded(relative_posix_path: str, exclude_patterns: tuple[str, ...]) -> bool:
     return any(path_matches_pattern(relative_posix_path, pattern) for pattern in exclude_patterns)
+
+
+@dataclass(frozen=True)
+class RetrievalWeights:
+    vector: float = 0.25
+    path: float = 0.75
+    heading: float = 0.0
+    recency: float = 0.0
+
+
+_DEFAULT_V2_WEIGHTS = RetrievalWeights(vector=0.6, path=0.25, heading=0.1, recency=0.05)
+
+
+def retrieval_weights_from_policy(policy: KnowledgePolicy | None) -> RetrievalWeights:
+    if policy is None:
+        return RetrievalWeights()
+    if not policy.retrieval_weights:
+        return _DEFAULT_V2_WEIGHTS
+    weights = policy.retrieval_weights
+    return RetrievalWeights(
+        vector=float(weights.get("vector", _DEFAULT_V2_WEIGHTS.vector)),
+        path=float(weights.get("path", _DEFAULT_V2_WEIGHTS.path)),
+        heading=float(weights.get("heading", _DEFAULT_V2_WEIGHTS.heading)),
+        recency=float(weights.get("recency", _DEFAULT_V2_WEIGHTS.recency)),
+    )
+
+
+def effective_retrieval_weights(config: WorkspaceConfig) -> RetrievalWeights:
+    return retrieval_weights_from_policy(load_knowledge_policy(config))

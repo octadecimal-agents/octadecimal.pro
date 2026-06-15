@@ -23,6 +23,8 @@ def log_retrieval_query(query: str, hits: list[RetrievedChunk]) -> None:
                 "vector": round(hit.breakdown.vector_score, 4) if hit.breakdown else None,
                 "keyword": round(hit.breakdown.keyword_score, 4) if hit.breakdown else None,
                 "keyword_raw": round(hit.breakdown.keyword_raw, 4) if hit.breakdown else None,
+                "heading": round(hit.breakdown.heading_score, 4) if hit.breakdown else None,
+                "recency": round(hit.breakdown.recency_score, 4) if hit.breakdown else None,
             }
             for hit in hits
         ],

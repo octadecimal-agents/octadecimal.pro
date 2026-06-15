@@ -158,6 +158,8 @@ def test_wiki_search_debug_retrieval_scores(workspace_client: TestClient, monkey
     assert "vector_score" in results[0]
     assert "keyword_score" in results[0]
     assert "keyword_raw" in results[0]
+    assert "heading_score" in results[0]
+    assert "recency_score" in results[0]
 
 
 def test_planning_generate(workspace_client: TestClient) -> None:

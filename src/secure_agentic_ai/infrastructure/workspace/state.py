@@ -9,6 +9,7 @@ from secure_agentic_ai.infrastructure.llm.factory import build_chat_provider
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
 from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.knowledge_loader import ingest_knowledge_paths
+from secure_agentic_ai.infrastructure.workspace.knowledge_policy import effective_retrieval_weights
 from secure_agentic_ai.infrastructure.workspace.ledger import WorkspaceLedger
 
 VectorStoreBackend = InMemoryVectorStore | QdrantVectorStore
@@ -106,7 +107,12 @@ def get_llm_label() -> str:
 
 
 def get_hybrid_search() -> HybridKnowledgeSearch:
-    return HybridKnowledgeSearch(retrieve=get_retrieve_use_case())
+    config = get_config()
+    return HybridKnowledgeSearch(
+        retrieve=get_retrieve_use_case(),
+        weights=effective_retrieval_weights(config),
+        knowledge_root=config.knowledge_root,
+    )
 
 
 def get_retrieve_use_case() -> RetrieveContextUseCase:
