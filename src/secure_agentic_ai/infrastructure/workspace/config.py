@@ -62,5 +62,6 @@ class WorkspaceConfig:
                 "01-Base-Point/pro/projects/octa-os/**/*.md",
                 "01-Base-Point/pro/knowledge-embeddings.md",
                 "02-6-Rooms-Model/Operacje/serwer/**/*.md",
+                "02-6-Rooms-Model/_system/**/*.md",
             ),
         )

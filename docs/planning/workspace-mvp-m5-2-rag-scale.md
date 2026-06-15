@@ -64,6 +64,8 @@ Prod (M5.5): ta sama abstrakcja, inny URL/kolekcja.
 
 ### M5.2.1 — `policy.yaml` tier T1
 
+**Status:** ✅ done (2026-06-15)
+
 **Problem:** sync skanuje globs z kodu; brak jawnej polityki „co wolno embedować” w Kanonie.
 
 **Lokalizacja:** `KNOWLEDGE_ROOT/.knowledge-index/policy.yaml`
@@ -96,6 +98,8 @@ tiers:
 ---
 
 ### M5.2.2 — Pełny ingest T1
+
+**Status:** ✅ done (2026-06-15) — 79 plików T1 lokalnie, `embed-knowledge.py scan --dev`
 
 **Kroki:**
 
@@ -233,8 +237,8 @@ flowchart TD
 
 ## Kryterium ukończenia fazy
 
-- [ ] `policy.yaml` T1 w repozytorium Knowledge
-- [ ] Pełny sync dev; health pokazuje >> 77 dokumentów/chunków
+- [x] `policy.yaml` T1 w repozytorium Knowledge
+- [x] Pełny sync dev; health pokazuje ≥ 79 dokumentów (lokalny Knowledge)
 - [ ] 5 golden queries PASS
 - [ ] Metryki retrieval w logach / debug
 - [ ] launchd/cron opcjonalnie udokumentowany

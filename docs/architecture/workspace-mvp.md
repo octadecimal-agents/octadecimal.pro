@@ -66,9 +66,12 @@ Incremental sync (only changed T1 files):
 
 ```bash
 ./scripts/octa-qdrant-dev.sh
+uv run python scripts/embed-knowledge.py scan --dev    # count T1 files (policy.yaml)
 uv run python scripts/embed-knowledge.py sync --dev
 uv run python scripts/embed-knowledge.py sync --dev --dry-run   # preview diff
 ```
+
+With `policy.yaml` in place, a typical local Knowledge tree indexes **~80+** T1 markdown files (expect `documents_indexed` >> 77 in `/workspace/health` after ingest).
 
 Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup skips full ingest when the Qdrant collection already has points (`OCTA_REINDEX=1` forces rebuild).
 
