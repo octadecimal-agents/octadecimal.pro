@@ -33,6 +33,7 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
 )
 from secure_agentic_ai.infrastructure.workspace.knowledge_sync import manifest_sync_status
 from secure_agentic_ai.infrastructure.workspace.ledger import Task
+from secure_agentic_ai.infrastructure.workspace.read_services import search_wiki, wiki_results_payload
 from secure_agentic_ai.infrastructure.workspace.retrieval_log import debug_retrieval_enabled, log_retrieval_query
 from secure_agentic_ai.infrastructure.workspace.review_adapter import pending_review_items
 from secure_agentic_ai.infrastructure.workspace.state import (
@@ -79,7 +80,7 @@ async def workspace_health(
     repo = SqlAlchemyApprovalRequestRepository(session)
     review_pending_count = len(await repo.list_pending())
     manifest_age, manifest_updated_at = manifest_sync_status(config)
-    _, calendar_source = await list_today_calendar_events(config)
+    calendar_events, calendar_source = await list_today_calendar_events(config)
     status, issues = get_workspace_status()
     root_exists = knowledge_root_exists(config)
     if not root_exists and status == "ok":
@@ -104,6 +105,7 @@ async def workspace_health(
         knowledge_last_sync_at=manifest_updated_at,
         calendar_provider=config.calendar_provider,
         calendar_source=calendar_source,
+        calendar_events_count=len(calendar_events),
         issues=issues,
     )
 
@@ -233,25 +235,12 @@ async def wiki_search(
     x_debug_retrieval: Annotated[str | None, Header(alias="X-Debug-Retrieval")] = None,
 ) -> WikiSearchResponse:
     await ensure_workspace_ready()
-    results = await get_hybrid_search().search(q, k=k)
+    results = await search_wiki(q, k=k)
     debug = debug_retrieval_enabled() and x_debug_retrieval == "1"
     if debug:
         log_retrieval_query(q, results)
 
-    payload: list[dict[str, str | float]] = []
-    for result in results:
-        row: dict[str, str | float] = {
-            "source": result.chunk.metadata.source if result.chunk.metadata else "",
-            "excerpt": result.chunk.text[:240],
-            "score": round(float(result.score), 4),
-        }
-        if debug and result.breakdown is not None:
-            row["vector_score"] = round(result.breakdown.vector_score, 4)
-            row["keyword_score"] = round(result.breakdown.keyword_score, 4)
-            row["keyword_raw"] = round(result.breakdown.keyword_raw, 4)
-            row["heading_score"] = round(result.breakdown.heading_score, 4)
-            row["recency_score"] = round(result.breakdown.recency_score, 4)
-        payload.append(row)
+    payload = wiki_results_payload(results, include_debug=debug)
     return WikiSearchResponse(query=q, results=payload)
 
 

@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import platform
 from datetime import date
 from pathlib import Path
@@ -7,6 +8,8 @@ from pathlib import Path
 from secure_agentic_ai.application.calendar import CalendarEventItem
 from secure_agentic_ai.application.planning_service import DEFAULT_CALENDAR
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
+
+logger = logging.getLogger(__name__)
 
 CACHE_FILENAME = "calendar-cache.json"
 
@@ -125,6 +128,10 @@ async def list_today_calendar_events(config: WorkspaceConfig) -> tuple[list[Cale
             return events, "macos"
         except Exception as exc:
             denied = type(exc).__name__ == "AccessDeniedError"
+            if denied:
+                logger.warning("Calendar access denied — falling back to cache/fixture")
+            elif provider == "auto":
+                logger.warning("Calendar live read failed (%s) — trying cache/fixture", exc)
             if denied or provider == "macos":
                 cached = load_cached_events(config, day)
                 if cached:

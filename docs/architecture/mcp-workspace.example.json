@@ -4,8 +4,11 @@
       "command": "/Users/octadecimal/Developer/Repositories/octadecimal-agents/octadecimal.pro/scripts/octa-mcp-workspace.sh",
       "env": {
         "KNOWLEDGE_ROOT": "/Users/octadecimal/Developer/Knowledge",
+        "OCTA_LEDGER": "/Users/octadecimal/.octa/ledger.sqlite",
         "CALENDAR_PROVIDER": "auto",
-        "CALENDAR_INCLUDE": "Dom,Praca,Ogarnianie"
+        "CALENDAR_INCLUDE": "Dom,Praca,Ogarnianie",
+        "LLM_PROVIDER": "dry",
+        "RAG_BACKEND": "memory"
       }
     }
   }

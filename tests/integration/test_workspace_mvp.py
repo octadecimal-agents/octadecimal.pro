@@ -108,6 +108,7 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     assert data["review_pending_count"] >= 0
     assert data["calendar_provider"] == "auto"
     assert isinstance(data["calendar_source"], str)
+    assert isinstance(data["calendar_events_count"], int)
 
 
 def test_workspace_health_degraded_when_knowledge_root_missing(tmp_path: Path) -> None:

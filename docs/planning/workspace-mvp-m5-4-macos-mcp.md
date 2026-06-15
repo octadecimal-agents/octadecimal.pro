@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Faza 10 — MCP](phase-10-mcp-tool-context.md) · [Workspace MVP (EN)](../architecture/workspace-mvp.md)
 
-**Status:** todo · **Szacunek:** 3–5 dni · **Priorytet:** P2 (równolegle do M5.2 po M5.1)
+**Status:** ✅ done (2026-06-15)
 
 ## Cel fazy
 
@@ -223,11 +223,11 @@ flowchart TB
 
 ## Kryterium ukończenia fazy
 
-- [ ] Live calendar na M5 (auto path)
-- [ ] MCP: wiki_search + board_list + review summary
-- [ ] Mail stub module + fixture (bez IMAP)
-- [ ] Policy test — brak write tools
-- [ ] Decyzja compose udokumentowana
+- [x] Live calendar na M5 (auto path)
+- [x] MCP: wiki_search + board_list + review summary
+- [x] Mail stub module + fixture (bez IMAP)
+- [x] Policy test — brak write tools
+- [x] Decyzja compose udokumentowana ([ADR 002](../adr/002-mcp-compose-strategy.md))
 
 ---
 

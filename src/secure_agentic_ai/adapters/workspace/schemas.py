@@ -107,4 +107,5 @@ class HealthWorkspaceResponse(BaseModel):
     knowledge_last_sync_at: str | None = None
     calendar_provider: str
     calendar_source: str
+    calendar_events_count: int = 0
     issues: list[str] = []

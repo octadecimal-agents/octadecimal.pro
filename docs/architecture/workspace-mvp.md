@@ -167,7 +167,7 @@ export CALENDAR_INCLUDE=Dom,Praca,Ogarnianie   # optional filter
 ./scripts/octa-mcp-workspace.sh                 # Cursor MCP (stdio)
 ```
 
-MCP tools: `list_today_calendar`, `workspace_health`. Example Cursor config: `docs/architecture/mcp-workspace.example.json`.
+MCP tools (read-only): `list_today_calendar`, `workspace_health`, `wiki_search`, `board_list_tasks`, `review_pending_summary`. Example Cursor config: `docs/architecture/mcp-workspace.example.json`. Compose strategy: [ADR 002](../adr/002-mcp-compose-strategy.md).
 
 Successful macOS reads are cached in `~/.octa/calendar-cache.json` for the current day.
 

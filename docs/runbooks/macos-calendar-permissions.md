@@ -111,6 +111,20 @@ cat ~/.octa/calendar-cache.json
 
 ---
 
+## 7. MCP (Cursor)
+
+Cursor Agent może czytać ten sam kalendarz co `#Planning` przez MCP:
+
+```bash
+./scripts/octa-mcp-workspace.sh   # stdio — konfiguracja w docs/architecture/mcp-workspace.example.json
+```
+
+**Wymaganie:** Cursor musi mieć uprawnienia **Calendars** (jak Terminal), jeśli `CALENDAR_PROVIDER=auto` ma zwracać `source=macos`.
+
+Narzędzia read-only: `list_today_calendar`, `wiki_search`, `board_list_tasks`, `review_pending_summary`, `workspace_health`.
+
+---
+
 ## Powiązane
 
 - [Workspace MVP — macOS calendar](../architecture/workspace-mvp.md#macos-calendar-mcp-stub)
