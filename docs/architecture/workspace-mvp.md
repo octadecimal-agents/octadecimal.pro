@@ -210,8 +210,8 @@ Per [ADR 006](../adr/006-m5-only-dev-strategy.md):
 
 | Phase | Status | Focus |
 |-------|--------|-------|
-| [M5.5](../planning/workspace-mvp-m5-5-m5-complete.md) | in progress | Runbook ✅, launchd ✅, teams ✅ |
-| [M5.6](../planning/workspace-mvp-m5-6-m1-server-mode.md) | planned | Always-on Workspace on M1 |
+| [M5.5](../planning/workspace-mvp-m5-5-m5-complete.md) | ✅ done | Dev loop complete |
+| [M5.6](../planning/workspace-mvp-m5-6-m1-server-mode.md) | next | Always-on Workspace on M1 |
 | [M5.7](../planning/workspace-mvp-m5-7-hosting-only.md) | deferred | pc-ubuntu hosting only (no HYDRA agents) |
 | [M6+](../planning/workspace-mvp-m6-platform.md) | parallel | Platform phases 5–13 |
 

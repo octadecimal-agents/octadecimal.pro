@@ -8,7 +8,7 @@
 
 This index describes **what was built** through the initial MVP and M5.x hardening phases. Each sprint has a separate file with architecture, steps, and verification — same format as M5.x phase plans.
 
-**Next:** [M5.5 — complete M5 dev loop](workspace-mvp-m5-5-m5-complete.md)
+**Next:** [M5.6 — M1 server mode](workspace-mvp-m5-6-m1-server-mode.md)
 
 ---
 
@@ -94,7 +94,9 @@ Lifespan (app.py):
 | M5.3 | AO evals, structured tools, persona v2 | [m5-3-ao-evals](workspace-mvp-m5-3-ao-evals.md) |
 | M5.4 | MCP read-only, calendar live, ADR 002 | [m5-4-macos-mcp](workspace-mvp-m5-4-macos-mcp.md) |
 
-Strategy pivot: [ADR 006](../adr/006-m5-only-dev-strategy.md) · [roadmap](workspace-mvp-roadmap.md)
+| M5.5 | Dev loop: runbook, launchd, teams, sign-off v2 | [m5-5-complete](workspace-mvp-m5-5-m5-complete.md) · [sign-off](workspace-mvp-m5-5-signoff.md) |
+
+Strategy pivot: [ADR 006](../adr/006-m5-only-dev-strategy.md) · [roadmap](workspace-mvp-roadmap.md) · **next:** [M5.6](workspace-mvp-m5-6-m1-server-mode.md)
 
 ---
 

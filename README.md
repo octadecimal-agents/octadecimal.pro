@@ -49,11 +49,13 @@ Open http://127.0.0.1:8000/operator/ to review pending approval requests.
 
 ## Octa Workspace MVP (localhost)
 
-Local CEO workspace: chat with the Personal Agent, hash panels (`#Planning`, `#Board`, `#Wiki`, `#Review`, `#Retro`, `#Zasady`), Knowledge RAG, and HITL review — see [docs/architecture/workspace-mvp.md](docs/architecture/workspace-mvp.md).
+Local CEO workspace on **M5 only** ([ADR 006](docs/adr/006-m5-only-dev-strategy.md)): chat with the Personal Agent, hash panels (`#Planning`, `#Board`, `#Wiki`, `#Review`, `#Retro`, `#Zasady`), Knowledge RAG, HITL review, and MCP read-only tools — **no** prod deploy or HYDRA integration in this phase.
+
+Full architecture: [docs/architecture/workspace-mvp.md](docs/architecture/workspace-mvp.md)
 
 ### Quick start (< 15 min)
 
-**Requirements:** [uv](https://docs.astral.sh/uv/) (Python 3.13). Optional: Node 22 (E2E), Docker (Qdrant), macOS Keychain (MiniMax/DeepSeek).
+**Requirements:** [uv](https://docs.astral.sh/uv/) (Python 3.13). Optional: Node 22 (E2E), Docker (Qdrant), macOS Keychain (MiniMax/DeepSeek), local clone of the Knowledge repo.
 
 ```bash
 git clone https://github.com/octadecimal-agents/octadecimal.pro.git
@@ -70,27 +72,41 @@ Open http://127.0.0.1:8042/
 | `/workspace/health` | Ops health (RAG, LLM, review queue, calendar) |
 | `/operator/` | HITL operator console (same process) |
 
-**Knowledge:** default `KNOWLEDGE_ROOT=~/Developer/Knowledge`. Without this path Wiki/RAG will be empty — clone the Knowledge repo alongside or set env.
+**Knowledge:** set `KNOWLEDGE_ROOT=~/Developer/Knowledge` (default). Without it, Wiki/RAG returns empty results.
+
+**Always-on (optional):** after first manual run, install launchd for daily use:
+
+```bash
+./scripts/install-workspace-api-launchd.sh   # do not run together with octa-mvp-up.sh
+```
+
+See [daily dev runbook](docs/runbooks/workspace-daily-dev.md).
 
 **Options:**
 
 ```bash
-# External LLM (Keychain/BSM — see workspace-mvp.md)
-export LLM_PROVIDER=minimax
-export RAG_BACKEND=qdrant   # requires: ./scripts/octa-qdrant-dev.sh
-
-# Tests
-uv run pytest               # 164 tests
-cd e2e && npm ci && npm test   # Playwright E2E (Node 22)
+export LLM_PROVIDER=minimax          # default: dry (no API key)
+export RAG_BACKEND=qdrant            # requires: ./scripts/octa-qdrant-dev.sh
+./scripts/octa-mvp-up.sh
 ```
 
-Full docs: [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [daily dev runbook](docs/runbooks/workspace-daily-dev.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [ADR 006](docs/adr/006-m5-only-dev-strategy.md)
+**Verify:**
 
+```bash
+curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
+uv run pytest                        # 169 tests
+cd e2e && npm ci && npm test         # 9 Playwright scenarios
 ```
-# Quality gates (CI uruchamia to samo)
+
+**Docs:** [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [M5.5 sign-off](docs/planning/workspace-mvp-m5-5-signoff.md) · [ADR 006](docs/adr/006-m5-only-dev-strategy.md)
+
+**Quality gates (same as CI):**
+
+```bash
 uv run pytest
 uv run ruff check src tests scripts
 uv run mypy src
+cd e2e && npm test
 ```
 
 ## What's Implemented
@@ -107,7 +123,8 @@ uv run mypy src
 | Observability | Tracing spans, cost estimation (4 models), eval runner with synthetic test cases |
 | MCP | FastMCP server with policy-governed `read_document` tool |
 | Secrets | SecretProvider port + Fake / Env / Bitwarden adapters, masked `__str__`/`__repr__`, no value leakage to logs |
-| Tests | 112 pytest + 9 Playwright E2E | CI on every push to `main` |
+| Tests | 169 pytest + 9 Playwright E2E | CI on every push to `main` |
+| Workspace | Octa CEO localhost MVP (`:8042`), RAG, AO evals, MCP read-only, launchd dev loop | [workspace-mvp.md](docs/architecture/workspace-mvp.md) |
 
 ## Architecture
 
@@ -153,6 +170,14 @@ tests/
 - **No ML classifier for safety**: Regex patterns are explicit, auditable, and testable.
 
 ## What's Planned
+
+**Workspace (M5-only path):**
+
+- [M5.6](docs/planning/workspace-mvp-m5-6-m1-server-mode.md) — always-on Workspace on M1
+- [M5.7](docs/planning/workspace-mvp-m5-7-hosting-only.md) — pc-ubuntu hosting (deferred)
+- [M6+ platform](docs/planning/workspace-mvp-m6-platform.md) — PostgreSQL, AI security, LangGraph
+
+**Platform core:**
 
 - OpenTelemetry / Langfuse integration (replace DebugTracer)
 - MCP tool registry expansion

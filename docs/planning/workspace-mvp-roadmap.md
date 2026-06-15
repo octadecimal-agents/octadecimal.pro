@@ -4,7 +4,7 @@
 
 [← Planning index](README.md) · [Workspace MVP architecture](../architecture/workspace-mvp.md)
 
-**Status:** active · **2026-06-15** · after M5.1–M5.4
+**Status:** active · **2026-06-15** · M5.5 dev loop complete
 
 This document tracks **what is done**, **what completes the M5-only dev loop**, and **later phases** (M1 server mode, deferred Ubuntu hosting). Runtime details: [workspace-mvp.md](../architecture/workspace-mvp.md). Kanon (PL): `Knowledge/.../octa-os/mvp-localhost-m5.md`. Strategy: [ADR 006](../adr/006-m5-only-dev-strategy.md).
 
@@ -16,9 +16,8 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 
 | Direction | Decision |
 |-----------|----------|
-| **Now** | Finish M5 dev loop on localhost (`127.0.0.1:8042`) |
-| **Next** | [M5.5](workspace-mvp-m5-5-m5-complete.md) — runbooks, launchd, board teams, Kanon sign-off v2 |
-| **Then** | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) — M1 server mode (agents 24/7 on Mac) |
+| **Now** | M5 dev loop complete — daily use on localhost |
+| **Next** | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) — M1 server mode (agents 24/7 on Mac) |
 | **Deferred** | [M5.7](workspace-mvp-m5-7-hosting-only.md) — pc-ubuntu hosting only (backup, HTTPS); no agent fleet |
 | **Parallel** | [M6+ platform](workspace-mvp-m6-platform.md) — phases 5–13 of the core platform |
 
@@ -56,8 +55,8 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 | [M5.2](workspace-mvp-m5-2-rag-scale.md) | RAG & Knowledge scale | ✅ done |
 | [M5.3](workspace-mvp-m5-3-ao-evals.md) | AO & evals | ✅ done (M5.3.3/7 skipped) |
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) | macOS live MCP | ✅ done |
-| [M5.5](workspace-mvp-m5-5-m5-complete.md) | Complete M5 dev loop | 🔲 next |
-| [M5.6](workspace-mvp-m5-6-m1-server-mode.md) | M1 server mode | 🔲 planned |
+| [M5.5](workspace-mvp-m5-5-m5-complete.md) | Complete M5 dev loop | ✅ done |
+| [M5.6](workspace-mvp-m5-6-m1-server-mode.md) | M1 server mode | 🔲 next |
 | [M5.7](workspace-mvp-m5-7-hosting-only.md) | Ubuntu hosting only | ⏸ deferred |
 | [M6+](workspace-mvp-m6-platform.md) | Platform core | 🔲 parallel |
 
@@ -66,8 +65,8 @@ M5.1  Hardening MVP          ✅ 2026-06-15
 M5.2  RAG & Knowledge scale  ✅ 2026-06-15
 M5.3  AO & evals             ✅ 2026-06-15
 M5.4  macOS live MCP         ✅ 2026-06-15
-M5.5  M5 dev loop complete   ← next (~1 week)
-M5.6  M1 server mode        ← after M5.5
+M5.5  M5 dev loop complete   ✅ 2026-06-15
+M5.6  M1 server mode        ← next
 M5.7  Ubuntu hosting only   ← deferred (no HYDRA agents)
 M6+   Platform core          ← parallel with M5.x
 ```
@@ -94,9 +93,9 @@ Persona v2, structured tools, eval datasets, explicit dry fallback. Skipped: Lan
 
 `calctl` production path, MCP read-only tools (`wiki_search`, `board_list_tasks`, `review_pending_summary`), mail stub, [ADR 002](../adr/002-mcp-compose-strategy.md).
 
-### [M5.5 — Complete M5 dev loop](workspace-mvp-m5-5-m5-complete.md) 🔲
+### [M5.5 — Complete M5 dev loop](workspace-mvp-m5-5-m5-complete.md) ✅
 
-Daily runbook, launchd for API, Octa-native board team names, Kanon sign-off v2.
+Runbook, launchd API, Octa-native board teams, Kanon sign-off v2. [Sign-off](workspace-mvp-m5-5-signoff.md).
 
 ### [M5.6 — M1 server mode](workspace-mvp-m5-6-m1-server-mode.md) 🔲
 
@@ -170,7 +169,7 @@ flowchart LR
 | [M5.2](workspace-mvp-m5-2-rag-scale.md) RAG scale | ✅ done | 2026-06-15 | 2026-06-15 | [plan](workspace-mvp-m5-2-rag-scale.md) |
 | [M5.3](workspace-mvp-m5-3-ao-evals.md) AO evals | ✅ done | 2026-06-15 | 2026-06-15 | [plan](workspace-mvp-m5-3-ao-evals.md) |
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) macOS MCP | ✅ done | 2026-06-15 | 2026-06-15 | [plan](workspace-mvp-m5-4-macos-mcp.md) |
-| [M5.5](workspace-mvp-m5-5-m5-complete.md) M5 complete | 🔲 todo | | | [plan](workspace-mvp-m5-5-m5-complete.md) |
+| [M5.5](workspace-mvp-m5-5-m5-complete.md) M5 complete | ✅ done | 2026-06-15 | 2026-06-15 | [sign-off](workspace-mvp-m5-5-signoff.md) |
 | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) M1 server | 🔲 todo | | | [plan](workspace-mvp-m5-6-m1-server-mode.md) |
 | [M5.7](workspace-mvp-m5-7-hosting-only.md) Hosting | ⏸ deferred | | | [plan](workspace-mvp-m5-7-hosting-only.md) |
 | [M6+](workspace-mvp-m6-platform.md) Platform | 🔲 parallel | | | [plan](workspace-mvp-m6-platform.md) |
@@ -196,9 +195,12 @@ flowchart LR
 - [Sprint 3 — Retro + RAG/calendar infra](workspace-mvp-sprint-3-retro-infra.md)
 - [Post–Sprint 3 extensions](workspace-mvp-done-extensions.md)
 
+### Closed (M5.x)
+
+- [M5.5 — M5 dev loop complete](workspace-mvp-m5-5-m5-complete.md) · [sign-off](workspace-mvp-m5-5-signoff.md)
+
 ### Open (M5.x)
 
-- [M5.5 — M5 dev loop complete](workspace-mvp-m5-5-m5-complete.md)
 - [M5.6 — M1 server mode](workspace-mvp-m5-6-m1-server-mode.md)
 - [M5.7 — Ubuntu hosting only](workspace-mvp-m5-7-hosting-only.md)
 - [M6+ — Platform](workspace-mvp-m6-platform.md)
