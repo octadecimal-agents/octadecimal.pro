@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [ADR 006](../adr/006-m5-only-dev-strategy.md)
 
-**Status:** planned · **Estimate:** 1–2 weeks · **Priority:** P1 (after M5.5)
+**Status:** planned · **Estimate:** 1–2 weeks · **Priority:** P1 (after M5.5) · **Owner:** backend-team
 
 ## Goal
 

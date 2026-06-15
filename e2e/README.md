@@ -1,6 +1,6 @@
 # Octa Workspace — Playwright E2E
 
-Browser tests for the Workspace MVP (`http://127.0.0.1:18042` by default).
+Browser tests for the Workspace MVP (`http://127.0.0.1:18042` by default). Contract for **backend-team** and **frontend-team**: selector anchors in `tests/workspace.spec.ts` must stay green on every PR — see [dual-track doc](../docs/planning/workspace-mvp-dual-track.md#53-kontrakt-selektorów-e2e-anchors).
 
 ## Prerequisites
 

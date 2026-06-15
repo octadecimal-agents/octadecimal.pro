@@ -53,6 +53,8 @@ Local CEO workspace on **M5 only** ([ADR 006](docs/adr/006-m5-only-dev-strategy.
 
 Full architecture: [docs/architecture/workspace-mvp.md](docs/architecture/workspace-mvp.md)
 
+**Teams:** [backend-team](docs/planning/workspace-mvp-dual-track.md) (API, infra, M5.6 — Cursor) and [frontend-team](docs/planning/workspace-mvp-dual-track.md) (UX/UI — OpenCode) work in parallel; merge via PR + CI.
+
 ### Quick start (< 15 min)
 
 **Requirements:** [uv](https://docs.astral.sh/uv/) (Python 3.13). Optional: Node 22 (E2E), Docker (Qdrant), macOS Keychain (MiniMax/DeepSeek), local clone of the Knowledge repo.
@@ -95,10 +97,10 @@ export RAG_BACKEND=qdrant            # requires: ./scripts/octa-qdrant-dev.sh
 ```bash
 curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
 uv run pytest                        # 169 tests
-cd e2e && npm ci && npm test         # 9 Playwright scenarios
+cd e2e && npm ci && npm test         # 12 Playwright scenarios
 ```
 
-**Docs:** [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [M5.5 sign-off](docs/planning/workspace-mvp-m5-5-signoff.md) · [ADR 006](docs/adr/006-m5-only-dev-strategy.md)
+**Docs:** [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [Dual-track teams](docs/planning/workspace-mvp-dual-track.md) · [M5.5 sign-off](docs/planning/workspace-mvp-m5-5-signoff.md) · [ADR 006](docs/adr/006-m5-only-dev-strategy.md)
 
 **Quality gates (same as CI):**
 
@@ -123,7 +125,7 @@ cd e2e && npm test
 | Observability | Tracing spans, cost estimation (4 models), eval runner with synthetic test cases |
 | MCP | FastMCP server with policy-governed `read_document` tool |
 | Secrets | SecretProvider port + Fake / Env / Bitwarden adapters, masked `__str__`/`__repr__`, no value leakage to logs |
-| Tests | 169 pytest + 9 Playwright E2E | CI on every push to `main` |
+| Tests | 169 pytest + 12 Playwright E2E | CI on every push to `main` |
 | Workspace | Octa CEO localhost MVP (`:8042`), RAG, AO evals, MCP read-only, launchd dev loop | [workspace-mvp.md](docs/architecture/workspace-mvp.md) |
 
 ## Architecture

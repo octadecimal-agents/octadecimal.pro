@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Roadmapa platformy](roadmap-draft.md)
 
-**Status:** planning · **Horizon:** parallel with M5.5–M5.7 (M5-only dev first)
+**Status:** planning · **Horizon:** parallel with M5.5–M5.7 (M5-only dev first) · **Owner:** backend-team
 
 ## Cel
 
@@ -177,20 +177,20 @@ Do dokończenia:
 
 ---
 
-## Backlog UX (poza platform core)
+## Backlog UX (frontend-team, poza platform core)
 
-Te elementy **nie blokują** faz platformy — osobny tor produktowy:
+Te elementy **nie blokują** faz platformy (**backend-team**) — osobny tor: [dual-track](workspace-mvp-dual-track.md).
 
-| ID | Opis | Zależność |
-|----|------|-----------|
-| UX.1 | Design system Figma → CSS | — |
-| UX.2 | Drag-and-drop `#Board` | stabilne API board |
-| UX.3 | Mobile responsive | UX.1 |
-| UX.4 | Push / Shortcuts M1 | MCP + stable API |
-| UX.5 | Głos AO | Ollama/Whisper lokalnie |
-| UX.6 | `#Dev`, `#Burndown`, `#Ranking` | git/CRM integracja |
+| ID | Opis | Owner | Zależność |
+|----|------|-------|-----------|
+| UX.1 | Design system Figma → CSS | frontend-team | — |
+| UX.2 | Drag-and-drop `#Board` | frontend-team | stabilne API board (backend-team) |
+| UX.3 | Mobile responsive | frontend-team | UX.1 |
+| UX.4 | Push / Shortcuts M1 | frontend-team | MCP + stable API (po M5.6) |
+| UX.5 | Głos AO | frontend-team | Ollama/Whisper lokalnie |
+| UX.6 | `#Dev`, `#Burndown`, `#Ranking` | frontend-team | git/CRM integracja — deferred |
 
-Dokument UX backlog pozostaje w [workspace-mvp-roadmap.md](workspace-mvp-roadmap.md#backlog-ux-poza-krytyczną-ścieżką); ewentualny osobny plik `workspace-mvp-ux-backlog.md` gdy rośnie.
+Dokument UX backlog: [workspace-mvp-roadmap.md](workspace-mvp-roadmap.md#ux-backlog-frontend-team-non-critical).
 
 ---
 

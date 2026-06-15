@@ -19,8 +19,8 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 | **Now** | M5 dev loop complete — daily use on localhost |
 | **Next** | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) — M1 server mode (agents 24/7 on Mac) |
 | **Deferred** | [M5.7](workspace-mvp-m5-7-hosting-only.md) — pc-ubuntu hosting only (backup, HTTPS); no agent fleet |
-| **Parallel** | [M6+ platform](workspace-mvp-m6-platform.md) — phases 5–13 of the core platform |
-| **Parallel UX** | [Dual-track Dev + UX](workspace-mvp-dual-track.md) — OpenCode / design system (Track B) |
+| **Parallel** | [M6+ platform](workspace-mvp-m6-platform.md) — phases 5–13; **backend-team** |
+| **Parallel UX** | [Dual-track](workspace-mvp-dual-track.md) — **frontend-team** (OpenCode / WDS) |
 
 **Explicitly deferred:** `embed-knowledge sync --prod`, HYDRA fleet integration, `#Dev` / git / CRM panels (UX.6).
 
@@ -112,7 +112,7 @@ Phases 5–13: PostgreSQL, AI security, LangGraph HITL, observability, portfolio
 
 ---
 
-## UX backlog (non-critical)
+## UX backlog (frontend-team, non-critical)
 
 | ID | Task | Notes |
 |----|------|-------|
@@ -181,7 +181,7 @@ flowchart LR
 
 ## Related documents
 
-- [Dual-track Dev + UX (onboarding OpenCode)](workspace-mvp-dual-track.md)
+- [Dual-track: backend-team + frontend-team](workspace-mvp-dual-track.md)
 - [Workspace MVP architecture](../architecture/workspace-mvp.md)
 - [ADR 006 — M5-only dev strategy](../adr/006-m5-only-dev-strategy.md)
 - [E2E README](../../e2e/README.md)
