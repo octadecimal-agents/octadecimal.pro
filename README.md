@@ -53,7 +53,7 @@ Local CEO workspace: chat with the Personal Agent, hash panels (`#Planning`, `#B
 
 ### Quick start (< 15 min)
 
-**Wymagania:** [uv](https://docs.astral.sh/uv/) (Python 3.13). Opcjonalnie: Node 22 (E2E), Docker (Qdrant), macOS Keychain (MiniMax/DeepSeek).
+**Requirements:** [uv](https://docs.astral.sh/uv/) (Python 3.13). Optional: Node 22 (E2E), Docker (Qdrant), macOS Keychain (MiniMax/DeepSeek).
 
 ```bash
 git clone https://github.com/octadecimal-agents/octadecimal.pro.git
@@ -70,21 +70,21 @@ Open http://127.0.0.1:8042/
 | `/workspace/health` | Ops health (RAG, LLM, review queue, calendar) |
 | `/operator/` | HITL operator console (same process) |
 
-**Knowledge:** domyślnie `KNOWLEDGE_ROOT=~/Developer/Knowledge`. Bez tego katalogu Wiki/RAG będzie puste — sklonuj repo Knowledge obok lub ustaw env.
+**Knowledge:** default `KNOWLEDGE_ROOT=~/Developer/Knowledge`. Without this path Wiki/RAG will be empty — clone the Knowledge repo alongside or set env.
 
-**Opcje:**
+**Options:**
 
 ```bash
-# Zewnętrzny LLM (Keychain/BWS — patrz workspace-mvp.md)
+# External LLM (Keychain/BSM — see workspace-mvp.md)
 export LLM_PROVIDER=minimax
-export RAG_BACKEND=qdrant   # wymaga: ./scripts/octa-qdrant-dev.sh
+export RAG_BACKEND=qdrant   # requires: ./scripts/octa-qdrant-dev.sh
 
-# Testy
-uv run pytest               # 112 testów
-cd e2e && npm ci && npm test   # 9 scenariuszy Playwright (Node 22)
+# Tests
+uv run pytest               # 164 tests
+cd e2e && npm ci && npm test   # Playwright E2E (Node 22)
 ```
 
-Pełna dokumentacja: [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [plan M5.x](docs/planning/workspace-mvp-roadmap.md) · [sign-off Kanonu §10](docs/planning/workspace-mvp-m5-1-signoff.md)
+Full docs: [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [ADR 006 M5-only strategy](docs/adr/006-m5-only-dev-strategy.md) · [Kanon sign-off §10](docs/planning/workspace-mvp-m5-1-signoff.md)
 
 ```
 # Quality gates (CI uruchamia to samo)

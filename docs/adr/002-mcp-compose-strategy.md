@@ -10,7 +10,7 @@ Use **Option A — stub mono-process MCP** for M5:
 - Read-only tools: calendar, health, wiki, board list, review summary
 - Shared read layer: `infrastructure/workspace/read_services.py`
 
-Defer **Option B — multi-server compose** (separate calendar/mail/knowledge MCP) until **M5.5 prod bridge** when HYDRA-hosted Workspace needs isolated tool boundaries and scaling.
+Defer **Option B — multi-server compose** (separate calendar/mail/knowledge MCP) until **[M5.7 hosting only](../planning/workspace-mvp-m5-7-hosting-only.md)** if independent deploy/restart cycles are required. Not part of M5.5 (M5-only dev loop).
 
 ## Rationale
 
@@ -27,7 +27,7 @@ Option C (Shortcuts host agent) remains out of scope.
 
 - Cursor config stays in `docs/architecture/mcp-workspace.example.json`
 - Mail live IMAP and write tools are **not** exposed via MCP in M5.4
-- M5.5 may split servers if prod requires independent deploy/restart cycles
+- [M5.7](../planning/workspace-mvp-m5-7-hosting-only.md) may split servers if hosting requires independent deploy/restart cycles
 
 ## References
 

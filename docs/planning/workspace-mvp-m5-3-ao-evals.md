@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Faza M5.3 — Agent Osobisty (inteligencja + jakość)
+# Phase M5.3 — Personal Agent (quality + evals)
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Faza 6 — LangGraph](phase-6-langgraph-hitl-memory.md) · [Faza 9 — evals](phase-9-observability-evals-costs.md)
 
-**Status:** in progress (M5.3.1–M5.3.6 done 2026-06-15) · **Szacunek:** 5–10 dni · **Priorytet:** P1 (po M5.2)
+**Status:** ✅ done (2026-06-15; M5.3.3 LangGraph and M5.3.7 streaming skipped) · **Estimate:** 5–10 days · **Priority:** P1 (after M5.2)
 
 ## Cel fazy
 

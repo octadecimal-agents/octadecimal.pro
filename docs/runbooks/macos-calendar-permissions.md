@@ -1,37 +1,37 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Runbook — uprawnienia kalendarza macOS (Workspace MVP)
+# Runbook — macOS calendar permissions (Workspace MVP)
 
 [← Workspace MVP](../architecture/workspace-mvp.md) · [M5.1 Hardening](../planning/workspace-mvp-m5-1-hardening.md)
 
-**Cel:** `#Planning` pokazuje live wydarzenia z EventKit (`source=macos`) zamiast fixture/cache.
+**Goal:** `#Planning` shows live EventKit events (`source=macos`) instead of fixture/cache.
 
-**Dotyczy:** M5, `CALENDAR_PROVIDER=auto` (domyślnie), binarka `calctl` (zależność Darwin w `pyproject.toml`).
-
----
-
-## 1. Wymagania wstępne
-
-- macOS z dostępem do aplikacji **Calendars** (EventKit)
-- Repo `octadecimal.pro` — `uv sync` na Macu (instaluje `calctl`)
-- Terminal, Cursor, iTerm lub inna aplikacja, **z której uruchamiasz** `./scripts/octa-mvp-up.sh`
+**Scope:** M5, `CALENDAR_PROVIDER=auto` (default), `calctl` binary (Darwin dependency in `pyproject.toml`).
 
 ---
 
-## 2. Nadaj uprawnienia Calendars
+## 1. Prerequisites
 
-1. Otwórz **System Settings** → **Privacy & Security** → **Calendars**.
-2. Włącz dostęp dla aplikacji, która uruchamia serwer:
-   - **Terminal** (domyślny flow)
-   - **Cursor** (jeśli startujesz z wbudowanego terminala)
-   - **iTerm** (jeśli używasz iTerm)
-3. Jeśli aplikacji nie ma na liście — uruchom `./scripts/octa-mvp-up.sh` raz; macOS powinien pokazać prompt. Po odrzuceniu dodaj ręcznie w Settings.
+- macOS with **Calendars** app (EventKit)
+- Repo `octadecimal.pro` — `uv sync` on Mac (installs `calctl`)
+- Terminal, Cursor, iTerm, or the app **from which you run** `./scripts/octa-mvp-up.sh`
 
-Opcjonalnie filtruj kalendarze:
+---
+
+## 2. Grant Calendars access
+
+1. Open **System Settings** → **Privacy & Security** → **Calendars**.
+2. Enable access for the app that starts the server:
+   - **Terminal** (default flow)
+   - **Cursor** (if starting from integrated terminal)
+   - **iTerm** (if using iTerm)
+3. If the app is not listed — run `./scripts/octa-mvp-up.sh` once; macOS should prompt. If denied, add manually in Settings.
+
+Optional calendar filter:
 
 ```bash
-export CALENDAR_INCLUDE=Dom,Praca,Ogarnianie
-export CALENDAR_EXCLUDE=Święta
+export CALENDAR_INCLUDE=Home,Work,Planning
+export CALENDAR_EXCLUDE=Holidays
 ```
 
 ---
@@ -60,39 +60,39 @@ asyncio.run(main())
 "
 ```
 
-**Oczekiwany wynik:** `source=macos` i co najmniej jedno wydarzenie (jeśli kalendarz nie jest pusty).
+**Expected:** `source=macos` and at least one event (if calendar is not empty).
 
 ---
 
-## 4. Weryfikacja w UI
+## 4. UI verification
 
 ```bash
 ./scripts/octa-mvp-up.sh
 open http://127.0.0.1:8042/#Planning
 ```
 
-W panelu **Plan dnia** sprawdź linię `Źródło kalendarza: macos`.
+In **Plan dnia** panel check line `Źródło kalendarza: macos` (UI label remains PL for CEO).
 
-Alternatywnie:
+Alternatively:
 
 ```bash
 curl -s http://127.0.0.1:8042/workspace/planning/calendar | python3 -m json.tool
 curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool
 ```
 
-Pola `calendar_provider` i `calendar_source` w `/workspace/health` powinny wskazywać `auto` / `macos`.
+Fields `calendar_provider` and `calendar_source` in `/workspace/health` should show `auto` / `macos`.
 
 ---
 
-## 5. Cache i fallback
+## 5. Cache and fallback
 
-| `calendar_source` | Znaczenie |
-|-------------------|-----------|
-| `macos` | Live odczyt EventKit |
-| `cache` | Ostatni udany odczyt z `~/.octa/calendar-cache.json` |
-| `fixture` / `fixture-*` | Statyczna lista (brak uprawnień lub `CALENDAR_PROVIDER=fixture`) |
+| `calendar_source` | Meaning |
+|-------------------|---------|
+| `macos` | Live EventKit read |
+| `cache` | Last successful read from `~/.octa/calendar-cache.json` |
+| `fixture` / `fixture-*` | Static list (no permission or `CALENDAR_PROVIDER=fixture`) |
 
-Cache zapisuje się automatycznie po udanym odczycie macOS:
+Cache is written automatically after successful macOS read:
 
 ```bash
 cat ~/.octa/calendar-cache.json
@@ -100,32 +100,32 @@ cat ~/.octa/calendar-cache.json
 
 ---
 
-## 6. Rozwiązywanie problemów
+## 6. Troubleshooting
 
-| Objaw | Przyczyna | Działanie |
-|-------|-----------|-----------|
-| `source=fixture-denied` | Brak uprawnień Calendars | Settings → włącz Terminal/Cursor |
-| `source=cache` | Wcześniejszy odczyt OK, dziś brak dostępu | Napraw uprawnienia; usuń cache jeśli testujesz od zera |
-| `source=fixture` | `CALENDAR_PROVIDER=fixture` lub brak `calctl` | Na Linux/CI to oczekiwane; na Macu: `uv sync` |
-| Pusty kalendarz | Filtr `CALENDAR_INCLUDE` zbyt wąski | Sprawdź nazwy kalendarzy w aplikacji Calendar |
+| Symptom | Cause | Action |
+|---------|-------|--------|
+| `source=fixture-denied` | Missing Calendars permission | Settings → enable Terminal/Cursor |
+| `source=cache` | Previous read OK, today no access | Fix permissions; delete cache for clean test |
+| `source=fixture` | `CALENDAR_PROVIDER=fixture` or missing `calctl` | Expected on Linux/CI; on Mac: `uv sync` |
+| Empty calendar | `CALENDAR_INCLUDE` too narrow | Check calendar names in Calendar app |
 
 ---
 
 ## 7. MCP (Cursor)
 
-Cursor Agent może czytać ten sam kalendarz co `#Planning` przez MCP:
+Cursor Agent can read the same calendar as `#Planning` via MCP:
 
 ```bash
-./scripts/octa-mcp-workspace.sh   # stdio — konfiguracja w docs/architecture/mcp-workspace.example.json
+./scripts/octa-mcp-workspace.sh   # stdio — config in docs/architecture/mcp-workspace.example.json
 ```
 
-**Wymaganie:** Cursor musi mieć uprawnienia **Calendars** (jak Terminal), jeśli `CALENDAR_PROVIDER=auto` ma zwracać `source=macos`.
+**Requirement:** Cursor needs **Calendars** permission (like Terminal) for `CALENDAR_PROVIDER=auto` to return `source=macos`.
 
-Narzędzia read-only: `list_today_calendar`, `wiki_search`, `board_list_tasks`, `review_pending_summary`, `workspace_health`.
+Read-only tools: `list_today_calendar`, `wiki_search`, `board_list_tasks`, `review_pending_summary`, `workspace_health`.
 
 ---
 
-## Powiązane
+## Related
 
 - [Workspace MVP — macOS calendar](../architecture/workspace-mvp.md#macos-calendar-mcp-stub)
-- [M5.4 — pełny MCP macOS](../planning/workspace-mvp-m5-4-macos-mcp.md)
+- [M5.4 — macOS MCP](../planning/workspace-mvp-m5-4-macos-mcp.md)

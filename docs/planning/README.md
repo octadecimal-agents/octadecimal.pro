@@ -25,10 +25,11 @@ Ten katalog służy do prowadzenia roadmapy, instrukcji faz, decyzji roboczych i
 - [Faza 11: Secret Manager Integration](phase-11-secret-manager.md) — SecretProvider, Bitwarden, audit.
 - [Faza 12: Minimal Operator Demo](phase-12-minimal-operator-demo.md) — operator console, approval demo.
 - [Faza 13: Portfolio Polish](phase-13-portfolio-polish.md) — README, diagrams, demo script, ADR-y.
-- [Octa Workspace MVP — plan dalszych prac](workspace-mvp-roadmap.md) — fazy M5.1–M5.5 po lokalnym MVP.
-  - **Zamknięte:** [indeks Sprint 0–3](workspace-mvp-done-index.md) · [S0](workspace-mvp-sprint-0-boot.md) · [S1](workspace-mvp-sprint-1-chat-wiki.md) · [S2](workspace-mvp-sprint-2-panels-hitl.md) · [S3](workspace-mvp-sprint-3-retro-infra.md) · [rozszerzenia](workspace-mvp-done-extensions.md)
-  - **Ukończone:** [M5.1 Hardening](workspace-mvp-m5-1-hardening.md) · [sign-off §10](workspace-mvp-m5-1-signoff.md)
-  - **Otwarte:** [M5.2](workspace-mvp-m5-2-rag-scale.md) · [M5.3](workspace-mvp-m5-3-ao-evals.md) · [M5.4](workspace-mvp-m5-4-macos-mcp.md) · [M5.5](workspace-mvp-m5-5-prod-bridge.md) · [M6+](workspace-mvp-m6-platform.md)
+- [Octa Workspace MVP — roadmap](workspace-mvp-roadmap.md) — M5.1–M5.7 after local MVP ([ADR 006](../adr/006-m5-only-dev-strategy.md)).
+  - **Closed:** [Sprint 0–3 index](workspace-mvp-done-index.md) · [S0](workspace-mvp-sprint-0-boot.md) · [S1](workspace-mvp-sprint-1-chat-wiki.md) · [S2](workspace-mvp-sprint-2-panels-hitl.md) · [S3](workspace-mvp-sprint-3-retro-infra.md) · [extensions](workspace-mvp-done-extensions.md)
+  - **Done:** [M5.1 Hardening](workspace-mvp-m5-1-hardening.md) · [sign-off §10](workspace-mvp-m5-1-signoff.md) · [M5.2](workspace-mvp-m5-2-rag-scale.md) · [M5.3](workspace-mvp-m5-3-ao-evals.md) · [M5.4](workspace-mvp-m5-4-macos-mcp.md)
+  - **Next:** [M5.5 M5 complete](workspace-mvp-m5-5-m5-complete.md) · [M5.6 M1 server](workspace-mvp-m5-6-m1-server-mode.md)
+  - **Deferred:** [M5.7 Hosting only](workspace-mvp-m5-7-hosting-only.md) · [M6+ platform](workspace-mvp-m6-platform.md)
 
 ---
 

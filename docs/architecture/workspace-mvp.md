@@ -190,11 +190,26 @@ cd e2e && npm install && npm test
 
 See `e2e/README.md` for scenarios and `E2E_SKIP_SERVER` when reusing a running dev instance.
 
-## Intentionally not implemented
+## Intentionally not implemented (M5-only scope)
 
-- Production Qdrant sync to pc-ubuntu (dev collection only)
-- Live Mail/Contacts MCP (calendar stub only for MVP)
+Per [ADR 006](../adr/006-m5-only-dev-strategy.md):
+
+- Production Qdrant sync to pc-ubuntu (deferred to [M5.7](../planning/workspace-mvp-m5-7-hosting-only.md))
+- HYDRA / legacy Ubuntu dev-team integration
+- Live Mail/Contacts MCP (calendar + mail stub only for MVP)
 - Full parity with workspace.octadecimal.pro design system
+- Public HTTPS subdomain (deferred to M5.7)
+
+## Roadmap (next phases)
+
+| Phase | Status | Focus |
+|-------|--------|-------|
+| [M5.5](../planning/workspace-mvp-m5-5-m5-complete.md) | next | Daily runbook, launchd API, board team rename |
+| [M5.6](../planning/workspace-mvp-m5-6-m1-server-mode.md) | planned | Always-on Workspace on M1 |
+| [M5.7](../planning/workspace-mvp-m5-7-hosting-only.md) | deferred | pc-ubuntu hosting only (no HYDRA agents) |
+| [M6+](../planning/workspace-mvp-m6-platform.md) | parallel | Platform phases 5–13 |
+
+Full tracking: [workspace-mvp-roadmap.md](../planning/workspace-mvp-roadmap.md).
 
 ## Related docs
 

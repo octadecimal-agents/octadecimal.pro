@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Faza M5.2 — RAG i skala Knowledge
+# Phase M5.2 — RAG & Knowledge scale
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Faza 7 platformy — RAG](phase-7-rag-foundation.md) · [Workspace MVP (EN)](../architecture/workspace-mvp.md)
 
-**Status:** todo · **Szacunek:** 5–8 dni · **Priorytet:** P1 (po M5.1)
+**Status:** ✅ done (2026-06-15) · **Estimate:** 5–8 days · **Priority:** P1 (after M5.1)
 
 ## Cel fazy
 
@@ -56,7 +56,7 @@ RAG_BACKEND=memory     → InMemoryVectorStore (CI, E2E, szybki dev)
 RAG_BACKEND=qdrant     → Qdrant :6335, kolekcja knowledge_chunks_dev
 ```
 
-Prod (M5.5): ta sama abstrakcja, inny URL/kolekcja.
+Prod ([M5.7](workspace-mvp-m5-7-hosting-only.md), deferred): same abstraction, different URL/collection.
 
 ---
 
@@ -241,7 +241,7 @@ flowchart TD
 | Ryzyko | Mitigacja |
 |--------|-----------|
 | HTML callouts psują chunki | Preprocessor już w scan — rozszerzyć testy |
-| Fake embeddings ≠ semantyka prod | Osobny task: real embeddings przed M5.5 |
+| Fake embeddings ≠ prod semantics | Separate task: real embeddings before [M5.7](workspace-mvp-m5-7-hosting-only.md) |
 | Duży ingest przy starcie | Lazy ingest + manifest; nie blokuj uvicorn > 30s |
 | Prywatne pliki w Kanonie | `exclude` w policy.yaml |
 

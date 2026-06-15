@@ -1,12 +1,14 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Octa Workspace MVP — zamknięte prace (indeks)
+# Octa Workspace MVP — completed work (index)
 
-[← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Workspace MVP (EN)](../architecture/workspace-mvp.md)
+[← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Workspace MVP](../architecture/workspace-mvp.md)
 
-**Status:** ✅ ukończone · **2026-06-14** · Sprint 0–3 + rozszerzenia + E2E
+**Status:** ✅ done · **2026-06-15** · Sprint 0–3 + extensions + M5.1–M5.4
 
-Ten indeks opisuje **co zostało zbudowane** przed fazą M5.1. Każdy sprint ma osobny plik z architekturą, zrealizowanymi krokami i dowodami weryfikacji — w tym samym formacie co plany faz M5.x.
+This index describes **what was built** through the initial MVP and M5.x hardening phases. Each sprint has a separate file with architecture, steps, and verification — same format as M5.x phase plans.
+
+**Next:** [M5.5 — complete M5 dev loop](workspace-mvp-m5-5-m5-complete.md)
 
 ---
 
@@ -78,12 +80,21 @@ Lifespan (app.py):
 | `#Review` approve/reject | ✅ | + badge + attention chat |
 | `#Retro` journal | ✅ | `{KNOWLEDGE_ROOT}/02-6-Rooms-Model/_system/journal/` |
 | Restart — dane Board/plan | ✅ | ledger SQLite |
-| pytest zielone | ✅ | 112 testów + CI |
+| pytest green | ✅ | 164 tests + CI |
 | Playwright E2E | ✅ | 9 scenariuszy w CI |
 | `#Zasady` | ✅ | M5.1.4 — statyczne linki |
 | Nowy dev < 15 min | ✅ | README quick start (M5.1.6) |
 
-Formalny sign-off → [workspace-mvp-m5-1-signoff.md](workspace-mvp-m5-1-signoff.md)
+## M5.1–M5.4 (2026-06-15)
+
+| Phase | Focus | Doc |
+|-------|-------|-----|
+| M5.1 | Hardening, CI E2E, sign-off §10 | [m5-1-hardening](workspace-mvp-m5-1-hardening.md) |
+| M5.2 | RAG T1, re-ranking v2, launchd sync | [m5-2-rag-scale](workspace-mvp-m5-2-rag-scale.md) |
+| M5.3 | AO evals, structured tools, persona v2 | [m5-3-ao-evals](workspace-mvp-m5-3-ao-evals.md) |
+| M5.4 | MCP read-only, calendar live, ADR 002 | [m5-4-macos-mcp](workspace-mvp-m5-4-macos-mcp.md) |
+
+Strategy pivot: [ADR 006](../adr/006-m5-only-dev-strategy.md) · [roadmap](workspace-mvp-roadmap.md)
 
 ---
 
@@ -105,4 +116,4 @@ Każdy zamknięty sprint spełnił:
 - [Sprint 2 — Board, Planning, Review](workspace-mvp-sprint-2-panels-hitl.md)
 - [Sprint 3 — Retro + infra](workspace-mvp-sprint-3-retro-infra.md)
 - [Rozszerzenia po Sprint 3](workspace-mvp-done-extensions.md)
-- [Plan dalszych prac M5.x](workspace-mvp-roadmap.md)
+- [M5.x roadmap](workspace-mvp-roadmap.md)

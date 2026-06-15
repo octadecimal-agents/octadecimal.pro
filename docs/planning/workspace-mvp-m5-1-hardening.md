@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Faza M5.1 — Domknięcie MVP (hardening)
+# Phase M5.1 — MVP hardening
 
-[← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Workspace MVP (EN)](../architecture/workspace-mvp.md) · [E2E README](../../e2e/README.md)
+[← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Workspace MVP](../architecture/workspace-mvp.md) · [E2E README](../../e2e/README.md)
 
-**Status:** ✅ ukończone · **2026-06-15**
+**Status:** ✅ done · **2026-06-15**
 
 ## Cel fazy
 

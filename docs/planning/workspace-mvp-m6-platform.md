@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Roadmapa platformy](roadmap-draft.md)
 
-**Status:** planowanie · **Horyzont:** po M5.1, równolegle z M5.2–M5.5
+**Status:** planning · **Horizon:** parallel with M5.5–M5.7 (M5-only dev first)
 
 ## Cel
 
@@ -218,5 +218,5 @@ Równolegle:   Faza 13 README/diagramy po M5.5 demo
 
 - [Roadmapa platformy — pełna](roadmap-draft.md)
 - [Workspace M5.1 — Hardening](workspace-mvp-m5-1-hardening.md)
-- [Workspace M5.5 — Prod bridge](workspace-mvp-m5-5-prod-bridge.md)
+- [Workspace M5.7 — Hosting only](workspace-mvp-m5-7-hosting-only.md)
 - [CONTRIBUTING.md](../../CONTRIBUTING.md)

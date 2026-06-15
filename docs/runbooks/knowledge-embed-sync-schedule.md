@@ -1,16 +1,16 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Runbook — harmonogram sync Knowledge (dev Qdrant)
+# Runbook — Knowledge embed sync schedule (dev Qdrant)
 
 [← Workspace MVP](../architecture/workspace-mvp.md) · [M5.2 RAG scale](../planning/workspace-mvp-m5-2-rag-scale.md)
 
-**Cel:** manifest T1 i Qdrant `:6335` aktualne bez ręcznego `embed-knowledge sync --dev`.
+**Goal:** keep T1 manifest and Qdrant `:6335` current without manual `embed-knowledge sync --dev`.
 
-**Dotyczy:** macOS dev (M5), kolekcja `knowledge_chunks_dev` — **nigdy** prod w tej fazie.
+**Scope:** macOS dev (M5), collection `knowledge_chunks_dev` — **never** prod in this phase.
 
 ---
 
-## 1. Ręczny sync (baseline)
+## 1. Manual sync (baseline)
 
 ```bash
 cd octadecimal.pro
@@ -20,7 +20,7 @@ cd octadecimal.pro
 
 Log: `~/.octa/logs/embed-sync.log`
 
-Podgląd bez zapisu:
+Dry run:
 
 ```bash
 OCTA_SYNC_DRY_RUN=1 ./scripts/octa-knowledge-sync-dev.sh
@@ -28,31 +28,31 @@ OCTA_SYNC_DRY_RUN=1 ./scripts/octa-knowledge-sync-dev.sh
 
 ---
 
-## 2. macOS launchd (co 6 h)
+## 2. macOS launchd (every 6 h)
 
 ```bash
 chmod +x scripts/octa-knowledge-sync-dev.sh scripts/install-embed-knowledge-launchd.sh
 ./scripts/install-embed-knowledge-launchd.sh
 ```
 
-Plist: `~/Library/LaunchAgents/pl.octadecimal.embed-knowledge-dev.plist` (generowany z szablonu w repo).
+Plist: `~/Library/LaunchAgents/pl.octadecimal.embed-knowledge-dev.plist` (generated from repo template).
 
-Ręczny trigger po zmianie w Knowledge:
+Manual trigger after Knowledge changes:
 
 ```bash
 launchctl kickstart -k "gui/$(id -u)/pl.octadecimal.embed-knowledge-dev"
 ```
 
-Weryfikacja:
+Verify:
 
 ```bash
 tail -20 ~/.octa/logs/embed-sync.log
 curl -s http://127.0.0.1:8042/workspace/health | python3 -m json.tool | grep -E 'documents_indexed|knowledge_last_sync'
 ```
 
-**Oczekiwany wynik:** wpis `sync complete` w logu; `knowledge_last_sync_at` odświeżone po udanym sync.
+**Expected:** `sync complete` in log; `knowledge_last_sync_at` refreshed after successful sync.
 
-Odinstalowanie:
+Uninstall:
 
 ```bash
 launchctl bootout "gui/$(id -u)/pl.octadecimal.embed-knowledge-dev"
@@ -61,33 +61,33 @@ rm ~/Library/LaunchAgents/pl.octadecimal.embed-knowledge-dev.plist
 
 ---
 
-## 3. Linux / cron (opcjonalnie)
+## 3. Linux / cron (optional)
 
 ```cron
-# co 6 godzin — dostosuj ścieżkę do repo
+# every 6 hours — adjust repo path
 0 */6 * * * /bin/bash /path/to/octadecimal.pro/scripts/octa-knowledge-sync-dev.sh
 ```
 
-Wymaga: `uv` w `PATH`, Docker dla Qdrant dev, `KNOWLEDGE_ROOT` ustawione jeśli nie domyślne.
+Requires: `uv` in `PATH`, Docker for dev Qdrant, `KNOWLEDGE_ROOT` if non-default.
 
 ---
 
-## 4. Bezpieczeństwo
+## 4. Safety
 
-Skrypt `octa-knowledge-sync-dev.sh` **odmawia** sync gdy:
+Script `octa-knowledge-sync-dev.sh` **refuses** sync when:
 
 - `QDRANT_COLLECTION` ≠ `knowledge_chunks_dev`
-- `QDRANT_URL` nie wskazuje lokalnego `:6335`
+- `QDRANT_URL` does not point to local `:6335`
 
-Nie instaluj tego agenta na serwerze prod — M5.5 wprowadzi osobny target `--prod`.
+Do not install this agent on prod server — [M5.7](../planning/workspace-mvp-m5-7-hosting-only.md) introduces separate `--prod` target (deferred).
 
 ---
 
 ## 5. Troubleshooting
 
-| Objaw | Działanie |
-|-------|-----------|
-| `uv not found in PATH` | Dodaj Homebrew/`~/.local/bin` do PATH w plist lub uruchamiaj z terminala |
-| `failed to start Qdrant dev` | `docker ps`, `./scripts/octa-qdrant-dev.sh` ręcznie |
-| Sync OK, UI stare wyniki | Workspace z `RAG_BACKEND=qdrant` musi widzieć tę samą kolekcję |
-| Brak pliku w wynikach | `uv run python scripts/embed-knowledge.py scan --dev` — sprawdź `policy.yaml` exclude |
+| Symptom | Action |
+|---------|--------|
+| `uv not found in PATH` | Add Homebrew/`~/.local/bin` to PATH in plist or run from terminal |
+| `failed to start Qdrant dev` | `docker ps`, run `./scripts/octa-qdrant-dev.sh` manually |
+| Sync OK, stale UI results | Workspace with `RAG_BACKEND=qdrant` must use same collection |
+| Missing file in results | `uv run python scripts/embed-knowledge.py scan --dev` — check `policy.yaml` exclude |

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="../styles/main.css">
 
-# Faza M5.4 — macOS MCP (live)
+# Phase M5.4 — macOS MCP (live)
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Faza 10 — MCP](phase-10-mcp-tool-context.md) · [Workspace MVP (EN)](../architecture/workspace-mvp.md)
 
@@ -172,10 +172,10 @@ async def test_mcp_no_write_tools_registered():
 | Opcja | Opis | Kiedy |
 |-------|------|-------|
 | A — Stub mono-process | Obecny `octa-mcp-workspace.sh` | M5.4 ✅ |
-| B — Compose multi-server | Osobne MCP: calendar, mail, knowledge | Po M5.5 |
+| B — Compose multi-server | Separate MCP: calendar, mail, knowledge | After [M5.7](workspace-mvp-m5-7-hosting-only.md) |
 | C — Host agent na M1 | Shortcuts + lokalny most | Poza scope |
 
-**Deliverable M5.4.5:** sekcja ADR lub appendix w docs z rekomendacją **A teraz, B po prod bridge**.
+**Deliverable M5.4.5:** ADR section with recommendation **A now, B after M5.7 hosting** — see [ADR 002](../adr/002-mcp-compose-strategy.md).
 
 ---
 
