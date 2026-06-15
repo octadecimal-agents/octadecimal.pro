@@ -15,10 +15,7 @@ def log_retrieval_query(query: str, hits: list[RetrievedChunk]) -> None:
     payload = {
         "event": "retrieval",
         "query": query,
-        "top_sources": [
-            hit.chunk.metadata.source if hit.chunk.metadata else ""
-            for hit in hits
-        ],
+        "top_sources": [hit.chunk.metadata.source if hit.chunk.metadata else "" for hit in hits],
         "scores": [
             {
                 "source": hit.chunk.metadata.source if hit.chunk.metadata else "",
