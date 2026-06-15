@@ -20,6 +20,7 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 | **Next** | [M5.6](workspace-mvp-m5-6-m1-server-mode.md) — M1 server mode (agents 24/7 on Mac) |
 | **Deferred** | [M5.7](workspace-mvp-m5-7-hosting-only.md) — pc-ubuntu hosting only (backup, HTTPS); no agent fleet |
 | **Parallel** | [M6+ platform](workspace-mvp-m6-platform.md) — phases 5–13 of the core platform |
+| **Parallel UX** | [Dual-track Dev + UX](workspace-mvp-dual-track.md) — OpenCode / design system (Track B) |
 
 **Explicitly deferred:** `embed-knowledge sync --prod`, HYDRA fleet integration, `#Dev` / git / CRM panels (UX.6).
 
@@ -180,6 +181,7 @@ flowchart LR
 
 ## Related documents
 
+- [Dual-track Dev + UX (onboarding OpenCode)](workspace-mvp-dual-track.md)
 - [Workspace MVP architecture](../architecture/workspace-mvp.md)
 - [ADR 006 — M5-only dev strategy](../adr/006-m5-only-dev-strategy.md)
 - [E2E README](../../e2e/README.md)

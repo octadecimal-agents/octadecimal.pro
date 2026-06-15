@@ -29,6 +29,7 @@ Ten katalog służy do prowadzenia roadmapy, instrukcji faz, decyzji roboczych i
   - **Closed:** [Sprint 0–3 index](workspace-mvp-done-index.md) · [S0](workspace-mvp-sprint-0-boot.md) · [S1](workspace-mvp-sprint-1-chat-wiki.md) · [S2](workspace-mvp-sprint-2-panels-hitl.md) · [S3](workspace-mvp-sprint-3-retro-infra.md) · [extensions](workspace-mvp-done-extensions.md)
   - **Done:** [M5.1](workspace-mvp-m5-1-hardening.md) · [M5.5 sign-off](workspace-mvp-m5-5-signoff.md) · [M5.2–M5.4](workspace-mvp-m5-2-rag-scale.md)
   - **Next:** [M5.6 M1 server](workspace-mvp-m5-6-m1-server-mode.md)
+  - **Parallel UX:** [Dual-track Dev + UX](workspace-mvp-dual-track.md) (OpenCode / WDS)
   - **Deferred:** [M5.7 Hosting only](workspace-mvp-m5-7-hosting-only.md) · [M6+ platform](workspace-mvp-m6-platform.md)
 
 ---
