@@ -48,6 +48,8 @@ jobs:
     name: Playwright E2E
     runs-on: ubuntu-latest
     needs: python
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/e2e/.playwright-browsers
 
     steps:
       - name: Check out repository
@@ -81,8 +83,6 @@ jobs:
 
       - name: Run E2E tests
         working-directory: e2e
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/e2e/.playwright-browsers
         run: npm test
 
       - name: Upload Playwright report on failure
