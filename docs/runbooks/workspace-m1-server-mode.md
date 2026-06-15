@@ -33,6 +33,32 @@ Only **one** launchd agent may bind `:8042` on a given Mac. Do not install both 
 
 ---
 
+## 2.1 Bootstrap from M5 via SSH
+
+M1 is reachable on LAN as **`M1.local`** (`192.168.0.172`). SSH hosts on M5 (`~/.ssh/config`):
+
+| Host | User | Use |
+|------|------|-----|
+| `m1-ceo` | CEO | Workspace server mode (this runbook) |
+| `m1-admin` | Admin | Console admin on M1 |
+
+```bash
+# On M5 — load key once per session (passphrase in Keychain / ssh-add locally)
+ssh-add ~/.ssh/m1_ceo_ed25519
+
+# Sync repo to M1 (first time or after big changes)
+rsync -az --exclude '.venv' --exclude 'node_modules' --exclude '__pycache__' \
+  ~/Developer/Repositories/octadecimal-agents/octadecimal.pro/ \
+  m1-ceo:Developer/Repositories/octadecimal-agents/octadecimal.pro/
+
+# Remote install
+ssh m1-ceo 'cd ~/Developer/Repositories/octadecimal-agents/octadecimal.pro && ./scripts/install-workspace-api-m1-launchd.sh'
+```
+
+**GUI session required:** macOS `LaunchAgents` bind to `gui/$(id -u)`. If install prints *gui/UID unavailable*, the target user must **log in at the M1 console** once (not SSH only), then re-run `launchctl bootstrap` from the runbook output. On this fleet, console is often **`admin`** while Workspace runs as **`ceo`** — either log in as CEO on console or align accounts (see §7).
+
+---
+
 ## 3. Install (M5.6.1)
 
 On **M1**:
@@ -111,6 +137,7 @@ Startup script **refuses** non-localhost `WORKSPACE_HOST` or non-8042 port.
 | Scenario | Behaviour |
 |----------|-----------|
 | CEO on M1, launchd running | Use `http://127.0.0.1:8042/` — normal |
+| `gui/UID` unavailable on install | User never logged in at console — see §2.1 |
 | Developer runs `./scripts/octa-mvp-up.sh` on **same Mac** as M1 launchd | **Conflict** — port 8042 busy; stop launchd first or use another machine |
 | Active dev on **M5**, CEO on **M1** | Independent — each Mac has its own `:8042` instance |
 | M1 launchd crash | `KeepAlive` restarts; check `~/.octa/logs/workspace-api-m1.log` |
