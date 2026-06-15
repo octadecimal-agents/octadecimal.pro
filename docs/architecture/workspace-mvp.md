@@ -77,6 +77,8 @@ Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup
 
 **Embed policy:** `KNOWLEDGE_ROOT/.knowledge-index/policy.yaml` defines tier T1 include/exclude globs (see [knowledge-policy.example.yaml](knowledge-policy.example.yaml)). When missing, code falls back to built-in `knowledge_globs` in `WorkspaceConfig`.
 
+**Retrieval debug (dev):** set `WORKSPACE_DEBUG=1` and pass header `X-Debug-Retrieval: 1` on `/workspace/wiki/search` to include `vector_score`, `keyword_score`, and `keyword_raw` per hit. Structured JSON logs go to logger `secure_agentic_ai.retrieval`.
+
 ### MiniMax (recommended external LLM)
 
 ```bash

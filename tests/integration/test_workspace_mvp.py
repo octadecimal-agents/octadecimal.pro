@@ -142,6 +142,22 @@ def test_wiki_search(workspace_client: TestClient) -> None:
     results = response.json()["results"]
     assert len(results) >= 1
     assert any("Backup.md" in r["source"] for r in results)
+    assert "vector_score" not in results[0]
+
+
+def test_wiki_search_debug_retrieval_scores(workspace_client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("WORKSPACE_DEBUG", "1")
+    response = workspace_client.get(
+        "/workspace/wiki/search",
+        params={"q": "backup Qdrant"},
+        headers={"X-Debug-Retrieval": "1"},
+    )
+    assert response.status_code == 200
+    results = response.json()["results"]
+    assert results
+    assert "vector_score" in results[0]
+    assert "keyword_score" in results[0]
+    assert "keyword_raw" in results[0]
 
 
 def test_planning_generate(workspace_client: TestClient) -> None:

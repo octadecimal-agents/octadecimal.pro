@@ -19,6 +19,15 @@ class DocumentChunk:
 
 
 @dataclass(frozen=True)
+class RetrievalScoreBreakdown:
+    vector_score: float
+    keyword_score: float
+    keyword_raw: float
+    combined_score: float
+
+
+@dataclass(frozen=True)
 class RetrievedChunk:
     chunk: DocumentChunk
     score: float
+    breakdown: RetrievalScoreBreakdown | None = None

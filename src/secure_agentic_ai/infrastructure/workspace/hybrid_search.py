@@ -1,7 +1,7 @@
 import re
 
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
-from secure_agentic_ai.domain.knowledge import RetrievedChunk
+from secure_agentic_ai.domain.knowledge import RetrievedChunk, RetrievalScoreBreakdown
 
 _TOKEN = re.compile(r"[a-z0-9\u0105-\u017c]{3,}", re.IGNORECASE)
 
@@ -65,9 +65,21 @@ class HybridKnowledgeSearch:
         ranked: list[tuple[float, RetrievedChunk]] = []
         for item in candidates:
             source = item.chunk.metadata.source if item.chunk.metadata else ""
-            kw = keyword_score(query, source, item.chunk.text) / max_kw
+            kw_raw = keyword_score(query, source, item.chunk.text)
+            kw = kw_raw / max_kw
             combined = self._vector_weight * item.score + (1.0 - self._vector_weight) * kw
-            ranked.append((combined, RetrievedChunk(chunk=item.chunk, score=combined)))
+            breakdown = RetrievalScoreBreakdown(
+                vector_score=float(item.score),
+                keyword_score=kw,
+                keyword_raw=kw_raw,
+                combined_score=combined,
+            )
+            ranked.append(
+                (
+                    combined,
+                    RetrievedChunk(chunk=item.chunk, score=combined, breakdown=breakdown),
+                )
+            )
 
         ranked.sort(key=lambda pair: pair[0], reverse=True)
         return [chunk for _, chunk in ranked[:k]]

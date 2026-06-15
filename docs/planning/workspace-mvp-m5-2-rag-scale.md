@@ -119,6 +119,8 @@ tiers:
 
 ### M5.2.3 — Metryki retrieval
 
+**Status:** ✅ done (2026-06-15)
+
 **Cel:** debug i eval bez zgadywania.
 
 **Rozwiązanie:**
@@ -239,8 +241,8 @@ flowchart TD
 
 - [x] `policy.yaml` T1 w repozytorium Knowledge
 - [x] Pełny sync dev; health pokazuje ≥ 79 dokumentów (lokalny Knowledge)
-- [ ] 5 golden queries PASS
-- [ ] Metryki retrieval w logach / debug
+- [x] 5 golden queries PASS (unit parametrized)
+- [x] Metryki retrieval w logach / debug header
 - [ ] launchd/cron opcjonalnie udokumentowany
 
 ---

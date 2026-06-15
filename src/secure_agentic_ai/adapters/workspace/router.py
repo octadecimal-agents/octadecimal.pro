@@ -2,7 +2,7 @@ from datetime import UTC, date, datetime
 from typing import Annotated
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from secure_agentic_ai.adapters.api.dependencies import get_db_session
@@ -33,6 +33,7 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
 )
 from secure_agentic_ai.infrastructure.workspace.knowledge_sync import manifest_sync_status
 from secure_agentic_ai.infrastructure.workspace.ledger import Task
+from secure_agentic_ai.infrastructure.workspace.retrieval_log import debug_retrieval_enabled, log_retrieval_query
 from secure_agentic_ai.infrastructure.workspace.review_adapter import pending_review_items
 from secure_agentic_ai.infrastructure.workspace.state import (
     get_chat_provider,
@@ -210,17 +211,29 @@ async def planning_calendar() -> CalendarListResponse:
 
 
 @router.get("/wiki/search", response_model=WikiSearchResponse)
-async def wiki_search(q: str, k: int = 5) -> WikiSearchResponse:
+async def wiki_search(
+    q: str,
+    k: int = 5,
+    x_debug_retrieval: Annotated[str | None, Header(alias="X-Debug-Retrieval")] = None,
+) -> WikiSearchResponse:
     await ensure_workspace_ready()
     results = await get_hybrid_search().search(q, k=k)
-    payload: list[dict[str, str | float]] = [
-        {
-            "source": r.chunk.metadata.source if r.chunk.metadata else "",
-            "excerpt": r.chunk.text[:240],
-            "score": round(float(r.score), 4),
+    debug = debug_retrieval_enabled() and x_debug_retrieval == "1"
+    if debug:
+        log_retrieval_query(q, results)
+
+    payload: list[dict[str, str | float]] = []
+    for result in results:
+        row: dict[str, str | float] = {
+            "source": result.chunk.metadata.source if result.chunk.metadata else "",
+            "excerpt": result.chunk.text[:240],
+            "score": round(float(result.score), 4),
         }
-        for r in results
-    ]
+        if debug and result.breakdown is not None:
+            row["vector_score"] = round(result.breakdown.vector_score, 4)
+            row["keyword_score"] = round(result.breakdown.keyword_score, 4)
+            row["keyword_raw"] = round(result.breakdown.keyword_raw, 4)
+        payload.append(row)
     return WikiSearchResponse(query=q, results=payload)
 
 
