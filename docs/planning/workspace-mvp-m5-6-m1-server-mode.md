@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [ADR 006](../adr/006-m5-only-dev-strategy.md)
 
-**Status:** planned · **Estimate:** 1–2 weeks · **Priority:** P1 (after M5.5) · **Owner:** backend-team
+**Status:** in progress · **Estimate:** 1–2 weeks · **Priority:** P1 (after M5.5) · **Owner:** backend-team
 
 ## Goal
 
@@ -38,13 +38,13 @@ M5 (dev/build)
 
 ## Tasks (draft)
 
-| ID | Task | Description | Done when |
-|----|------|-------------|-----------|
-| M5.6.1 | M1 launchd stack | Install plist(s) for Workspace on M1 | health OK after reboot |
-| M5.6.2 | Network binding | Document `127.0.0.1` vs Tailscale LAN; no public exposure | runbook |
-| M5.6.3 | Calendar on M1 | `CALENDAR_PROVIDER=auto` on daily driver | `#Planning` live events |
-| M5.6.4 | Shortcuts / CLI entry | Optional `octa workspace open` from M1 | one-command CEO start |
-| M5.6.5 | Failover doc | When M5 dev overwrites API — how M1 degrades | runbook section |
+| ID | Task | Description | Done when | Status |
+|----|------|-------------|-----------|--------|
+| M5.6.1 | M1 launchd stack | Install plist(s) for Workspace on M1 | health OK after reboot | ✅ [runbook](../runbooks/workspace-m1-server-mode.md) |
+| M5.6.2 | Network binding | Document `127.0.0.1` vs Tailscale LAN; no public exposure | runbook | ✅ §6 runbook |
+| M5.6.3 | Calendar on M1 | `CALENDAR_PROVIDER=auto` on daily driver | `#Planning` live events | ✅ plist; verify on M1 |
+| M5.6.4 | Shortcuts / CLI entry | Optional `octa workspace open` from M1 | one-command CEO start | 🔲 optional |
+| M5.6.5 | Failover doc | When M5 dev overwrites API — how M1 degrades | runbook section | ✅ §7 runbook |
 
 ---
 
@@ -58,14 +58,24 @@ M5 (dev/build)
 
 ## Phase completion criteria
 
-- [ ] Workspace reachable on M1 without manual terminal start
+- [ ] Workspace reachable on M1 without manual terminal start — **install on physical M1 + reboot test**
 - [ ] Calendar + chat smoke on M1 for 3 consecutive days
-- [ ] Runbook: M1 server mode install + rollback
+- [x] Runbook: M1 server mode install + rollback — [workspace-m1-server-mode.md](../runbooks/workspace-m1-server-mode.md)
+
+---
+
+## Deliverables (M5.6.1)
+
+- `scripts/octa-workspace-api-m1.sh`
+- `scripts/install-workspace-api-m1-launchd.sh` (`--uninstall`)
+- `scripts/launchd/pl.octadecimal.workspace-api-m1.plist.template`
+- Cross-guard vs `pl.octadecimal.workspace-api-dev` on same host
 
 ---
 
 ## Related
 
+- [M1 server mode runbook](../runbooks/workspace-m1-server-mode.md)
 - [M5.5 — M5 dev loop complete](workspace-mvp-m5-5-m5-complete.md)
 - [M5.7 — Ubuntu hosting only](workspace-mvp-m5-7-hosting-only.md)
 - Knowledge: `OCTA-ZALOZENIA.md` §6 node roles

@@ -76,13 +76,17 @@ Open http://127.0.0.1:8042/
 
 **Knowledge:** set `KNOWLEDGE_ROOT=~/Developer/Knowledge` (default). Without it, Wiki/RAG returns empty results.
 
-**Always-on (optional):** after first manual run, install launchd for daily use:
+**Always-on (optional):** after first manual run, install launchd:
 
 ```bash
-./scripts/install-workspace-api-launchd.sh   # do not run together with octa-mvp-up.sh
+# M5 dev/build node
+./scripts/install-workspace-api-launchd.sh
+
+# M1 daily driver (server mode) — see runbook
+./scripts/install-workspace-api-m1-launchd.sh
 ```
 
-See [daily dev runbook](docs/runbooks/workspace-daily-dev.md).
+Do not run `octa-mvp-up.sh` while launchd holds `:8042`. See [daily dev runbook](docs/runbooks/workspace-daily-dev.md) (M5) or [M1 server mode](docs/runbooks/workspace-m1-server-mode.md).
 
 **Options:**
 

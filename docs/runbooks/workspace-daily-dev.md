@@ -71,6 +71,7 @@ Uninstall:
 ```bash
 launchctl bootout "gui/$(id -u)/pl.octadecimal.workspace-api-dev"
 rm ~/Library/LaunchAgents/pl.octadecimal.workspace-api-dev.plist
+# or: ./scripts/install-workspace-api-launchd.sh --uninstall
 ```
 
 Logs:
@@ -160,4 +161,4 @@ CI runs the same gates on every push to `main`.
 ## Related
 
 - [Workspace MVP architecture](../architecture/workspace-mvp.md)
-- [M5.6 M1 server mode](../planning/workspace-mvp-m5-6-m1-server-mode.md) — next after M5.5 complete
+- [M5.6 M1 server mode](../planning/workspace-mvp-m5-6-m1-server-mode.md) — [M1 runbook](workspace-m1-server-mode.md)

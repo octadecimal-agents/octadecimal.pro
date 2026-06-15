@@ -57,7 +57,7 @@ Development stays **M5-only** until the local loop is complete. We do **not** in
 | [M5.3](workspace-mvp-m5-3-ao-evals.md) | AO & evals | ✅ done (M5.3.3/7 skipped) |
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) | macOS live MCP | ✅ done |
 | [M5.5](workspace-mvp-m5-5-m5-complete.md) | Complete M5 dev loop | ✅ done |
-| [M5.6](workspace-mvp-m5-6-m1-server-mode.md) | M1 server mode | 🔲 next |
+| [M5.6](workspace-mvp-m5-6-m1-server-mode.md) | M1 server mode | 🔄 in progress |
 | [M5.7](workspace-mvp-m5-7-hosting-only.md) | Ubuntu hosting only | ⏸ deferred |
 | [M6+](workspace-mvp-m6-platform.md) | Platform core | 🔲 parallel |
 
@@ -98,9 +98,9 @@ Persona v2, structured tools, eval datasets, explicit dry fallback. Skipped: Lan
 
 Runbook, launchd API, Octa-native board teams, Kanon sign-off v2. [Sign-off](workspace-mvp-m5-5-signoff.md).
 
-### [M5.6 — M1 server mode](workspace-mvp-m5-6-m1-server-mode.md) 🔲
+### [M5.6 — M1 server mode](workspace-mvp-m5-6-m1-server-mode.md) 🔄
 
-Always-on agents on M1 Mac; Workspace API reachable from daily driver without manual `octa-mvp-up.sh`.
+Always-on Workspace on M1. **M5.6.1 done** — [M1 runbook](../runbooks/workspace-m1-server-mode.md). Pending: 3-day smoke on physical M1, optional M5.6.4 Shortcuts.
 
 ### [M5.7 — Ubuntu hosting only](workspace-mvp-m5-7-hosting-only.md) ⏸
 
@@ -171,7 +171,7 @@ flowchart LR
 | [M5.3](workspace-mvp-m5-3-ao-evals.md) AO evals | ✅ done | 2026-06-15 | 2026-06-15 | [plan](workspace-mvp-m5-3-ao-evals.md) |
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) macOS MCP | ✅ done | 2026-06-15 | 2026-06-15 | [plan](workspace-mvp-m5-4-macos-mcp.md) |
 | [M5.5](workspace-mvp-m5-5-m5-complete.md) M5 complete | ✅ done | 2026-06-15 | 2026-06-15 | [sign-off](workspace-mvp-m5-5-signoff.md) |
-| [M5.6](workspace-mvp-m5-6-m1-server-mode.md) M1 server | 🔲 todo | | | [plan](workspace-mvp-m5-6-m1-server-mode.md) |
+| [M5.6](workspace-mvp-m5-6-m1-server-mode.md) M1 server | 🔄 in progress | 2026-06-15 | | [runbook](../runbooks/workspace-m1-server-mode.md) |
 | [M5.7](workspace-mvp-m5-7-hosting-only.md) Hosting | ⏸ deferred | | | [plan](workspace-mvp-m5-7-hosting-only.md) |
 | [M6+](workspace-mvp-m6-platform.md) Platform | 🔲 parallel | | | [plan](workspace-mvp-m6-platform.md) |
 

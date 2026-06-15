@@ -77,7 +77,7 @@ if command -v curl >/dev/null 2>&1; then
   fi
 fi
 
-log "starting uvicorn on ${WORKSPACE_HOST}:${WORKSPACE_PORT} (llm=${LLM_PROVIDER}, rag=${RAG_BACKEND})"
+log "starting uvicorn on ${WORKSPACE_HOST}:${WORKSPACE_PORT} (node=${OCTA_NODE:-dev}, llm=${LLM_PROVIDER}, rag=${RAG_BACKEND}, calendar=${CALENDAR_PROVIDER:-auto})"
 
 if [[ "${FOREGROUND}" -eq 1 ]]; then
   exec uv run uvicorn secure_agentic_ai.adapters.api.app:app \
