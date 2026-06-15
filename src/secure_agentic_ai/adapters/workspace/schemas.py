@@ -100,6 +100,8 @@ class HealthWorkspaceResponse(BaseModel):
     rag_backend: str
     llm_provider: str
     llm_available: bool
+    llm_active: str
+    llm_fallback_reason: str | None = None
     review_pending_count: int = 0
     knowledge_manifest_age_seconds: int | None = None
     knowledge_last_sync_at: str | None = None

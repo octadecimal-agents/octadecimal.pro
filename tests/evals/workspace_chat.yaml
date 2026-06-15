@@ -1,0 +1,74 @@
+cases:
+  - id: attention-pl
+    input: "Co wymaga uwagi?"
+    expect:
+      suggested_hash: "#Review"
+      message_contains: ["Review"]
+
+  - id: review-pl
+    input: "Co czeka w review?"
+    expect:
+      suggested_hash: "#Review"
+      message_contains: ["Review"]
+
+  - id: review-akcept
+    input: "Co w kolejce akceptacji?"
+    expect:
+      suggested_hash: "#Review"
+      message_contains: ["Review"]
+
+  - id: backup-pl
+    input: "jak backup Qdrant?"
+    expect:
+      suggested_hash: "#Wiki"
+      message_contains: ["Backup"]
+
+  - id: plan-today-pl
+    input: "Jaki plan na dziś?"
+    expect:
+      suggested_hash: "#Planning"
+      message_contains: ["plan"]
+
+  - id: generate-plan-pl
+    input: "wygeneruj plan na dziś"
+    expect:
+      suggested_hash: "#Planning"
+      message_contains: ["plan"]
+
+  - id: blocked-pl
+    input: "Co jest zablokowane?"
+    expect:
+      suggested_hash: "#Board"
+      message_contains: ["zablok"]
+
+  - id: blocked-en
+    input: "show blocked tasks"
+    expect:
+      suggested_hash: "#Board"
+      message_contains: ["zablok"]
+
+  - id: attention-en
+    input: "what needs attention today?"
+    expect:
+      suggested_hash: "#Review"
+      message_contains: ["Review"]
+
+  - id: planning-keyword
+    input: "planning na dziś"
+    expect:
+      suggested_hash: "#Planning"
+      message_contains: ["plan"]
+
+  - id: empty-review
+    input: "status review queue"
+    expect:
+      suggested_hash: "#Review"
+      message_contains: ["Review"]
+
+  - id: backup-keyword
+    input: "backup retention Qdrant"
+    expect:
+      suggested_hash: "#Wiki"
+      message_contains: ["Backup"]
+
+min_pass_rate: 0.8

@@ -1,0 +1,32 @@
+cases:
+  - id: backup-qdrant
+    query: "backup Qdrant"
+    expect:
+      source_suffix: "Backup.md"
+      top_k: 3
+
+  - id: octa-mvp
+    query: "Octa OS MVP"
+    expect:
+      source_suffix: "mvp-localhost-m5.md"
+      top_k: 3
+
+  - id: hitl-approval
+    query: "HITL approval"
+    expect:
+      source_suffix: "hitl-approval.md"
+      top_k: 3
+
+  - id: embed-knowledge
+    query: "embed knowledge"
+    expect:
+      source_suffix: "knowledge-embeddings.md"
+      top_k: 3
+
+  - id: ceo-plan
+    query: "plan dnia CEO"
+    expect:
+      source_suffix: "07-typowy-dzien-ceo.md"
+      top_k: 3
+
+min_pass_rate: 1.0

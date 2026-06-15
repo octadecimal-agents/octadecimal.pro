@@ -103,6 +103,8 @@ def test_workspace_health(workspace_client: TestClient) -> None:
     assert data["rag_backend"] == "memory"
     assert data["llm_provider"] == "dry"
     assert data["llm_available"] is False  # dry = heuristics, no external LLM
+    assert data["llm_active"] == "dry"
+    assert data["llm_fallback_reason"] is None
     assert data["review_pending_count"] >= 0
     assert data["calendar_provider"] == "auto"
     assert isinstance(data["calendar_source"], str)

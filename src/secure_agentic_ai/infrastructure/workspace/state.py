@@ -5,7 +5,6 @@ from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
 from secure_agentic_ai.infrastructure.knowledge.fake_embedding_provider import FakeEmbeddingProvider
 from secure_agentic_ai.infrastructure.knowledge.in_memory_vector_store import InMemoryVectorStore
 from secure_agentic_ai.infrastructure.knowledge.qdrant_vector_store import QdrantVectorStore
-from secure_agentic_ai.infrastructure.llm.factory import build_chat_provider
 from secure_agentic_ai.infrastructure.workspace.config import WorkspaceConfig
 from secure_agentic_ai.infrastructure.workspace.hybrid_search import HybridKnowledgeSearch
 from secure_agentic_ai.infrastructure.workspace.knowledge_loader import ingest_knowledge_paths
@@ -19,6 +18,8 @@ _ledger: WorkspaceLedger | None = None
 _vector_store: VectorStoreBackend | None = None
 _config: WorkspaceConfig | None = None
 _chat_provider: ChatCompletionProvider | None = None
+_llm_active: str = "dry"
+_llm_fallback_reason: str | None = None
 _initialized = False
 _documents_indexed = 0
 _workspace_status = "ok"
@@ -117,10 +118,23 @@ def get_rag_backend_label() -> str:
 
 
 async def get_chat_provider() -> ChatCompletionProvider:
-    global _chat_provider
+    global _chat_provider, _llm_active, _llm_fallback_reason
     if _chat_provider is None:
-        _chat_provider = await build_chat_provider(get_config())
+        from secure_agentic_ai.infrastructure.llm.factory import resolve_chat_provider
+
+        resolved = await resolve_chat_provider(get_config())
+        _chat_provider = resolved.provider
+        _llm_active = resolved.active
+        _llm_fallback_reason = resolved.fallback_reason
     return _chat_provider
+
+
+def get_llm_active_mode() -> str:
+    return _llm_active
+
+
+def get_llm_fallback_reason() -> str | None:
+    return _llm_fallback_reason
 
 
 def get_llm_label() -> str:
@@ -159,7 +173,7 @@ async def shutdown_workspace_state() -> None:
 
 def reset_for_tests() -> None:
     global _ledger, _vector_store, _config, _chat_provider, _initialized, _documents_indexed
-    global _workspace_status, _workspace_issues
+    global _workspace_status, _workspace_issues, _llm_active, _llm_fallback_reason
     _ledger = None
     _vector_store = None
     _config = None
@@ -168,3 +182,5 @@ def reset_for_tests() -> None:
     _documents_indexed = 0
     _workspace_status = "ok"
     _workspace_issues = []
+    _llm_active = "dry"
+    _llm_fallback_reason = None

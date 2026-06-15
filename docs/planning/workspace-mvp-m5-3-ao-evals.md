@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Faza 6 — LangGraph](phase-6-langgraph-hitl-memory.md) · [Faza 9 — evals](phase-9-observability-evals-costs.md)
 
-**Status:** todo · **Szacunek:** 5–10 dni · **Priorytet:** P1 (po M5.2)
+**Status:** in progress (M5.3.1–M5.3.6 done 2026-06-15) · **Szacunek:** 5–10 dni · **Priorytet:** P1 (po M5.2)
 
 ## Cel fazy
 
@@ -88,6 +88,8 @@ Powiązanie z [Fazą 6](phase-6-langgraph-hitl-memory.md): checkpoint dopiero gd
 
 ### M5.3.1 — Persona prompt v2
 
+**Status:** ✅ done (2026-06-15)
+
 **Persona:** Maja (struktura, plan) + Anna (ton, ciepło) — krótko, po polsku.
 
 **Plik:** `infrastructure/llm/chat_prompts.py` — `SYSTEM_PROMPT` / `build_rag_messages`.
@@ -99,11 +101,13 @@ Powiązanie z [Fazą 6](phase-6-langgraph-hitl-memory.md): checkpoint dopiero gd
 3. Nie ujawniaj chain-of-thought; `sanitize_llm_reply` usuwa `<think>` / tagi reasoning.
 4. Przy braku kontekstu — przyznaj i zaproponuj `#Wiki` search.
 
-**Done when:** review promptów w PR; 3 przykładowe odpowiedzi w docs (anonimizowane).
+**Done when:** review promptów w PR; 3 przykładowe odpowiedzi w docs (anonimizowane). → [ao-persona-examples.md](../architecture/ao-persona-examples.md)
 
 ---
 
 ### M5.3.2 — Structured tools
+
+**Status:** ✅ done (2026-06-15)
 
 **Implementacja:**
 
@@ -127,6 +131,8 @@ async def plan_today(ledger) -> ToolResult: ...
 
 ### M5.3.3 — LangGraph slice (opcjonalnie)
 
+**Status:** odłożone → Faza 6 platformy
+
 **Scope spike (max 2 dni):**
 
 - Jeden plik `infrastructure/workflow/chat_graph.py`
@@ -139,6 +145,8 @@ async def plan_today(ledger) -> ToolResult: ...
 ---
 
 ### M5.3.4 — Chat eval dataset
+
+**Status:** ✅ done (2026-06-15)
 
 **Lokalizacja:** `tests/evals/workspace_chat.yaml`
 
@@ -166,6 +174,8 @@ cases:
 
 ### M5.3.5 — RAG eval dataset
 
+**Status:** ✅ done (2026-06-15)
+
 **Lokalizacja:** `tests/evals/rag_golden.yaml`
 
 **Runner:** reuse `HybridKnowledgeSearch` + assert top-3 sources.
@@ -175,6 +185,8 @@ Powiązane z M5.2.4 — ten sam zestaw golden queries.
 ---
 
 ### M5.3.6 — Fallback chain LLM
+
+**Status:** ✅ done (2026-06-15)
 
 **Problem:** brak tokenu MiniMax → cichy fallback do dry myli CEO.
 
@@ -194,6 +206,8 @@ MINIMAX_API_TOKEN missing
 ---
 
 ### M5.3.7 — Streaming odpowiedzi (nice-to-have)
+
+**Status:** todo (nice-to-have)
 
 **Architektura:**
 
@@ -235,12 +249,13 @@ Pełny prompt injection suite → [Faza 8](phase-8-ai-security-prompt-injection.
 
 ## Kryterium ukończenia fazy
 
-- [ ] Persona v2 wdrożona
-- [ ] Tool trace w dev logs
-- [ ] `workspace_chat.yaml` ≥ 80% pass (dry)
-- [ ] RAG golden eval PASS
-- [ ] Fallback LLM jawny w health/UI
-- [ ] pytest + E2E bez regresji
+- [x] Persona v2 wdrożona
+- [x] Tool trace w dev logs
+- [x] `workspace_chat.yaml` ≥ 80% pass (dry)
+- [x] RAG golden eval PASS
+- [x] Fallback LLM jawny w health/UI
+- [x] pytest + E2E bez regresji
+- [ ] Streaming SSE (M5.3.7, opcjonalnie)
 
 ---
 

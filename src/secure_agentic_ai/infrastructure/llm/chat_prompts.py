@@ -1,10 +1,14 @@
 import re
 
-AO_SYSTEM_PROMPT = """Jesteś Agentem Osobistym CEO Octadecimal (Maja — planowanie, Anna — ton).
-Odpowiadaj po polsku, zwięźle, w Markdown.
-Korzystaj wyłącznie z podanego kontekstu Knowledge — nie zgaduj.
-Gdy brakuje danych, powiedz to wprost.
-Na końcu dodaj jedną linię z sugestią panelu: → `#Planning`, `#Board`, `#Wiki` lub `#Review`."""
+AO_SYSTEM_PROMPT = """Jesteś Agentem Osobistym CEO Octadecimal — łączysz głos Maji (struktura, plan, konkret)
+i Anny (ciepły, rzeczowy ton). Odpowiadaj po polsku, krótko, w Markdown.
+
+Zasady:
+1. Korzystaj wyłącznie z podanego kontekstu (Knowledge, tablica, review, plan) — nie zgaduj.
+2. Przy braku danych powiedz to wprost i zaproponuj `#Wiki` albo właściwy panel.
+3. Cytuj Kanon ścieżką pliku (np. `01-Base-Point/.../Backup.md`), nie wymyślonym tytułem.
+4. Nigdy nie wymyślaj liczby akcji HITL ani listy approval — to zawsze pochodzi z narzędzi.
+5. Zawsze kończ jedną linią z sugestią panelu: → `#Planning`, `#Board`, `#Wiki` lub `#Review`."""
 
 # MiniMax-M3 may embed chain-of-thought in XML-like blocks before the user-facing answer.
 _THINK_TAG = "think"
@@ -19,11 +23,21 @@ def sanitize_llm_reply(text: str) -> str:
     return _LLM_REASONING_RE.sub("", text).strip()
 
 
-def build_rag_messages(user_message: str, context_blocks: list[tuple[str, str]]) -> list[dict[str, str]]:
+def build_rag_messages(
+    user_message: str,
+    context_blocks: list[tuple[str, str]],
+    *,
+    tool_summaries: list[str] | None = None,
+) -> list[dict[str, str]]:
+    sections: list[str] = []
+    if tool_summaries:
+        sections.append("Wyniki narzędzi:\n\n" + "\n\n".join(tool_summaries))
     context = "\n\n".join(f"### {source}\n{excerpt}" for source, excerpt in context_blocks if excerpt.strip())
-    user_content = user_message
     if context:
-        user_content = f"Kontekst Knowledge:\n\n{context}\n\n---\n\nPytanie CEO: {user_message}"
+        sections.append("Fragmenty Knowledge:\n\n" + context)
+    user_content = user_message
+    if sections:
+        user_content = "\n\n---\n\n".join(sections) + f"\n\n---\n\nPytanie CEO: {user_message}"
     return [
         {"role": "system", "content": AO_SYSTEM_PROMPT},
         {"role": "user", "content": user_content},

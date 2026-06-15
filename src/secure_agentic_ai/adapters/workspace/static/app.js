@@ -299,6 +299,11 @@ window.addEventListener("hashchange", () => {
     } else {
       appendMessage(`Indeks Knowledge: ${health.documents_indexed} dokumentów.`, "agent");
     }
+    if (health.llm_fallback_reason) {
+      appendMessage(`Tryb suchy — ${health.llm_fallback_reason}`, "agent");
+    } else if (health.llm_active === "dry" && health.llm_provider === "dry") {
+      appendMessage("LLM: tryb suchy (heurystyki + RAG, bez zewnętrznego modelu).", "agent");
+    }
     if (health.review_pending_count > 0) {
       appendMessage(
         `W kolejce #Review czeka ${health.review_pending_count} akcji do zatwierdzenia — zapytaj „co wymaga uwagi?”.`,
