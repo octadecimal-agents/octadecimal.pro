@@ -116,7 +116,24 @@ Knowledge ingest (MVP): scan T1 globs under `KNOWLEDGE_ROOT`, strip HTML callout
 - `GET /workspace/review/pending` — pending CEO approvals (same DB as `/operator/`)
 - Sidebar badge on `#Review` shows pending count; refreshed after approve/reject
 - AO answers „co wymaga uwagi?” / „review” with queue summary + suggests `#Review`
-- `/workspace/health` includes `review_pending_count`
+- `/workspace/health` includes `review_pending_count`, `llm_available`, knowledge manifest age, and calendar source
+
+Example:
+
+```json
+{
+  "status": "ok",
+  "documents_indexed": 251,
+  "rag_backend": "memory",
+  "llm_provider": "dry",
+  "llm_available": false,
+  "review_pending_count": 3,
+  "knowledge_manifest_age_seconds": 3600,
+  "knowledge_last_sync_at": "2026-06-14T10:00:00+00:00",
+  "calendar_provider": "auto",
+  "calendar_source": "fixture"
+}
+```
 
 ## macOS calendar (MCP stub)
 
@@ -138,6 +155,8 @@ export CALENDAR_INCLUDE=Dom,Praca,Ogarnianie   # optional filter
 MCP tools: `list_today_calendar`, `workspace_health`. Example Cursor config: `docs/architecture/mcp-workspace.example.json`.
 
 Successful macOS reads are cached in `~/.octa/calendar-cache.json` for the current day.
+
+**Runbook (uprawnienia):** [macos-calendar-permissions.md](../runbooks/macos-calendar-permissions.md)
 
 ## Planning
 

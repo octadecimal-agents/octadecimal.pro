@@ -98,4 +98,9 @@ class HealthWorkspaceResponse(BaseModel):
     documents_indexed: int
     rag_backend: str
     llm_provider: str
+    llm_available: bool
     review_pending_count: int = 0
+    knowledge_manifest_age_seconds: int | None = None
+    knowledge_last_sync_at: str | None = None
+    calendar_provider: str
+    calendar_source: str

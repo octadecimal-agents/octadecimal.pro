@@ -72,18 +72,18 @@ Lifespan (app.py):
 
 | Punkt Kanonu | Status | Uwagi |
 |--------------|--------|-------|
-| Chat + 5 paneli bez błędów JS | ✅ | fix `loadReview` (`3ec1e03`) |
+| Chat + 5 paneli bez błędów JS | ✅ | E2E + fix `loadReview` |
 | AO cytuje Knowledge | ✅ | hybrid search + RAG |
 | `#Board` CRUD | ✅ | select status (nie drag) |
 | `#Review` approve/reject | ✅ | + badge + attention chat |
-| `#Retro` journal | ✅ | path via `OCTA_STATE_DIR` / config |
+| `#Retro` journal | ✅ | `{KNOWLEDGE_ROOT}/02-6-Rooms-Model/_system/journal/` |
 | Restart — dane Board/plan | ✅ | ledger SQLite |
-| pytest zielone | ✅ | 110 testów |
-| Playwright E2E | ✅ | 9 scenariuszy (M5.1.2 → CI todo) |
-| `#Zasady` | 🔲 | M5.1.4 |
-| Nowy dev < 15 min | 🔲 | M5.1.6 |
+| pytest zielone | ✅ | 112 testów + CI |
+| Playwright E2E | ✅ | 9 scenariuszy w CI |
+| `#Zasady` | ✅ | M5.1.4 — statyczne linki |
+| Nowy dev < 15 min | ✅ | README quick start (M5.1.6) |
 
-Formalny sign-off checklisty → [M5.1](workspace-mvp-m5-1-hardening.md).
+Formalny sign-off → [workspace-mvp-m5-1-signoff.md](workspace-mvp-m5-1-signoff.md)
 
 ---
 

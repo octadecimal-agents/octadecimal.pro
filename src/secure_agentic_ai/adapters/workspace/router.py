@@ -31,6 +31,7 @@ from secure_agentic_ai.infrastructure.persistence.approval_repository import (
     SqlAlchemyApprovalRequestRepository,
     SqlAlchemyAuditWriter,
 )
+from secure_agentic_ai.infrastructure.workspace.knowledge_sync import manifest_sync_status
 from secure_agentic_ai.infrastructure.workspace.ledger import Task
 from secure_agentic_ai.infrastructure.workspace.review_adapter import pending_review_items
 from secure_agentic_ai.infrastructure.workspace.state import (
@@ -68,10 +69,12 @@ async def workspace_health(
     session: Annotated[AsyncSession, Depends(get_db_session)],
 ) -> HealthWorkspaceResponse:
     await ensure_workspace_ready()
-    await get_chat_provider()
+    chat = await get_chat_provider()
     config = get_config()
     repo = SqlAlchemyApprovalRequestRepository(session)
     review_pending_count = len(await repo.list_pending())
+    manifest_age, manifest_updated_at = manifest_sync_status(config)
+    _, calendar_source = await list_today_calendar_events(config)
     return HealthWorkspaceResponse(
         status="ok",
         knowledge_root=str(config.knowledge_root),
@@ -79,7 +82,12 @@ async def workspace_health(
         documents_indexed=get_documents_indexed(),
         rag_backend=get_rag_backend_label(),
         llm_provider=get_llm_label(),
+        llm_available=chat.is_available(),
         review_pending_count=review_pending_count,
+        knowledge_manifest_age_seconds=manifest_age,
+        knowledge_last_sync_at=manifest_updated_at,
+        calendar_provider=config.calendar_provider,
+        calendar_source=calendar_source,
     )
 
 

@@ -4,7 +4,7 @@
 
 [← Workspace MVP roadmap](workspace-mvp-roadmap.md) · [Workspace MVP (EN)](../architecture/workspace-mvp.md) · [E2E README](../../e2e/README.md)
 
-**Status:** todo · **Szacunek:** 3–5 dni · **Priorytet:** P0
+**Status:** ✅ ukończone · **2026-06-15**
 
 ## Cel fazy
 
@@ -219,7 +219,7 @@ open http://127.0.0.1:8042/
 
 - `WorkspaceHealthResponse` w `schemas.py`
 - Odczyt `manifest-dev.json` mtime z `KNOWLEDGE_ROOT/.knowledge-index/`
-- `ChatCompletionProvider.is_available()` dla LLM
+- `ChatCompletionProvider.is_available()` for LLM — `true` when external API key/token is configured; `false` for dry/heuristic mode
 
 **Done when:** `curl /workspace/health | jq` wystarcza do diagnozy bez logów.
 
@@ -237,12 +237,13 @@ open http://127.0.0.1:8042/
 
 ## Kryterium ukończenia fazy
 
-- [ ] Checklist Kanonu §10 — PASS
-- [ ] GitHub Actions: pytest + Playwright
-- [ ] Seed idempotentny
-- [ ] `#Zasady` + placeholdery w UI
-- [ ] README quick start < 15 min
-- [ ] Health rozszerzony udokumentowany
+- [x] Checklist Kanonu §10 — PASS ([sign-off](workspace-mvp-m5-1-signoff.md))
+- [x] GitHub Actions: pytest + Playwright
+- [x] Seed idempotentny
+- [x] `#Zasady` + placeholdery w UI
+- [x] README quick start < 15 min
+- [x] Health rozszerzony udokumentowany
+- [x] Runbook kalendarza macOS
 
 ---
 

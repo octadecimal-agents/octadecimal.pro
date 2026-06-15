@@ -8,6 +8,7 @@ from secure_agentic_ai.infrastructure.workspace.knowledge_scan import (
 )
 from secure_agentic_ai.infrastructure.workspace.knowledge_sync import (
     load_manifest,
+    manifest_sync_status,
     plan_sync,
     save_manifest,
 )
@@ -76,3 +77,38 @@ def test_manifest_roundtrip(tmp_path: Path) -> None:
     save_manifest(path, files)
     loaded = load_manifest(path)
     assert loaded["foo.md"]["sha256"] == "abc"
+
+
+def test_manifest_sync_status_reads_age_and_timestamp(tmp_path: Path) -> None:
+    root = tmp_path / "knowledge"
+    root.mkdir()
+    config = WorkspaceConfig(
+        enabled=True,
+        knowledge_root=root,
+        ledger_path=tmp_path / "ledger.sqlite",
+        journal_dir=root / "journal",
+        llm_provider="dry",
+        deepseek_model="deepseek-v4-flash",
+        deepseek_base_url="https://api.deepseek.com",
+        deepseek_bw_label="",
+        minimax_model="MiniMax-M3",
+        minimax_base_url="https://api.minimax.io/v1",
+        minimax_bw_label="",
+        calendar_provider="fixture",
+        calendar_fixture_path=tmp_path / "calendar.json",
+        calendar_include=(),
+        calendar_exclude=(),
+        octa_state_dir=tmp_path / ".octa",
+        rag_backend="memory",
+        qdrant_url="http://127.0.0.1:6335",
+        qdrant_collection="knowledge_chunks_dev",
+        knowledge_globs=("**/*.md",),
+    )
+    save_manifest(root / ".knowledge-index" / "manifest-dev.json", {"foo.md": {"sha256": "abc", "document_id": "x"}})
+
+    age, updated_at = manifest_sync_status(config)
+
+    assert age is not None
+    assert age >= 0
+    assert updated_at is not None
+    assert "T" in updated_at

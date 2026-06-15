@@ -49,19 +49,48 @@ Open http://127.0.0.1:8000/operator/ to review pending approval requests.
 
 ## Octa Workspace MVP (localhost)
 
-Local CEO workspace: chat with the Personal Agent, hash panels (`#Planning`, `#Board`, `#Wiki`, `#Review`, `#Retro`), Knowledge RAG, and HITL review — see [docs/architecture/workspace-mvp.md](docs/architecture/workspace-mvp.md).
+Local CEO workspace: chat with the Personal Agent, hash panels (`#Planning`, `#Board`, `#Wiki`, `#Review`, `#Retro`, `#Zasady`), Knowledge RAG, and HITL review — see [docs/architecture/workspace-mvp.md](docs/architecture/workspace-mvp.md).
+
+### Quick start (< 15 min)
+
+**Wymagania:** [uv](https://docs.astral.sh/uv/) (Python 3.13). Opcjonalnie: Node 22 (E2E), Docker (Qdrant), macOS Keychain (MiniMax/DeepSeek).
 
 ```bash
+git clone https://github.com/octadecimal-agents/octadecimal.pro.git
+cd octadecimal.pro
+uv sync
 ./scripts/octa-mvp-up.sh
 ```
 
 Open http://127.0.0.1:8042/
 
+| URL | Role |
+|-----|------|
+| `/` | Workspace UI (chat + hash panels) |
+| `/workspace/health` | Ops health (RAG, LLM, review queue, calendar) |
+| `/operator/` | HITL operator console (same process) |
+
+**Knowledge:** domyślnie `KNOWLEDGE_ROOT=~/Developer/Knowledge`. Bez tego katalogu Wiki/RAG będzie puste — sklonuj repo Knowledge obok lub ustaw env.
+
+**Opcje:**
+
+```bash
+# Zewnętrzny LLM (Keychain/BWS — patrz workspace-mvp.md)
+export LLM_PROVIDER=minimax
+export RAG_BACKEND=qdrant   # wymaga: ./scripts/octa-qdrant-dev.sh
+
+# Testy
+uv run pytest               # 112 testów
+cd e2e && npm ci && npm test   # 9 scenariuszy Playwright (Node 22)
 ```
-# Quick checks
-uv run pytest          # 62 tests
-uv run ruff check .    # lint
-uv run mypy src/       # types
+
+Pełna dokumentacja: [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [plan M5.x](docs/planning/workspace-mvp-roadmap.md) · [sign-off Kanonu §10](docs/planning/workspace-mvp-m5-1-signoff.md)
+
+```
+# Quality gates (CI uruchamia to samo)
+uv run pytest
+uv run ruff check src tests scripts
+uv run mypy src
 ```
 
 ## What's Implemented
@@ -78,7 +107,7 @@ uv run mypy src/       # types
 | Observability | Tracing spans, cost estimation (4 models), eval runner with synthetic test cases |
 | MCP | FastMCP server with policy-governed `read_document` tool |
 | Secrets | SecretProvider port + Fake / Env / Bitwarden adapters, masked `__str__`/`__repr__`, no value leakage to logs |
-| Tests | 62 tests across unit + integration — ALLOW, DENY, APPROVAL_REQUIRED, safety blocks, HITL pause/resume, audit, RAG, MCP, secrets, observability |
+| Tests | 112 pytest + 9 Playwright E2E | CI on every push to `main` |
 
 ## Architecture
 

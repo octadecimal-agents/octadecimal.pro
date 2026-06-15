@@ -47,7 +47,7 @@ Szczegóły architektury faz otwartych — w osobnych plikach:
 | [M6+](workspace-mvp-m6-platform.md) | Platform core | [workspace-mvp-m6-platform.md](workspace-mvp-m6-platform.md) |
 
 ```text
-M5.1  Hardening MVP          ← teraz (1 tydzień)
+M5.1  Hardening MVP          ← ✅ ukończone (2026-06-15)
 M5.2  RAG & Knowledge scale  ← 1–2 tygodnie
 M5.3  AO & evals             ← 1–2 tygodnie
 M5.4  macOS live MCP         ← 1 tydzień
@@ -249,7 +249,7 @@ Każde zadanie z tabel uznajemy za ukończone, gdy:
 | Faza | Status | Data start | Data koniec | Szczegóły |
 |------|--------|------------|-------------|-----------|
 | [Sprint 0–3 + ext](workspace-mvp-done-index.md) MVP core | ✅ done | 2026-06 | 2026-06-14 | [indeks](workspace-mvp-done-index.md) · [S0](workspace-mvp-sprint-0-boot.md) · [S1](workspace-mvp-sprint-1-chat-wiki.md) · [S2](workspace-mvp-sprint-2-panels-hitl.md) · [S3](workspace-mvp-sprint-3-retro-infra.md) · [ext](workspace-mvp-done-extensions.md) |
-| [M5.1](workspace-mvp-m5-1-hardening.md) Hardening | 🔲 todo | | | [plan](workspace-mvp-m5-1-hardening.md) |
+| [M5.1](workspace-mvp-m5-1-hardening.md) Hardening | ✅ done | 2026-06-15 | [sign-off](workspace-mvp-m5-1-signoff.md) | [plan](workspace-mvp-m5-1-hardening.md) |
 | [M5.2](workspace-mvp-m5-2-rag-scale.md) RAG scale | 🔲 todo | | | [plan](workspace-mvp-m5-2-rag-scale.md) |
 | [M5.3](workspace-mvp-m5-3-ao-evals.md) AO evals | 🔲 todo | | | [plan](workspace-mvp-m5-3-ao-evals.md) |
 | [M5.4](workspace-mvp-m5-4-macos-mcp.md) macOS MCP | 🔲 todo | | | [plan](workspace-mvp-m5-4-macos-mcp.md) |

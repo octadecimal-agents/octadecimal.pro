@@ -54,6 +54,22 @@ def save_manifest(path: Path, files: dict[str, dict[str, str]]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def manifest_sync_status(config: WorkspaceConfig) -> tuple[int | None, str | None]:
+    """Return manifest age in seconds and optional updated_at ISO timestamp."""
+    path = manifest_path(config)
+    if not path.is_file():
+        return None, None
+    age_seconds = int(datetime.now(UTC).timestamp() - path.stat().st_mtime)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return age_seconds, None
+    updated_at = data.get("updated_at")
+    if isinstance(updated_at, str):
+        return age_seconds, updated_at
+    return age_seconds, None
+
+
 def plan_sync(
     scanned: list[KnowledgeFile],
     manifest: dict[str, dict[str, str]],
