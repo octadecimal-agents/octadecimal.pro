@@ -77,6 +77,8 @@ Manifest: `KNOWLEDGE_ROOT/.knowledge-index/manifest-dev.json`. Workspace startup
 
 **Scheduled sync (optional, M5.2.5):** `./scripts/octa-knowledge-sync-dev.sh` wraps incremental sync with logging to `~/.octa/logs/embed-sync.log`. Install macOS launchd (every 6h): `./scripts/install-embed-knowledge-launchd.sh`. See [knowledge-embed-sync-schedule runbook](../runbooks/knowledge-embed-sync-schedule.md).
 
+**Always-on API (M5.5.2):** `./scripts/install-workspace-api-launchd.sh` keeps Workspace on `127.0.0.1:8042` across reboots. Do not run `./scripts/octa-mvp-up.sh` at the same time. See [daily dev runbook](../runbooks/workspace-daily-dev.md).
+
 **Embed policy:** `KNOWLEDGE_ROOT/.knowledge-index/policy.yaml` defines tier T1 include/exclude globs (see [knowledge-policy.example.yaml](knowledge-policy.example.yaml)). When missing, code falls back to built-in `knowledge_globs` in `WorkspaceConfig`.
 
 **Retrieval debug (dev):** set `WORKSPACE_DEBUG=1` and pass header `X-Debug-Retrieval: 1` on `/workspace/wiki/search` to include score breakdown per hit. Structured JSON logs go to logger `secure_agentic_ai.retrieval`.

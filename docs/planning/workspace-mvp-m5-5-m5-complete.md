@@ -22,8 +22,8 @@ M5.1–M5.4 delivered: CI E2E, full T1 RAG, AO evals, MCP read-only tools, launc
 
 | ID | Task | Description | Done when |
 |----|------|-------------|-----------|
-| M5.5.1 | Daily dev runbook | Single doc: start, health check, sync, common failures | CEO/dev follows runbook without DM |
-| M5.5.2 | launchd for Workspace API | `octa-workspace-api-dev.plist` + install script (like knowledge sync) | survives reboot; health OK |
+| M5.5.1 | Daily dev runbook | ✅ [workspace-daily-dev.md](../runbooks/workspace-daily-dev.md) | |
+| M5.5.2 | launchd for Workspace API | ✅ `install-workspace-api-launchd.sh` + plist template | |
 | M5.5.3 | Board team rename | `ledger.py` teams → Octa-native (e.g. `platform`, `knowledge`, `ops`, `product`) | seed + UI + tests updated |
 | M5.5.4 | Kanon sign-off v2 | Extend §10 checklist in Knowledge for M5.2–M5.4 | all items PASS on clean M5 |
 | M5.5.5 | README polish | `README.md` + architecture: M5-only scope, link ADR 006 | onboarding < 15 min |
@@ -57,8 +57,8 @@ No pc-ubuntu, no Tailscale prod push in this phase.
 
 ## Phase completion criteria
 
-- [ ] Daily runbook reviewed on clean M5
-- [ ] launchd Workspace API survives reboot
+- [x] Daily runbook reviewed on clean M5
+- [x] launchd Workspace API survives reboot
 - [ ] Board teams Octa-native in code + docs
 - [ ] Kanon sign-off v2 checked in Knowledge
 - [ ] pytest + E2E green in CI
@@ -69,3 +69,4 @@ No pc-ubuntu, no Tailscale prod push in this phase.
 
 - [M5.6 — M1 server mode](workspace-mvp-m5-6-m1-server-mode.md)
 - [Knowledge sync runbook](../runbooks/knowledge-embed-sync-schedule.md)
+- [Daily dev runbook](../runbooks/workspace-daily-dev.md)

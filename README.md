@@ -84,7 +84,7 @@ uv run pytest               # 164 tests
 cd e2e && npm ci && npm test   # Playwright E2E (Node 22)
 ```
 
-Full docs: [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [ADR 006 M5-only strategy](docs/adr/006-m5-only-dev-strategy.md) · [Kanon sign-off §10](docs/planning/workspace-mvp-m5-1-signoff.md)
+Full docs: [workspace-mvp.md](docs/architecture/workspace-mvp.md) · [daily dev runbook](docs/runbooks/workspace-daily-dev.md) · [M5.x roadmap](docs/planning/workspace-mvp-roadmap.md) · [ADR 006](docs/adr/006-m5-only-dev-strategy.md)
 
 ```
 # Quality gates (CI uruchamia to samo)
