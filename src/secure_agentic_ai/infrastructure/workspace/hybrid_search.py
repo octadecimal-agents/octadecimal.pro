@@ -1,7 +1,7 @@
 import re
 
 from secure_agentic_ai.application.use_cases import RetrieveContextUseCase
-from secure_agentic_ai.domain.knowledge import RetrievedChunk, RetrievalScoreBreakdown
+from secure_agentic_ai.domain.knowledge import RetrievalScoreBreakdown, RetrievedChunk
 
 _TOKEN = re.compile(r"[a-z0-9\u0105-\u017c]{3,}", re.IGNORECASE)
 
